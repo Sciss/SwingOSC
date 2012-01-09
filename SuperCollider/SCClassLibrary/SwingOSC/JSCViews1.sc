@@ -396,7 +396,7 @@ JSCTopView : JSCContainerView {	// NOT subclass of JSCCompositeView
 	prBoundsFromJava { arg rect; ^rect.copy }
 
 	prBoundsUpdated {
-		if( window.drawHook.notNil, { window.refresh });
+		if( window.drawFunc.notNil, { window.refresh });
 	}
 	
 	prAllVisible {

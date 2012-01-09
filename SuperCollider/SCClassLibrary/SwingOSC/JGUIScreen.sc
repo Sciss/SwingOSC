@@ -21,10 +21,6 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *		- 27-Jul-08	using new java Frame class (de.sciss.common.AppWindow)
  */
 
 /**
@@ -36,9 +32,6 @@
  *
  *	Added features
  *	- method id returns the node ID
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.64, 28-Jan-10
  */
 JSCWindow : Object
 {
@@ -52,7 +45,7 @@ JSCWindow : Object
 	
 	var dataptr, <name, <>onClose, <view, <userCanClose = true;
 	var <alwaysOnTop = false;
-	var <drawHook;
+	var <drawFunc;
 	var <acceptsMouseOver = false;	var <acceptsClickThrough = true;
 	var <>toFrontAction, <>endFrontAction;
 	
@@ -130,8 +123,17 @@ JSCWindow : Object
 
 	// ----------------- public instance methods -----------------
 
-	drawHook_ { arg func;
-		if( drawHook.isNil, {
+	drawHook {
+		this.deprecated(thisMethod, this.class.findMethod(\drawFunc));
+		^drawFunc
+	}
+	drawHook_ { |aFunction|
+		this.deprecated(thisMethod, this.class.findMethod(\drawFunc_));
+		this.drawFunc_(aFunction)
+	}
+
+	drawFunc_ { arg func;
+		if( drawFunc.isNil, {
 			if( func.notNil, {
 				penID	= server.nextNodeID;
 				server.sendBundle( nil,
@@ -149,15 +151,15 @@ JSCWindow : Object
 					[ '/free', penID ]
 				);
 				penID = nil;
-				drawHook = nil;
+				drawFunc = nil;
 				pendingDraw = false;
 				^this;
 			});
 		});
-		drawHook = func;
+		drawFunc = func;
 		if( visible, {
 			pendingDraw = false;
-			JPen.protRefresh( drawHook, this, server, penID, this.id );
+			JPen.protRefresh( drawFunc, this, server, penID, this.id );
 		}, {
 			pendingDraw = true;
 		});
@@ -188,7 +190,7 @@ JSCWindow : Object
 			visible = bool;
 			if( pendingDraw, {
 				pendingDraw = false;
-				JPen.protRefresh( drawHook, this, server, penID, this.id );
+				JPen.protRefresh( drawFunc, this, server, penID, this.id );
 			});
 			pre	= List.new;
 			post	= List.new;
@@ -235,7 +237,7 @@ JSCWindow : Object
 			visible = true;	// must be set to true before calling view.protDraw!
 			if( pendingDraw, {
 				pendingDraw = false;
-				JPen.protRefresh( drawHook, this, server, penID, this.id );
+				JPen.protRefresh( drawFunc, this, server, penID, this.id );
 			});
 			view.prInvalidateAllVisible;
 			view.prVisibilityChange;
@@ -274,10 +276,10 @@ JSCWindow : Object
 	
 	refresh {
 		pendingDraw = false;
-		if( drawHook.isNil, {
+		if( drawFunc.isNil, {
 			server.sendMsg( '/method', this.id, \repaint );
 		}, {
-			JPen.protRefresh( drawHook, this, server, penID, this.id );
+			JPen.protRefresh( drawFunc, this, server, penID, this.id );
 		});
 		view.protDraw;
 	}
@@ -352,10 +354,6 @@ JSCWindow : Object
 	findByID { arg id;
 		^view.findByID( id );
 	}
-
-//	callDrawHook {
-//		this.refresh;
-//	}
 	
 //	id { ^id }
 
@@ -385,12 +383,6 @@ JSCWindow : Object
 	}
 
 	// ----------------- private instance methods -----------------
-
-//	protDraw {
-//		if( drawHook.notNil and: { this.visible }, {
-//			JPen.protRefresh( drawHook, this, server, penID, this.id );
-//		});
-//	}
 
 	add { arg aView; view.add( aView )}
 
@@ -462,9 +454,7 @@ JSCWindow : Object
 			state = msg[2].asSymbol;
 			switch( state,
 			\resized, {
-//				bounds = this.prBoundsFromJava( Rect( msg[3], msg[4], msg[5], msg[6] ));
 				bounds = Rect( msg[3], msg[4], msg[5], msg[6] );
-//				if( drawHook.notNil, { this.refresh });
 			},
 			\moved, {
 //				bounds = this.prBoundsFromJava( Rect( msg[3], msg[4], msg[5], msg[6] ));
@@ -519,7 +509,7 @@ JSCWindow : Object
 		if( dataptr.notNil, {
 			acResp.remove;
 			updServer.remove;
-			this.drawHook_( nil );
+			this.drawFunc_( nil );
 			server.sendBundle( nil,
 				[ '/method', "ac" ++ this.id, \remove ],
 				[ '/method', this.id, \dispose ],

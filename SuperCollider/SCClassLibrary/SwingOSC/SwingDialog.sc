@@ -31,9 +31,6 @@
  *
  *	Not yet working:
  *	- multiple input file selection
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.57, 12-Jan-08
  */
 SwingDialog {
 	classvar result, ok, cancel, inProgress;
@@ -44,11 +41,12 @@ SwingDialog {
 	
 	// ----------------- public class methods -----------------
 
-	*getPaths { arg okFunc, cancelFunc, allowsMultiple=true; // maxSize=20;
-		^this.openPanel({ arg ... result; okFunc.( result )}, cancelFunc, allowsMultiple );
+	*openPanel { arg okFunc, cancelFunc, multipleSelection=false;
+		var okFunc2 = if( multipleSelection, { okFunc }, {{ arg arr; okFunc.( arr[0])}});
+		^this.getPaths( okFunc2, cancelFunc, multipleSelection );
 	}
 
-	*openPanel { arg okFunc, cancelFunc, allowsMultiple=false;
+	*getPaths { arg okFunc, cancelFunc, allowsMultiple=true; // maxSize=20;
 		if(inProgress.notNil,{
 			"A SwingDialog is already in progress.  do: [SwingDialog.clear]".warn;
 			^nil
@@ -146,7 +144,7 @@ SwingDialog {
 		var res;
 		res = result;
 		cancel = result = nil;
-		ok.valueArray(res);
+		ok.value(res);
 		ok = nil;
 	}
 	

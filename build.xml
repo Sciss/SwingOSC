@@ -53,7 +53,7 @@
 				<!-- <attribute name="Class-Path" value="${libraries}" /> -->
 			</manifest>
 		</jar>
-		<jar destfile="${jar.file}" basedir="${resources.dir}" update="true"/>
+		<jar destfile="${jar.file}" basedir="src/main/resources" update="true"/>
 		<if><not><equals arg1="${plain}" arg2="true" /></not><then>
 			<unjar src="${lib.dir}/ScissLib.jar" dest="${lib.dir}" />
 			<unjar src="${lib.dir}/JCollider.jar" dest="${lib.dir}" />

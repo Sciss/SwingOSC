@@ -53,13 +53,13 @@ SwingOptions
 		default = this.new.javaOptions_(
 			switch( thisProcess.platform.name,
 			\osx, {
-				"-Dapple.laf.useScreenMenuBar=true -Dapple.awt.graphics.UseQuartz=true -Xdock:icon=application.icns -Xdock:name=SwingOSC"; // "-Dswing.defaultlaf=apple.laf.AquaLookAndFeel"
+				"-Dapple.laf.useScreenMenuBar=true -Xdock:icon=application.icns -Xdock:name=SwingOSC -Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // "-Dswing.defaultlaf=apple.laf.AquaLookAndFeel"
 			},
 			\linux, {
-				"-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+				"-Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
 			},
 			\windows, {
-				"-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+				"-Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
 			})
 		);
 	}

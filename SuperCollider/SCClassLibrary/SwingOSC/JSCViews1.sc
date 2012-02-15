@@ -3580,9 +3580,10 @@ JSCTextEditBase : JSCStaticTextBase {
 	}
 
 	init { arg argParent, argBounds, id;
-		typingColor = Color.red;
-		normalColor = Color.black;
-		parent = argParent.asView; // actual view
+		jinsets		= Insets( 2, 2, 2, 2 );  // Nimbus focus border
+		typingColor	= Color.red;
+		normalColor	= Color.black;
+		parent		= argParent.asView; // actual view
 // cocoa does parent.asView once more. too cryptic IMO ?
 //		this.prInit( parent, argBounds.asRect, this.class.viewClass, parent.server, id );
 		this.prInit( parent.asView, argBounds, this.class.viewClass, parent.server, id );

@@ -1352,7 +1352,7 @@ JSCButton : JSCControlView {
 
 	prInitView {
 		properties.put( \value, 0 );
-		jinsets = Insets( 3, 3, 3, 3 );
+		jinsets = Insets( 2, 2, 2, 2 ); // ( 3, 3, 3, 3 )
 		acResp = OSCpathResponder( server.addr, [ '/action', this.id ], { arg time, resp, msg;
 			var value, modifiers;
 			value	= msg[4];
@@ -1365,7 +1365,7 @@ JSCButton : JSCControlView {
 			{ this.doAction( modifiers )}.defer;
 		}).add;
 		^this.prSCViewNew([
-			[ '/local', this.id, '[', '/new', "de.sciss.gui.MultiStateButton", ']',
+			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.Button", ']', // "de.sciss.gui.MultiStateButton"
 				"ac" ++ this.id,
 				'[', '/new', "de.sciss.swingosc.ActionResponder", this.id, '[', '/array', \selectedIndex, \lastModifiers, ']', ']' ]
 		]);

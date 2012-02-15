@@ -36,6 +36,8 @@
  */
 SwingGUI {
 	classvar extraClasses;
+	
+	classvar boundsWarned = false;
 
 	*initClass {
 		Class.initClassTree( Event );
@@ -149,6 +151,7 @@ SwingGUI {
 	 */
 	*stringBounds { arg string, font, server;
 		var msg, id;
+		font = font ?? { JFont.default };
 		if( thisThread.isKindOf( Routine ), {
 			if( server.isNil, { server = SwingOSC.default });
 			id		= server.nextNodeID;
@@ -174,9 +177,12 @@ SwingGUI {
 			
 			"Meta_SwingGUI:stringBounds : server timeout".warn;
 		}, {
-			"Meta_SwingGUI:stringBounds : should be called inside a Routine".warn;
+			if( boundsWarned.not, { "Meta_SwingGUI:stringBounds : should be called inside a Routine".warn });
 		});
-		"Using coarse approximation".postln;
+		if( boundsWarned.not, {
+			boundsWarned = true;
+			"Using coarse approximation".postln;
+		});
 		// width in Helvetica approx = string size * font size * 0.52146
 		// 0.52146 is average of all 32-127 ascii characters widths
 		// this is a bad hack...

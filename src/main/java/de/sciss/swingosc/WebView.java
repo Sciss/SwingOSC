@@ -25,30 +25,39 @@
 
 package de.sciss.swingosc;
 
-import org.lobobrowser.gui.ContentEvent;
-import org.lobobrowser.gui.ContentListener;
-import org.lobobrowser.gui.FramePanel;
-import org.lobobrowser.main.PlatformInit;
-import org.lobobrowser.ua.*;
+import com.teamdev.jxbrowser.Browser;
+import com.teamdev.jxbrowser.BrowserFactory;
+import com.teamdev.jxbrowser.events.NavigationEvent;
+import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
+import com.teamdev.jxbrowser.events.NavigationListener;
 
+import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.AWTEventMulticaster;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class WebView extends FramePanel {
+public class WebView extends JPanel {
+    public static final boolean VERBOSE         = true;
+
     public static final String ACTION_LOADED    = "loaded";
 
     private static boolean initialized = false;
 
+    private final Browser browser = BrowserFactory.createBrowser();
     private final List hyperlinkListeners   = new ArrayList();
     private ActionListener actionListener = null;
 
@@ -96,13 +105,13 @@ public class WebView extends FramePanel {
 
     private static synchronized void init() throws Exception {
         if( !initialized ) {
-            final PlatformInit pi = PlatformInit.getInstance();
-//            pi.initOtherProperties();
-//            pi.initSecurity();
-//            pi.initProtocols();
-////            pi.initHTTP();
-//            pi.initExtensions();
-            pi.init( false, false );
+//            final PlatformInit pi = PlatformInit.getInstance();
+////            pi.initOtherProperties();
+////            pi.initSecurity();
+////            pi.initProtocols();
+//////            pi.initHTTP();
+////            pi.initExtensions();
+//            pi.init( false, false );
             initialized = true;
         }
     }
@@ -113,15 +122,17 @@ public class WebView extends FramePanel {
     }
 
     public String getURL() {
-        final NavigationEntry ne = getCurrentNavigationEntry();
-        final URL u = ne == null ? null : ne.getUrl();
-        return u == null ? "" : u.toString();
+//        final NavigationEntry ne = getCurrentNavigationEntry();
+//        final URL u = ne == null ? null : ne.getUrl();
+//        return u == null ? "" : u.toString();
+        return "";
     }
 
     public String getTitle() {
-        final NavigationEntry ne = getCurrentNavigationEntry();
-        final String t = ne == null ? null : ne.getTitle();
-        return t == null ? "" : t;
+//        final NavigationEntry ne = getCurrentNavigationEntry();
+//        final String t = ne == null ? null : ne.getTitle();
+//        return t == null ? "" : t;
+        return "";
     }
 
     public void setHtml( String html ) throws IOException {
@@ -134,34 +145,81 @@ public class WebView extends FramePanel {
         navigate( url );
     }
 
+    public void navigate( String url ) throws MalformedURLException {
+        if( VERBOSE ) System.out.println( "navigate: " + url );
+
+        final int i = url.indexOf( ':' );
+        final String proto = url.substring( 0, i );
+        final String addr  = url.substring( i + 1 );
+        try {
+            navigate( new URI( proto, addr, "" ).toURL() );
+
+        } catch( URISyntaxException e ) {
+            throw new MalformedURLException( url );
+        }
+//        browser.navigate(url);
+    }
+
+    public void navigate( URL url ) {
+        browser.navigate( url.toString() );
+    }
+
+    public void forward() {
+        browser.goForward();
+    }
+
+    public void back() {
+        browser.goBack();
+    }
+
+    public void reload() {
+        browser.refresh();
+    }
+
     private WebView() {
-        super();
-        addContentListener( new ContentListener() {
-            public void contentSet( ContentEvent e ) {
-//                final ComponentContent c = getComponentContent();
+        super( new BorderLayout() );
+        add( browser.getComponent(), BorderLayout.CENTER );
+
+//        browser.
+//
+        browser.addNavigationListener( new NavigationListener() {
+            public void navigationStarted( NavigationEvent e ) {
+                if( VERBOSE ) System.out.println("Navigation started");
+                // ...
+            }
+
+            public void navigationFinished( NavigationFinishedEvent e ) {
+                if( VERBOSE ) System.out.println( "Navigation finished" );
                 dispatchAction( ACTION_LOADED );
-//                final String descr = c.getDescription();
-//                final NavigationEntry ne = getCurrentNavigationEntry();
             }
         });
 
-        addNavigationListener( new NavigationListener() {
-            public void beforeNavigate( NavigationEvent e ) throws NavigationVetoException {
-                if( e.getTargetType() != TargetType.SELF ) throw new NavigationVetoException();
-            }
-
-            public void beforeLocalNavigate( NavigationEvent e ) throws NavigationVetoException {
-                if( e.isFromClick() ) {
-//System.out.println( "beforeLocalNavigate : " + e.getMethod() + " : " + e.getURL() + " : " + e.getTargetType() + " : " + e.getLinkObject() + " : " + e.getParamInfo() + " : " + e.getRequestType() );
-                    dispatchLinkActivated(e.getURL());
-                    throw new NavigationVetoException( "Client handles navigation" );
-                }
-            }
-
-            public void beforeWindowOpen( NavigationEvent e ) throws NavigationVetoException {
-                throw new NavigationVetoException();
-            }
-        });
+//        addContentListener( new ContentListener() {
+//            public void contentSet( ContentEvent e ) {
+////                final ComponentContent c = getComponentContent();
+//                dispatchAction( ACTION_LOADED );
+////                final String descr = c.getDescription();
+////                final NavigationEntry ne = getCurrentNavigationEntry();
+//            }
+//        });
+//
+//        addNavigationListener( new NavigationListener() {
+//            public void beforeNavigate( NavigationEvent e ) throws NavigationVetoException {
+//                if( e.getTargetType() != TargetType.SELF ) throw new NavigationVetoException();
+//            }
+//
+//            public void beforeLocalNavigate( NavigationEvent e ) throws NavigationVetoException {
+//                if( e.isFromClick() ) {
+////System.out.println( "beforeLocalNavigate : " + e.getMethod() + " : " + e.getURL() + " : " + e.getTargetType() + " : " + e.getLinkObject() + " : " + e.getParamInfo() + " : " + e.getRequestType() );
+//                    dispatchLinkActivated(e.getURL());
+//                    throw new NavigationVetoException( "Client handles navigation" );
+//                }
+//            }
+//
+//            public void beforeWindowOpen( NavigationEvent e ) throws NavigationVetoException {
+//                throw new NavigationVetoException();
+//            }
+//        });
     }
 
 //    public void readURL( String url ) throws MalformedURLException {

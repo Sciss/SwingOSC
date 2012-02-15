@@ -25,3 +25,12 @@ assembleArtifact in packageScala := false   // no scala-library.jar
 assembleArtifact in packageSrc := false     // no sources
 
 mainClass in assembly := Some( "de.sciss.swingosc.SwingOSC" )
+
+excludedFiles in assembly := { (bases: Seq[File]) =>
+   bases flatMap { base =>
+      (base / "META-INF" * "*").get collect {
+         case f if f.getName.toLowerCase.endsWith( ".sf" ) => f
+         case f if f.getName.toLowerCase == "manifest.mf"  => f
+      }
+   }
+}

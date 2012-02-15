@@ -14,6 +14,8 @@ In progress:
  - we are switching look-and-feel to Nimbus on all platforms. This means that you should use Oracle's Java 6 on Linux. If you prefer OpenJDK, make sure you use OpenJDK 7, as OpenJDK 6 does _not_ include Nimbus. The OS X port of Java 6 _does_ include Nimbus.
  - the reason for this is to have consistent look for the custom widgets and known focus borders which are accounted for the in SuperCollider classes.
 
+The project now includes all the JXBrowser library components. The license keys are _not yet checked in_, because I need to find out if both development and runtime keys should go into git or not. While you can compile the project without problems, to use the web view component, you must downlod the [JXBrowser for evaluation](http://www.teamdev.com/jxbrowser/) and put the 30-days evaluation key (`lib/license.jar`) on the classpath, until this is sorted out.
+
 ### requirements / installation
 
 SwingOSC now builds with the [Simple Build Tool](https://github.com/harrah/xsbt/wiki). Download the bootstrap jar version 0.11.2 from the sbt website, and create a shell script `sbt` in your preferred `PATH`, e.g. as `~/bin/sbt`.

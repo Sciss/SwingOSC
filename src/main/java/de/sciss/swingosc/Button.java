@@ -1,8 +1,8 @@
 /*
- *  MultiStateButton.java
- *  de.sciss.gui package
+ *  Button.java
+ *  (SwingOSC)
  *
- *  Copyright (c) 2004-2010 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -33,73 +33,29 @@
  
 package de.sciss.swingosc;
 
-import java.awt.Composite;
-import java.awt.CompositeContext;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractButton;
 import javax.swing.DefaultButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import javax.swing.UIDefaults;
 
 /**
  *	A button with a variable number of states.
  *	Each state is defined by a label and colours,
  *	so as to mimic the functionality of SuperCollider's SCButton.
- *	However, we decided to use a more aqua'ish look.
- *	<p>
- *	New version paints focus WITHOUT requiring <code>focus.png</code> resource.
- *
- *	@author		Hanns Holger Rutz
- *	@version	0.37, 25-Feb-08
- *
- *	@todo		preferred size : maxH calculation is stupid ; we should try to
- *				get a LineBreakMeasure instance and reveal ascent / descent / leading
- *	@todo		maybe an option to pass arming state and switch directly with
- *				a mouse press...
- *	@todo		maybe option to add an icon
- *
- *	@warning	when using gradient colours, display becomes notably sluggish
- *				because the use of CompositeContext is hell slow
  */
 public class Button
 extends JButton // AbstractButton
-implements	MouseListener, MouseMotionListener, FocusListener,
-			KeyListener, PropertyChangeListener, Composite, CompositeContext
+//implements	MouseListener, MouseMotionListener, FocusListener,
+//			KeyListener, PropertyChangeListener, Composite, CompositeContext
 {
 	private DefaultButtonModel	model;
 	private String				lastTxt;
@@ -166,6 +122,16 @@ implements	MouseListener, MouseMotionListener, FocusListener,
         defaults.put( "Button.contentMargins", new Insets( 0, 0, 0, 0 ));
         putClientProperty( "Nimbus.Overrides", defaults );
 
+//        addActionListener( new ActionListener() {
+//            public void actionPerformed( ActionEvent e ) {
+//                if( autoStep && (numStates > 0) ) {
+//                    state = (state + 1) % numStates;
+//                    stateUpdate();
+//                }
+//                lastModifiers = e.getModifiers();
+//            }
+//        });
+
 //
 //		setBorder( new AquaFocusBorder() );
 //		addMouseListener( this );
@@ -177,6 +143,15 @@ implements	MouseListener, MouseMotionListener, FocusListener,
 //		setModel( model );
 //		setFocusable( true );
 	}
+
+    @Override protected void fireActionPerformed( ActionEvent e ) {
+        if( autoStep && (numStates > 0) ) {
+            state = (state + 1) % numStates;
+            stateUpdate();
+        }
+        lastModifiers = e.getModifiers();
+        super.fireActionPerformed( e );
+    }
 	
 	public void setNumColumns( int num )
 	{
@@ -203,39 +178,39 @@ implements	MouseListener, MouseMotionListener, FocusListener,
 	
 	private void recalcPrefSize()
 	{
-		final Font	fnt = getFont();
-		
-		if( fnt == null ) return;
-		
-		final FontRenderContext frc = new FontRenderContext( GraphicsEnvironment.getLocalGraphicsEnvironment().
-			getDefaultScreenDevice().getDefaultConfiguration().getNormalizingTransform(), true, true );
-
-		int			maxW = 0, maxH = 0;
-		Rectangle2D	r;
-		StateView	sv;
-
-		if( numColumns == 0 ) {
-			for( int i = 0; i < numStates; i++ ) {
-				sv		= (StateView) collStateViews.get( i );
-				if( sv.text != null ) {
-					r		= fnt.getStringBounds( sv.text, frc );
-					maxW	= Math.max( maxW, (int) r.getWidth() );
-//					maxH	= Math.max( maxH, (int) r.getHeight() );
-				}
-				if( sv.icon != null ) {
-					maxW	= Math.max( maxW, sv.icon.getIconWidth() );
-					maxH	= Math.max( maxH, sv.icon.getIconWidth() );
-				}
-			}
-			r		= fnt.getStringBounds( "Mp", frc );
-		} else {
-			r		= fnt.getStringBounds( "Mp", frc );
-			maxW	= (int) (r.getWidth() * numColumns / 2);
-//			maxH	= (int) (r.getHeight() * numColumns / 2);
-		}
-maxH = Math.max( maxH, (int) r.getHeight() );
-//System.err.println( "prefW " + (maxW+24) + "; prefH " + (maxH+13) );
-		setPreferredSize( new Dimension( maxW + 24, maxH + 13 ));
+//		final Font	fnt = getFont();
+//
+//		if( fnt == null ) return;
+//
+//		final FontRenderContext frc = new FontRenderContext( GraphicsEnvironment.getLocalGraphicsEnvironment().
+//			getDefaultScreenDevice().getDefaultConfiguration().getNormalizingTransform(), true, true );
+//
+//		int			maxW = 0, maxH = 0;
+//		Rectangle2D	r;
+//		StateView	sv;
+//
+//		if( numColumns == 0 ) {
+//			for( int i = 0; i < numStates; i++ ) {
+//				sv		= (StateView) collStateViews.get( i );
+//				if( sv.text != null ) {
+//					r		= fnt.getStringBounds( sv.text, frc );
+//					maxW	= Math.max( maxW, (int) r.getWidth() );
+////					maxH	= Math.max( maxH, (int) r.getHeight() );
+//				}
+//				if( sv.icon != null ) {
+//					maxW	= Math.max( maxW, sv.icon.getIconWidth() );
+//					maxH	= Math.max( maxH, sv.icon.getIconWidth() );
+//				}
+//			}
+//			r		= fnt.getStringBounds( "Mp", frc );
+//		} else {
+//			r		= fnt.getStringBounds( "Mp", frc );
+//			maxW	= (int) (r.getWidth() * numColumns / 2);
+////			maxH	= (int) (r.getHeight() * numColumns / 2);
+//		}
+//maxH = Math.max( maxH, (int) r.getHeight() );
+////System.err.println( "prefW " + (maxW+24) + "; prefH " + (maxH+13) );
+//		setPreferredSize( new Dimension( maxW + 24, maxH + 13 ));
 	}
 	
 	private void configureTextColor( StateView sv, Color c )
@@ -278,11 +253,11 @@ maxH = Math.max( maxH, (int) r.getHeight() );
 	private int[] mixPixels( int[] pNous, int[] pNousN, Color cVous )
 	{
 		final int[] result	= new int[ pNous.length ];
-		
+
 		for( int i = 0; i < result.length; i++ ) {
 			result[ i ] = mixPixel( pNous[ i ], pNousN[ i ], cVous );
 		}
-		
+
 		return result;
 	}
 
@@ -294,7 +269,7 @@ maxH = Math.max( maxH, (int) r.getHeight() );
 		final float	nr		= ((pNous >> 16) & 0xFF) * va1 + ((pNousN >> 16) & 0xFF) * va2;
 		final float	ng		= ((pNous >> 8) & 0xFF) * va1 + ((pNousN >> 8) & 0xFF) * va2;
 		final float	nb		= (pNous & 0xFF) * va1 + (pNousN & 0xFF) * va2;
-		
+
 		final int vr		= cVous.getRed(); // (pVous >> 16) & 0xFF;
 		final int vg		= cVous.getGreen(); // (pVous >> 8) & 0xFF;
 		final int vb		= cVous.getBlue(); // pVous & 0xFF;
@@ -585,384 +560,384 @@ maxH = Math.max( maxH, (int) r.getHeight() );
 		return lastModifiers;
 	}
 	
-	public void paintComponent_( Graphics g )
-	{
-		super.paintComponent( g );
-
-		if( (state < 0) || (state >= numStates) ) return;
-				
-		final Graphics2D		g2		= (Graphics2D) g;
-		final AffineTransform	atOrig	= g2.getTransform();
-		final Composite			cmpOrig	= g2.getComposite();
-		final int				cidx	= isEnabled() ? (model.isArmed() ? ARMED : NORMAL) : DISABLED;
-		StateView				sv;
-		
-		final Insets i	= getInsets();
-		final int x		= i.left;
-		final int y		= i.top;
-		final int xi	= x + 3;
-		final int yi	= y + 3;
-		final int x2	= getWidth() - i.right;
-		final int y2	= getHeight() - i.bottom;
-		final int w		= x2 - x;
-		final int h		= y2 - y;
-		final int wi	= w - 6;
-		final int hi	= h - 6;
-		final int hh	= h >> 1;
-		final int hh2	= h - hh;
-		final int iconX, iconY, iconWidth, iconHeight, txtX, txtY;
-		final int txtIconX, txtIconY, txtIconWidth, txtIconHeight;
-		
-		if( w != recentWidth ) {
-			for( int j = 0; j < collStateViews.size(); j++ ) {
-				sv = (StateView) collStateViews.get( j );
-				if( sv.isGradient ) {
-					sv.pntBack = null;
-				}
-			}
-			recentWidth = w;
-		}
-
-		sv = (StateView) collStateViews.get( state );
-		if( sv.isGradient && (sv.pntBack == null) ) {
-			sv.pntBack = new GradientPaint( 0, 0, sv.colrBackGrad1, w - 1, 0, sv.colrBackGrad2 );
-		}
+//	public void paintComponent_( Graphics g )
+//	{
+//		super.paintComponent( g );
+//
+//		if( (state < 0) || (state >= numStates) ) return;
+//
+//		final Graphics2D		g2		= (Graphics2D) g;
+//		final AffineTransform	atOrig	= g2.getTransform();
+//		final Composite			cmpOrig	= g2.getComposite();
+//		final int				cidx	= isEnabled() ? (model.isArmed() ? ARMED : NORMAL) : DISABLED;
+//		StateView				sv;
+//
+//		final Insets i	= getInsets();
+//		final int x		= i.left;
+//		final int y		= i.top;
+//		final int xi	= x + 3;
+//		final int yi	= y + 3;
+//		final int x2	= getWidth() - i.right;
+//		final int y2	= getHeight() - i.bottom;
+//		final int w		= x2 - x;
+//		final int h		= y2 - y;
+//		final int wi	= w - 6;
+//		final int hi	= h - 6;
+//		final int hh	= h >> 1;
+//		final int hh2	= h - hh;
+//		final int iconX, iconY, iconWidth, iconHeight, txtX, txtY;
+//		final int txtIconX, txtIconY, txtIconWidth, txtIconHeight;
+//
+//		if( w != recentWidth ) {
+//			for( int j = 0; j < collStateViews.size(); j++ ) {
+//				sv = (StateView) collStateViews.get( j );
+//				if( sv.isGradient ) {
+//					sv.pntBack = null;
+//				}
+//			}
+//			recentWidth = w;
+//		}
+//
+//		sv = (StateView) collStateViews.get( state );
+//		if( sv.isGradient && (sv.pntBack == null) ) {
+//			sv.pntBack = new GradientPaint( 0, 0, sv.colrBackGrad1, w - 1, 0, sv.colrBackGrad2 );
+//		}
+//
+//		if( sv.isGradient || sv.isClear ) {
+//			g2.setColor( colrBackTop[ cidx ]);
+//			g2.fillRect( x + 1, y + 1, w - 2, hh - 1 );
+//			g2.setColor( colrBackBot[ cidx ]);
+//			g2.fillRect( x + 1, y + hh, w - 2, hh2 - 7 );
+//			g2.translate( x + 1, y2 - 7 );
+//			g2.setPaint( pntBackBot[ cidx ]);
+//			g2.fillRect( 0, 0, w - 2, 6 );
+//
+//			if( sv.isGradient ) {
+//				g2.translate( 0, y - y2 + 8 );
+//				g2.setComposite( this );
+//				g2.setPaint( sv.pntBack );
+//				g2.fillRect( 0, 0, w - 2, h - 2 );
+//				g2.setComposite( cmpOrig );
+//			}
+//		} else {
+//			g2.setColor( sv.colrSVBackTop[ cidx ]);
+//			g2.fillRect( x + 1, y + 1, w - 2, hh - 1 );
+//			g2.setColor( sv.colrSVBackBot[ cidx ]);
+//			g2.fillRect( x + 1, y + hh, w - 2, hh2 - 7 );
+//			g2.translate( x + 1, y2 - 7 );
+//			g2.setPaint( sv.pntSVBackBot[ cidx ]);
+//			g2.fillRect( 0, 0, w - 2, 6 );
+//		}
+//		g2.setTransform( atOrig );
+//
+//		g2.setColor( colrBorderCorner[ cidx ]);
+//		g2.drawLine( x, y, x + 1, y );
+//		g2.drawLine( x2 - 2, y, x2 - 1, y );
+//		g2.setColor( colrBorderTopS );
+//		g2.drawLine( x, y - 1, x2, y - 1 );
+//		g2.setColor( colrBorderTop[ cidx ]);
+//		g2.drawLine( x + 1, y, x2 - 2, y );
+//		g2.setColor( colrBorderRest[ cidx ]);
+//		g2.drawLine( x, y + 1, x, y2 - 2 );
+//		g2.drawLine( x2 - 1, y + 1, x2 - 1, y2 - 2 );
+//		g2.drawLine( x, y2 - 1, x2 - 1, y2 - 1 );
+//		g2.setColor( colrBorderBotS );
+//		g2.drawLine( x, y2, x2 - 1, y2 );
+//
+//		if( (sv.text != null) && (sv.text != lastTxt) ) {
+//			final FontMetrics fm= g.getFontMetrics( g.getFont() );
+//			lastTxt				= sv.text;
+//			txtWidth			= fm.stringWidth( lastTxt );
+//			txtHeight			= fm.getHeight();
+//			txtAscent			= fm.getAscent();
+//		}
+//
+//		if( sv.icon == null ) {
+//			iconWidth			= 0;
+//			iconHeight			= 0;
+//			if( sv.text == null ) {
+//				txtIconWidth	= 0;
+//				txtIconHeight	= 0;
+//			} else {
+//				txtIconWidth	= txtWidth;
+//				txtIconHeight	= txtHeight;
+//			}
+//		} else {
+//			iconWidth			= sv.icon.getIconWidth();
+//			iconHeight			= sv.icon.getIconHeight();
+//			if( sv.text == null ) {
+//				txtIconWidth	= iconWidth;
+//				txtIconHeight	= iconHeight;
+//			} else {
+//				if( this.getHorizontalTextPosition() != SwingConstants.CENTER ) {
+//					txtIconWidth= iconWidth + txtWidth + getIconTextGap();
+//				} else {
+//					txtIconWidth= Math.max( iconWidth, txtWidth );
+//				}
+//				txtIconHeight	= Math.max( txtHeight, iconHeight );
+//			}
+//		}
+//		switch( getHorizontalAlignment() ) {
+//		case SwingConstants.CENTER:
+//			txtIconX = ((wi - txtIconWidth) >> 1) + xi;
+//			break;
+//		case SwingConstants.LEFT:
+//		case SwingConstants.LEADING:
+//			txtIconX = xi;
+//			break;
+//		case SwingConstants.RIGHT:
+//		case SwingConstants.TRAILING:
+//			txtIconX = wi - txtIconWidth + xi;
+//			break;
+//		default:
+//			throw new IllegalArgumentException( "horizontalAlignment " + getHorizontalAlignment() );
+//		}
+//		switch( getVerticalAlignment() ) {
+//		case SwingConstants.CENTER:
+//			txtIconY = ((hi - txtIconHeight) >> 1) + yi;
+//			break;
+//		case SwingConstants.TOP:
+//			txtIconY = yi;
+//			break;
+//		case SwingConstants.BOTTOM:
+//			txtIconY = hi - txtIconHeight + yi;
+//			break;
+//		default:
+//			throw new IllegalArgumentException( "verticalAlignment " + getVerticalAlignment() );
+//		}
+//
+//		if( sv.icon != null ) {
+//			switch( getHorizontalTextPosition() ) {
+//			case SwingConstants.CENTER:
+//				iconX = ((txtIconWidth - iconWidth) >> 1) + txtIconX;
+//				break;
+//			case SwingConstants.LEFT:
+//			case SwingConstants.LEADING:
+//				iconX = txtIconWidth - iconWidth + txtIconX;
+//				break;
+//			case SwingConstants.RIGHT:
+//			case SwingConstants.TRAILING:
+//				iconX = txtIconX;
+//				break;
+//			default:
+//				throw new IllegalArgumentException( "horizontalTextPosition " + getHorizontalTextPosition() );
+//			}
+//			switch( getVerticalTextPosition() ) {
+//			case SwingConstants.CENTER: // XXX
+//				iconY = ((txtIconHeight - iconHeight) >> 1) + txtIconY;
+//				break;
+//			case SwingConstants.TOP: // XXX
+//				iconY = txtIconY;
+//				break;
+//			case SwingConstants.BOTTOM: // XXX
+//				iconY = txtIconHeight - iconHeight + txtIconY;
+//				break;
+//			default:
+//				throw new IllegalArgumentException( "verticalTextPosition " + getVerticalTextPosition() );
+//			}
+//			sv.icon.paintIcon( this, g, iconX, iconY );
+//		}
+//
+//		if( sv.text != null ) {
+//			switch( getHorizontalTextPosition() ) {
+//			case SwingConstants.CENTER:
+//				txtX = ((txtIconWidth - txtWidth) >> 1) + txtIconX;
+//				break;
+//			case SwingConstants.LEFT:
+//			case SwingConstants.LEADING:
+//				txtX = txtIconX;
+//				break;
+//			case SwingConstants.RIGHT:
+//			case SwingConstants.TRAILING:
+//				txtX = txtIconWidth - txtWidth + txtIconX;
+//				break;
+//			default:
+//				throw new IllegalArgumentException( "horizontalTextPosition " + getHorizontalTextPosition() );
+//			}
+//			switch( getVerticalTextPosition() ) {
+//			case SwingConstants.CENTER:
+//				txtY = ((txtIconHeight - txtHeight) >> 1) + txtIconY;
+//				break;
+//			case SwingConstants.TOP:
+//				txtY = txtIconY;
+//				break;
+//			case SwingConstants.BOTTOM:
+//				txtY = txtIconHeight - txtHeight + txtIconY;
+//				break;
+//			default:
+//				throw new IllegalArgumentException( "verticalTextPosition " + getVerticalTextPosition() );
+//			}
+//
+//			g2.setColor( sv.colrLabel[ cidx ]);
+//			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+//			g2.drawString( lastTxt, txtX, txtY + txtAscent );
+//		}
+//	}
 	
-		if( sv.isGradient || sv.isClear ) {
-			g2.setColor( colrBackTop[ cidx ]);
-			g2.fillRect( x + 1, y + 1, w - 2, hh - 1 );
-			g2.setColor( colrBackBot[ cidx ]);
-			g2.fillRect( x + 1, y + hh, w - 2, hh2 - 7 );
-			g2.translate( x + 1, y2 - 7 );
-			g2.setPaint( pntBackBot[ cidx ]);
-			g2.fillRect( 0, 0, w - 2, 6 );
-			
-			if( sv.isGradient ) {
-				g2.translate( 0, y - y2 + 8 );
-				g2.setComposite( this );
-				g2.setPaint( sv.pntBack );
-				g2.fillRect( 0, 0, w - 2, h - 2 );
-				g2.setComposite( cmpOrig );
-			}
-		} else {
-			g2.setColor( sv.colrSVBackTop[ cidx ]);
-			g2.fillRect( x + 1, y + 1, w - 2, hh - 1 );
-			g2.setColor( sv.colrSVBackBot[ cidx ]);
-			g2.fillRect( x + 1, y + hh, w - 2, hh2 - 7 );
-			g2.translate( x + 1, y2 - 7 );
-			g2.setPaint( sv.pntSVBackBot[ cidx ]);
-			g2.fillRect( 0, 0, w - 2, 6 );		
-		}
-		g2.setTransform( atOrig );
-				
-		g2.setColor( colrBorderCorner[ cidx ]);
-		g2.drawLine( x, y, x + 1, y );
-		g2.drawLine( x2 - 2, y, x2 - 1, y );
-		g2.setColor( colrBorderTopS );
-		g2.drawLine( x, y - 1, x2, y - 1 );
-		g2.setColor( colrBorderTop[ cidx ]);
-		g2.drawLine( x + 1, y, x2 - 2, y );
-		g2.setColor( colrBorderRest[ cidx ]);
-		g2.drawLine( x, y + 1, x, y2 - 2 );
-		g2.drawLine( x2 - 1, y + 1, x2 - 1, y2 - 2 );
-		g2.drawLine( x, y2 - 1, x2 - 1, y2 - 1 );
-		g2.setColor( colrBorderBotS );
-		g2.drawLine( x, y2, x2 - 1, y2 );
+//	public static void makeTestFrame( int htextPos, int vtextPos )
+//	{
+//		final javax.swing.JFrame f = new javax.swing.JFrame( "Test ");
+//		final java.awt.Container c = f.getContentPane();
+//		final int[] halign = new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT };
+//		final int[] valign = new int[] { SwingConstants.TOP, SwingConstants.CENTER, SwingConstants.BOTTOM };
+//		Button b;
+//		final Icon i = new Icon() {
+//			public void paintIcon( java.awt.Component comp, Graphics g, int x, int y )
+//			{
+//				g.setColor( Color.red );
+//				g.drawRect( x, y, 39, 39 );
+//			}
+//
+//			public int getIconWidth() { return 40; }
+//			public int getIconHeight() { return 40; }
+//		};
+//
+//		c.setLayout( new java.awt.GridLayout( 3, 3 ));
+//		for( int row = 0; row < 3; row++ ) {
+//			for( int col = 0; col < 3; col++ ) {
+//				b = new Button();
+//				b.addItem( "Test" );
+//				b.setItemIcon( 0, i );
+//				b.setHorizontalAlignment( halign[ col ]);
+//				b.setVerticalAlignment( valign[ row ]);
+//				b.setHorizontalTextPosition( htextPos );
+//				b.setVerticalTextPosition( vtextPos );
+//				b.setIconTextGap( 16 );
+//				c.add( b );
+//			}
+//		}
+//
+//		f.pack();
+//		f.setVisible( true );
+//		f.toFront();
+//	}
 
-		if( (sv.text != null) && (sv.text != lastTxt) ) {
-			final FontMetrics fm= g.getFontMetrics( g.getFont() );
-			lastTxt				= sv.text;
-			txtWidth			= fm.stringWidth( lastTxt );
-			txtHeight			= fm.getHeight();
-			txtAscent			= fm.getAscent();
-		}
-
-		if( sv.icon == null ) {
-			iconWidth			= 0;
-			iconHeight			= 0;
-			if( sv.text == null ) {
-				txtIconWidth	= 0;
-				txtIconHeight	= 0;
-			} else {
-				txtIconWidth	= txtWidth;
-				txtIconHeight	= txtHeight;
-			}
-		} else {
-			iconWidth			= sv.icon.getIconWidth();
-			iconHeight			= sv.icon.getIconHeight();
-			if( sv.text == null ) {
-				txtIconWidth	= iconWidth;
-				txtIconHeight	= iconHeight;
-			} else {
-				if( this.getHorizontalTextPosition() != SwingConstants.CENTER ) {
-					txtIconWidth= iconWidth + txtWidth + getIconTextGap();
-				} else {
-					txtIconWidth= Math.max( iconWidth, txtWidth );
-				}
-				txtIconHeight	= Math.max( txtHeight, iconHeight );
-			}
-		}
-		switch( getHorizontalAlignment() ) {
-		case SwingConstants.CENTER:
-			txtIconX = ((wi - txtIconWidth) >> 1) + xi;
-			break;
-		case SwingConstants.LEFT:
-		case SwingConstants.LEADING:
-			txtIconX = xi;
-			break;
-		case SwingConstants.RIGHT:
-		case SwingConstants.TRAILING:
-			txtIconX = wi - txtIconWidth + xi;
-			break;
-		default:
-			throw new IllegalArgumentException( "horizontalAlignment " + getHorizontalAlignment() );
-		}
-		switch( getVerticalAlignment() ) {
-		case SwingConstants.CENTER:
-			txtIconY = ((hi - txtIconHeight) >> 1) + yi;
-			break;
-		case SwingConstants.TOP:
-			txtIconY = yi;
-			break;
-		case SwingConstants.BOTTOM:
-			txtIconY = hi - txtIconHeight + yi;
-			break;
-		default:
-			throw new IllegalArgumentException( "verticalAlignment " + getVerticalAlignment() );
-		}
-		
-		if( sv.icon != null ) {
-			switch( getHorizontalTextPosition() ) {
-			case SwingConstants.CENTER:
-				iconX = ((txtIconWidth - iconWidth) >> 1) + txtIconX;
-				break;
-			case SwingConstants.LEFT:
-			case SwingConstants.LEADING:
-				iconX = txtIconWidth - iconWidth + txtIconX;
-				break;
-			case SwingConstants.RIGHT:
-			case SwingConstants.TRAILING:
-				iconX = txtIconX;
-				break;
-			default:
-				throw new IllegalArgumentException( "horizontalTextPosition " + getHorizontalTextPosition() );
-			}
-			switch( getVerticalTextPosition() ) {
-			case SwingConstants.CENTER: // XXX
-				iconY = ((txtIconHeight - iconHeight) >> 1) + txtIconY;
-				break;
-			case SwingConstants.TOP: // XXX
-				iconY = txtIconY;
-				break;
-			case SwingConstants.BOTTOM: // XXX
-				iconY = txtIconHeight - iconHeight + txtIconY;
-				break;
-			default:
-				throw new IllegalArgumentException( "verticalTextPosition " + getVerticalTextPosition() );
-			}
-			sv.icon.paintIcon( this, g, iconX, iconY );
-		}
-		
-		if( sv.text != null ) {
-			switch( getHorizontalTextPosition() ) {
-			case SwingConstants.CENTER:
-				txtX = ((txtIconWidth - txtWidth) >> 1) + txtIconX;
-				break;
-			case SwingConstants.LEFT:
-			case SwingConstants.LEADING:
-				txtX = txtIconX;
-				break;
-			case SwingConstants.RIGHT:
-			case SwingConstants.TRAILING:
-				txtX = txtIconWidth - txtWidth + txtIconX;
-				break;
-			default:
-				throw new IllegalArgumentException( "horizontalTextPosition " + getHorizontalTextPosition() );
-			}
-			switch( getVerticalTextPosition() ) {
-			case SwingConstants.CENTER:
-				txtY = ((txtIconHeight - txtHeight) >> 1) + txtIconY;
-				break;
-			case SwingConstants.TOP:
-				txtY = txtIconY;
-				break;
-			case SwingConstants.BOTTOM:
-				txtY = txtIconHeight - txtHeight + txtIconY;
-				break;
-			default:
-				throw new IllegalArgumentException( "verticalTextPosition " + getVerticalTextPosition() );
-			}
-
-			g2.setColor( sv.colrLabel[ cidx ]);
-			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-			g2.drawString( lastTxt, txtX, txtY + txtAscent );
-		}
-	}
-	
-	public static void makeTestFrame( int htextPos, int vtextPos )
-	{
-		final javax.swing.JFrame f = new javax.swing.JFrame( "Test ");
-		final java.awt.Container c = f.getContentPane();
-		final int[] halign = new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT };
-		final int[] valign = new int[] { SwingConstants.TOP, SwingConstants.CENTER, SwingConstants.BOTTOM };
-		Button b;
-		final Icon i = new Icon() {
-			public void paintIcon( java.awt.Component comp, Graphics g, int x, int y )
-			{
-				g.setColor( Color.red );
-				g.drawRect( x, y, 39, 39 );
-			}
-			
-			public int getIconWidth() { return 40; }
-			public int getIconHeight() { return 40; }
-		};
-		
-		c.setLayout( new java.awt.GridLayout( 3, 3 ));
-		for( int row = 0; row < 3; row++ ) {
-			for( int col = 0; col < 3; col++ ) {
-				b = new Button();
-				b.addItem( "Test" );
-				b.setItemIcon( 0, i );
-				b.setHorizontalAlignment( halign[ col ]);
-				b.setVerticalAlignment( valign[ row ]);
-				b.setHorizontalTextPosition( htextPos );
-				b.setVerticalTextPosition( vtextPos );
-				b.setIconTextGap( 16 );
-				c.add( b );
-			}
-		}
-		
-		f.pack();
-		f.setVisible( true );
-		f.toFront();
-	}
-
-	private void lala( InputEvent e )
-	{
-		model.setPressed( true );
-		if( model.isArmed() ) {
-			if( autoStep && (numStates > 0) ) state = (state + 1) % numStates;
-			lastModifiers = e.getModifiers();
-			fireActionPerformed( new ActionEvent( this, ActionEvent.ACTION_PERFORMED, "",
-				e.getWhen(), lastModifiers ));
-			model.setArmed( false );
-			repaint();
-		}
-	}
+//	private void lala( InputEvent e )
+//	{
+//		model.setPressed( true );
+//		if( model.isArmed() ) {
+//			if( autoStep && (numStates > 0) ) state = (state + 1) % numStates;
+//			lastModifiers = e.getModifiers();
+//			fireActionPerformed( new ActionEvent( this, ActionEvent.ACTION_PERFORMED, "",
+//				e.getWhen(), lastModifiers ));
+//			model.setArmed( false );
+//			repaint();
+//		}
+//	}
 
 // ---------------- Composite interface ----------------
 
-	public CompositeContext createContext( ColorModel srcColorModel, ColorModel dstColorModel, RenderingHints hints ) 
-	{
-		return this;
-	}
+//	public CompositeContext createContext( ColorModel srcColorModel, ColorModel dstColorModel, RenderingHints hints )
+//	{
+//		return this;
+//	}
 
 // ---------------- CompositeContext interface ----------------
 
-	// this composite implements a "multiply"
-	// algorithm as known e.g. from photoshop
-	// (for each RGB component, source and target (normalized to 0 ... 1)
-	// are multiplied)
-	public void compose( Raster srcR, Raster dstInR, WritableRaster dstOutR ) 
-	{
-		final DataBuffer	srcBuf		= srcR.getDataBuffer();
-		final DataBuffer	dstInBuf	= dstInR.getDataBuffer();
-		final DataBuffer	dstOutBuf	= dstOutR.getDataBuffer();
-		final int			num			= dstOutBuf.getSize();
-	
-		int src, dst;
-		
-		for( int i = 0; i < num; i++ ) {
-			src = srcBuf.getElem( i );
-			dst = dstInBuf.getElem( i );
-			dstOutBuf.setElem( i,
-				(((src & 0xFF) * (dst & 0xFF) >> 8)) |
-				((((src >> 8) & 0xFF) * ((dst >> 8) & 0xFF)) & 0xFF00) |
-				(((((src >> 16) & 0xFF) * ((dst >> 16) & 0xFF)) << 8) & 0xFF0000) |
-				(((((src >> 24) & 0xFF) * ((dst >> 24) & 0xFF)) << 16) & 0xFF000000)
-			);
-		}
-	}
-	
-	public void dispose() { /* empty */ }
+//	// this composite implements a "multiply"
+//	// algorithm as known e.g. from photoshop
+//	// (for each RGB component, source and target (normalized to 0 ... 1)
+//	// are multiplied)
+//	public void compose( Raster srcR, Raster dstInR, WritableRaster dstOutR )
+//	{
+//		final DataBuffer	srcBuf		= srcR.getDataBuffer();
+//		final DataBuffer	dstInBuf	= dstInR.getDataBuffer();
+//		final DataBuffer	dstOutBuf	= dstOutR.getDataBuffer();
+//		final int			num			= dstOutBuf.getSize();
+//
+//		int src, dst;
+//
+//		for( int i = 0; i < num; i++ ) {
+//			src = srcBuf.getElem( i );
+//			dst = dstInBuf.getElem( i );
+//			dstOutBuf.setElem( i,
+//				(((src & 0xFF) * (dst & 0xFF) >> 8)) |
+//				((((src >> 8) & 0xFF) * ((dst >> 8) & 0xFF)) & 0xFF00) |
+//				(((((src >> 16) & 0xFF) * ((dst >> 16) & 0xFF)) << 8) & 0xFF0000) |
+//				(((((src >> 24) & 0xFF) * ((dst >> 24) & 0xFF)) << 16) & 0xFF000000)
+//			);
+//		}
+//	}
+//
+//	public void dispose() { /* empty */ }
 
 // ---------------- Mouse(Motion)Listener interfaces ----------------
 
-	public void mousePressed( MouseEvent e )
-	{
-		if( !isEnabled() ) return;
-
-		requestFocus();
-
-		if( e.isControlDown() ) return;
-
-		model.setArmed( true );
-		repaint();
-	}
-
-	public void mouseReleased( MouseEvent e )
-	{
-		if( isEnabled() ) {
-			lala( e );
-		}
-	}
-
-	public void mouseDragged( MouseEvent e )
-	{
-		if( !isEnabled() || e.isControlDown() ) return;
-
-		final boolean oldState = model.isArmed();
-		final boolean newState = this.contains( e.getPoint() );
-		if( oldState != newState ) {
-			model.setArmed( newState );
-			repaint();
-		}
-	}
-	
-	public void mouseClicked( MouseEvent e ) { /* ignored */ }
-	public void mouseEntered( MouseEvent e ) { /* ignored */ }
-	public void mouseExited( MouseEvent e ) { /* ignored */ }
-	public void mouseMoved( MouseEvent e ) { /* ignored */ }
+//	public void mousePressed( MouseEvent e )
+//	{
+//		if( !isEnabled() ) return;
+//
+//		requestFocus();
+//
+//		if( e.isControlDown() ) return;
+//
+//		model.setArmed( true );
+//		repaint();
+//	}
+//
+//	public void mouseReleased( MouseEvent e )
+//	{
+//		if( isEnabled() ) {
+//			lala( e );
+//		}
+//	}
+//
+//	public void mouseDragged( MouseEvent e )
+//	{
+//		if( !isEnabled() || e.isControlDown() ) return;
+//
+//		final boolean oldState = model.isArmed();
+//		final boolean newState = this.contains( e.getPoint() );
+//		if( oldState != newState ) {
+//			model.setArmed( newState );
+//			repaint();
+//		}
+//	}
+//
+//	public void mouseClicked( MouseEvent e ) { /* ignored */ }
+//	public void mouseEntered( MouseEvent e ) { /* ignored */ }
+//	public void mouseExited( MouseEvent e ) { /* ignored */ }
+//	public void mouseMoved( MouseEvent e ) { /* ignored */ }
 
 // ---------------- KeyListener interface ----------------
 
-	public void keyPressed( KeyEvent e )
-	{
-		if( isEnabled() && (e.getKeyChar() == ' ') && !model.isArmed() ) {
-			model.setArmed( true );
-			repaint();
-		}
-	}
-	
-	public void keyReleased( KeyEvent e )
-	{
-		if( isEnabled() && (e.getKeyChar() == ' ') ) {
-			lala( e );
-		}
-	}
-
-	public void keyTyped( KeyEvent e ) { /* ignored */ }
+//	public void keyPressed( KeyEvent e )
+//	{
+//		if( isEnabled() && (e.getKeyChar() == ' ') && !model.isArmed() ) {
+//			model.setArmed( true );
+//			repaint();
+//		}
+//	}
+//
+//	public void keyReleased( KeyEvent e )
+//	{
+//		if( isEnabled() && (e.getKeyChar() == ' ') ) {
+//			lala( e );
+//		}
+//	}
+//
+//	public void keyTyped( KeyEvent e ) { /* ignored */ }
 
 // ---------------- FocusListener interface ----------------
 
-	public void focusGained( FocusEvent e )
-	{
-		repaint();
-	}
-
-	public void focusLost( FocusEvent e )
-	{
-		repaint();
-	}
+//	public void focusGained( FocusEvent e )
+//	{
+//		repaint();
+//	}
+//
+//	public void focusLost( FocusEvent e )
+//	{
+//		repaint();
+//	}
 	
 // ---------------- PropertyChangeListener interface ----------------
 
-	public void propertyChange( PropertyChangeEvent e )
-	{
-		lastTxt = null;
-		recalcPrefSize();
-		repaint();
-	}
+//	public void propertyChange( PropertyChangeEvent e )
+//	{
+//		lastTxt = null;
+//		recalcPrefSize();
+//		repaint();
+//	}
 
 // ---------------- internal classes ----------------
 

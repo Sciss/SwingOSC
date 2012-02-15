@@ -1,8 +1,8 @@
 /*
  *  ListView.java
- *  SwingOSC
+ *  (SwingOSC)
  *
- *  Copyright (c) 2005-2011 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *		26-Dec-06	created
  *		29-Jan-08	added setValue
  */
+
 package de.sciss.swingosc;
 
 import java.awt.Color;

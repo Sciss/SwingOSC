@@ -1,8 +1,8 @@
 /*
  *  ColliderLayout.java
- *  SwingOSC
+ *  (SwingOSC)
  *
- *  Copyright (c) 2005-2011 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
  *		27-Jan-08	conforms with java 1.4
  *		31-Jan-08	special handling for Panel in preferredSize calcluation
  */
+
 package de.sciss.swingosc;
 
 import java.awt.Component;

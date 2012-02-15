@@ -1,8 +1,8 @@
 /*
  *  PeakMeterManager.java
- *  SwingOSC
+ *  (SwingOSC)
  *
- *  Copyright (c) 2008-2009 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *  	11-Aug-08	created from EisK
  *  	21-Apr-09	created from Nuages, retrofitted java 1.4
  */
+
 package de.sciss.swingosc;
 
 import java.awt.EventQueue;

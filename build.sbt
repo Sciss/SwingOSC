@@ -1,3 +1,5 @@
+import AssemblyKeys._
+
 name := "SwingOSC"
 
 organization := "de.sciss"
@@ -10,4 +12,16 @@ description := "An OpenSoundControl (OSC) server to dynamically instantiate and 
 
 scalaVersion := "2.9.1"
 
-crossPaths := false
+crossPaths := false   // currently no scala involved, hence remove that from the artifact names
+
+// ---- assembly packaging ----
+
+seq( assemblySettings: _* )
+
+assembleArtifact in packageScala := false   // no scala-library.jar
+
+// assembleArtifact in packageBin := false     // no sources
+
+assembleArtifact in packageSrc := false     // no sources
+
+mainClass in assembly := Some( "de.sciss.swingosc.SwingOSC" )

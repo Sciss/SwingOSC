@@ -27,7 +27,6 @@ package de.sciss.swingosc;
 
 import com.teamdev.jxbrowser.Browser;
 import com.teamdev.jxbrowser.BrowserFactory;
-import com.teamdev.jxbrowser.BrowserType;
 import com.teamdev.jxbrowser.events.NavigationEvent;
 import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
 import com.teamdev.jxbrowser.events.NavigationListener;
@@ -42,20 +41,15 @@ import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.AWTEventMulticaster;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class WebView extends JPanel {
-    public static final boolean VERBOSE         = true;
+    public static final boolean VERBOSE         = false;
 
     public static final String ACTION_LOADED    = "loaded";
 
@@ -187,23 +181,32 @@ public class WebView extends JPanel {
 //        final int i = url.indexOf( ':' );
 //        final String proto = url.substring( 0, i );
 //        final String addr  = url.substring( i + 1 );
-        try {
+//        try {
 //        final URI uri = new URI( proto, addr, "" );
 //            final URI uri = new URI( url );
-            final URI uri = new URI( escape( url ));
-            navigate( uri.toURL() );
+            final String url1 = escape( url );
+            if( VERBOSE ) System.out.println( "navigate string " + url1 );
+//            final URI uri = new URI( url1 );
+            navigate( new URL( url1 ));
 
-        } catch( URISyntaxException e ) {
-            throw new MalformedURLException( url );
+//        } catch( URISyntaxException e ) {
+//            throw new MalformedURLException( url );
 //        } catch( UnsupportedEncodingException e ) {
 //            throw new MalformedURLException( url );
-        }
+//        }
 //        browser.navigate(url);
     }
 
     // XXX ought to use apache commons-httpclient, but this adds another 500K at least
-    private String escape( String url ) /* throws UnsupportedEncodingException */ {
-        return url.replace( " ", "%20" );
+    private String escape( String url ) throws MalformedURLException {
+        final String url1;
+        if( url.startsWith( "file:/" ) && url.length() > 6 && url.charAt( 6 ) != '/' ) {
+            url1 = "file://" + url.substring( 5 );
+        } else {
+            url1 = url;
+        }
+        return URLUtil.encodePathQuery( url1, "UTF-8" );
+//        return url.replace( " ", "%20" );
 //        final int i = url.indexOf( ':' );
 //        if( i >= 0 ) {
 //            final String proto = url.substring( 0, i );

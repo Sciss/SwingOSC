@@ -27,6 +27,7 @@ package de.sciss.swingosc;
 
 import com.teamdev.jxbrowser.Browser;
 import com.teamdev.jxbrowser.BrowserFactory;
+import com.teamdev.jxbrowser.BrowserType;
 import com.teamdev.jxbrowser.events.NavigationEvent;
 import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
 import com.teamdev.jxbrowser.events.NavigationListener;
@@ -43,10 +44,12 @@ import java.awt.AWTEventMulticaster;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,25 +61,30 @@ public class WebView extends JPanel {
 
     private static boolean initialized = false;
 
-    private final Browser browser = BrowserFactory.createBrowser();
+    private final Browser browser = BrowserFactory.createBrowser(); // ( BrowserType.Mozilla );
     private final List hyperlinkListeners   = new ArrayList();
     private ActionListener actionListener = null;
 
-    private String nonManualURL = "";
+    private final String dummyURLString = escape( "file:" + new File( "" ).getAbsolutePath() );
+    private final URL dummyURL;
+
+    private URL nonManualURL = null;
 
     private final NavigationListener navListener = new NavigationListener() {
         public void navigationStarted( NavigationEvent e ) {
-            final String url = e.getUrl();
-            if( VERBOSE ) System.out.println( "Navigation started " + url );
-            if( (e.getNavigationType() == NavigationType.NAVIGATE) && !url.equals( nonManualURL )) {
-                try {
-                    nonManualURL = "";
-//                    dispatchLinkActivated( new URI( url ).toURL() );
-                } catch( MalformedURLException e2 ) {
-                    e2.printStackTrace();
-                } catch( URISyntaxException e2 ) {
-                    e2.printStackTrace();
+            try {
+                final URL url = new URL( e.getUrl() );
+                if( url.equals( dummyURL )) return;
+                final boolean sameURL = url.equals( nonManualURL );
+                if( VERBOSE ) System.out.println( "Navigation started " + url.toString() + " / same? " + sameURL );
+                if( (e.getNavigationType() == NavigationType.NAVIGATE) && !sameURL ) {
+                    nonManualURL = null;
+                    dispatchLinkActivated( url );
                 }
+            } catch( MalformedURLException e2 ) {
+                e2.printStackTrace();
+//            } catch( URISyntaxException e2 ) {
+//                e2.printStackTrace();
             }
         }
 
@@ -147,51 +155,72 @@ public class WebView extends JPanel {
     }
 
     public String getURL() {
+        final String u = browser.getCurrentLocation();
 //        final NavigationEntry ne = getCurrentNavigationEntry();
 //        final URL u = ne == null ? null : ne.getUrl();
-//        return u == null ? "" : u.toString();
-        return "";
+        return u == null ? "" : u; // .toString();
     }
 
     public String getTitle() {
+        final String t = browser.getTitle();
 //        final NavigationEntry ne = getCurrentNavigationEntry();
 //        final String t = ne == null ? null : ne.getTitle();
-//        return t == null ? "" : t;
-        return "";
+        return t == null ? "" : t;
     }
 
     public void setHtml( String html ) throws IOException {
-        final File f    = File.createTempFile( "tmp", ".html" );
-        f.deleteOnExit();
-        final URL url   = f.toURI().toURL();
-        final FileWriter w = new FileWriter( f );
-        w.write( html );
-        w.close();
-        navigate( url );
+//        browser.setContent( html );
+        nonManualURL = dummyURL;
+        browser.setContent( html, dummyURLString );
+//        final File f    = File.createTempFile( "tmp", ".html" );
+//        f.deleteOnExit();
+//        final URL url   = f.toURI().toURL();
+//        final FileWriter w = new FileWriter( f );
+//        w.write( html );
+//        w.close();
+//        navigate( url );
     }
 
     public void navigate( String url ) throws MalformedURLException {
-        if( VERBOSE ) System.out.println( "navigate: " + url );
+//        if( VERBOSE ) System.out.println( "navigate: " + url );
 
 //        final int i = url.indexOf( ':' );
 //        final String proto = url.substring( 0, i );
 //        final String addr  = url.substring( i + 1 );
         try {
 //        final URI uri = new URI( proto, addr, "" );
-            final URI uri = new URI( url );
+//            final URI uri = new URI( url );
+            final URI uri = new URI( escape( url ));
             navigate( uri.toURL() );
 
         } catch( URISyntaxException e ) {
             throw new MalformedURLException( url );
+//        } catch( UnsupportedEncodingException e ) {
+//            throw new MalformedURLException( url );
         }
 //        browser.navigate(url);
+    }
+
+    // XXX ought to use apache commons-httpclient, but this adds another 500K at least
+    private String escape( String url ) /* throws UnsupportedEncodingException */ {
+        return url.replace( " ", "%20" );
+//        final int i = url.indexOf( ':' );
+//        if( i >= 0 ) {
+//            final String proto = url.substring( 0, i );
+//            final String path  = url.substring( i + 1 );
+//            return proto + ":" + URLEncoder.encode( path, "UTF-8" );
+//        } else {
+//            return URLEncoder.encode( url, "UTF-8" );
+//        }
     }
 
     public void navigate( URL url ) {
 //        browser.removeNavigationListener( navListener );
 //        try {
         final String urlString = url.toString();
-        nonManualURL = urlString;
+        if( VERBOSE ) System.out.println( "navigate: " + urlString );
+        nonManualURL = url;
+        browser.stop();
             browser.navigate( urlString );
 //        } finally {
 //            browser.addNavigationListener( navListener );
@@ -210,8 +239,9 @@ public class WebView extends JPanel {
         browser.refresh();
     }
 
-    private WebView() {
+    private WebView() throws MalformedURLException {
         super( new BorderLayout() );
+        dummyURL = new URL( dummyURLString );
         add( browser.getComponent(), BorderLayout.CENTER );
 
 //        browser.

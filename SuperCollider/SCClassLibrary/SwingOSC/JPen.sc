@@ -2,7 +2,7 @@
  *	JPen
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,15 +21,6 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *	- 03-Oct-06	separate font_ method, font and colour
- *				removed in string methods!!
- *	- 01-Jan-07	bundle size increased to 8K again
- *				; fixes missing List -> asSwingArg ; setSmoothing
- *	- 25-Feb-08	added image methods
- *	- 04-Aug-08	incorporated some of the additions from charles picasso
  */
 
 /**
@@ -46,12 +37,6 @@
  *	object implements the Icon interface and hence
  *	it can be added to a JLabel or the special Frame
  *	class for example.
- *
- *	@version		0.64, 28-Jan-10
- *	@author		Hanns Holger Rutz
- *
- *	@todo		check if String.bounds is cross platform or not
- *				(might have to replace)
  */
 JPen {
 	classvar cmds;

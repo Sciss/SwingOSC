@@ -2,7 +2,7 @@
  *	SwingGUI
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,27 +21,25 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
  */
 
 /**
  *	This is the Java/Swing(OSC) framework GUI implementation.
  *	It can be accessed from the GUI
  *	class using GUI.swing, GUI.fromID( \swing ) or GUI.get( \swing ).
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.64, 30-Mar-10
  */
 SwingGUI {
 	classvar extraClasses;
 	
 	classvar boundsWarned = false;
+	
+	classvar <nimbusInsets;
 
 	*initClass {
 		Class.initClassTree( Event );
 		extraClasses = Event.new;
+		Class.initClassTree( Insets );
+		nimbusInsets = Insets( 2, 2, 2, 2 );
 		Class.initClassTree( GUI );
 		GUI.add( this );
 	}

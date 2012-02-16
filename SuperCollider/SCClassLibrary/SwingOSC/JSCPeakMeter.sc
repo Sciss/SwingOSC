@@ -1,8 +1,8 @@
 /*
- *	JSCViews collection 4
+ *	JSCPeakMeter
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,16 +21,8 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *		02-Oct-09		added JPeakMeterSettings
  */
 
-/**
- *	@version		0.64, 14-Mar-10
- *	@author		Hanns Holger Rutz
- */
 JPeakMeterSettings {
 	classvar all;			// IdentityDictionary mapping SwingOSC to Server to JPeakMeterSettings
 
@@ -236,7 +228,7 @@ JPeakMeterManager {
 	}
 }
 
-JSCPeakMeter : JSCControlView {
+JSCPeakMeter : JSCView {
 	var <bus, <group, manager;
 	var <active = true;
 	var <border = false, <caption = false, <captionVisible = true, <captionPosition = \left;

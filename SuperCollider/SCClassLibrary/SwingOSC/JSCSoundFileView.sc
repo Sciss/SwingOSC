@@ -2,7 +2,7 @@
  *	JSCSoundFileView
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,20 +21,8 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *	- 30-Jan-07	setSelectionSpan removed, use setSelection now
- *				(was added to cocoa view)
- *	- 29-Jul-07	added cache support
  */
 
-/**
- *	Replacement for / enhancement of the (Cocoa) SCSoundFileView class by Jan Truetzschler.
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.64, 28-Jan-10
- */
 JSCSoundFileView : JSCView { // in SwingOSC not a subclass of JSCScope
 	classvar cacheServers;	// IdentitySet whose elements are SwingOSC instances
 

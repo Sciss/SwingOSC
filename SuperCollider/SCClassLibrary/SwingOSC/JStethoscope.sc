@@ -2,7 +2,7 @@
  *	JStethoscope
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz, Marije Baalman. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz, Marije Baalman. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
  *	A replacement for (Cocoa) Stethoscope.
  *
  *	@author		Hanns Holger Rutz, Marije Baalman
- *	@version		0.61, 04-Aug-08
  */
 JStethoscope {
 	classvar ugenScopes;

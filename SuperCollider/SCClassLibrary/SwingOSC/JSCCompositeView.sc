@@ -1,5 +1,5 @@
 /*
- *	Insets
+ *	JSCCompositeView
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,40 +23,21 @@
  *	contact@sciss.de
  */
 
-/**
- *	Helper class like java.awt.Insets, but unmutable.
- *	An Insets object is a representation of the borders of a container.
- *	It specifies the space that a container must leave at each of its edges. 
- */
-Insets {
-	var <top, <left, <bottom, <right;
-	var allZero;
-	
-	// ----------------- constructor -----------------
+JSCCompositeView : JSCContainerView {
+	// ----------------- quasi-interface methods : crucial-lib support -----------------
 
-	*new { arg top = 0, left = 0, bottom = 0, right = 0;
-		^super.newCopyArgs( top, left, bottom, right ).prInit;
-	}
-	
-	// ----------------- public instance methods -----------------
-
-	addTo { arg rect;
-		^if( allZero, rect, { rect.insetAll( left, top, right, bottom )});
-	}
-	
-	subtractFrom { arg rect;
-		^if( allZero, rect, { rect.insetAll( left.neg, top.neg, right.neg, bottom.neg )});
-	}
-	
-	leftTop {
-		^Point( left, top );
+	asFlowView { arg bounds;
+		^FlowView( this,bounds ?? { this.bounds });
 	}
 
-	storeArgs { ^[ top, left, bottom, right ]}
-	
 	// ----------------- private instance methods -----------------
 
-	prInit {
-		allZero = (top == 0) and: (left == 0) and: (right == 0) and: (bottom == 0);
+	prChildOrder { arg child; ^0 }
+
+	prInitView {
+		jinsets = Insets( 3, 3, 3, 3 );  // so focus borders of children are not clipped
+		^this.prSCViewNew([
+			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.Panel", '[', '/new', "de.sciss.swingosc.ColliderLayout", ']', ']' ]
+		]);
 	}
 }

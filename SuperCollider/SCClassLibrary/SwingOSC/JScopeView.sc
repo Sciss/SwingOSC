@@ -2,7 +2,7 @@
  *	JScopeView
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz, Marije Baalman. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz, Marije Baalman. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,16 +21,12 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
  */
 
 /**
  *	Replacement for the (Cocoa) SCScope class.
  *
  *	@author		Hanns Holger Rutz, Marije Baalman
- *	@version		0.61, 11-Aug-08
  */
 JScopeOut : UGen {
 	// ----------------- quasi-constructors -----------------

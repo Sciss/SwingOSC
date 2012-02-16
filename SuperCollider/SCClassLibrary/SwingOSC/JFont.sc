@@ -2,7 +2,7 @@
  *	JFont
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,17 +21,8 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
  */
 
-/**
- *	Replacement for the cocoa font class.
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.65, 10-May-10
- */
 JFont {
 	classvar <>verbose = false;
 
@@ -77,16 +68,6 @@ JFont {
 		^super.newCopyArgs( name, size, style );
 	}
 	
-	setDefault {
-		default = this;
-// ??? should we do this ??? cocoa doesn't
-		SwingOSC.set.do({ arg server; server.listSendMsg([ '/local', \font ] ++ this.asSwingArg )});
-	}
-
-	asSwingArg {
-		^([ '[', '/new', 'java.awt.Font', this.name, this.style, this.size, ']' ]);
-	}
-	
 	*availableFonts { arg server;
 		var servers, result;
 		servers 	= Archive.global[ \swingOSCFontNames ];
@@ -122,12 +103,6 @@ JFont {
 		if( verbose, { "JFont.smoothing : has no effect".error; });
 	}
 
-	storeArgs { ^[ name, size, style ] }
-
-	boldVariant {
-		^this.class.new( name, size, style | 1 );
-	}
-
 	*defaultSansFace {
 		^defaultSansFace;
 	}
@@ -140,16 +115,16 @@ JFont {
 		^defaultMonoFace;
 	}
 
-	*monospace {|size|
-		^this.new(this.defaultMonoFace, size)
+	*monospace { arg size, bold = false, italic = false;
+		^this.new( this.defaultMonoFace, size, if( bold, 1, 0 ) | if( italic, 2, 0 ));
 	}
 
-	*serif {|size|
-		^this.new(this.defaultSerifFace, size)
+	*serif { arg size, bold = false, italic = false;
+		^this.new( this.defaultSerifFace, size, if( bold, 1, 0 ) | if( italic, 2, 0 ));
 	}
 
-	*sansSerif {|size|
-		^this.new(this.defaultSansFace, size)
+	*sansSerif { arg size, bold = false, italic = false;
+		^this.new( this.defaultSansFace, size, if( bold, 1, 0 ) | if( italic, 2, 0 ));
 	}
 
 	*prQueryFontNames { arg server;
@@ -190,4 +165,40 @@ JFont {
 		if( verbose, { "JFont.availableFonts : query done.".postln });
 		^if( success, fontNames );
 	}
+
+	setDefault {
+		default = this;
+// ??? should we do this ??? cocoa doesn't
+		SwingOSC.set.do({ arg server; server.listSendMsg([ '/local', \font ] ++ this.asSwingArg )});
+	}
+
+	asSwingArg {
+		^([ '[', '/new', 'java.awt.Font', this.name, this.style, this.size, ']' ]);
+	}
+	
+	storeArgs { ^[ name, size, style ] }
+
+	boldVariant {
+		^this.class.new( name, size, style | 1 );
+	}
+	
+	bold { ^((style & 1) != 0) }
+	bold_ { arg bool; style = (style & 1.bitNot) | if( bool, 1, 0 ) }
+
+	italic { ^((style & 2) != 0) }
+	italic_ { arg bool; style = (style & 2.bitNot) | if( bool, 2, 0 ) }
+
+// don't start supporting unnecessary stuff!	
+//	hasPointSize { ^false } // Java 2D uses fixed 72 dpi
+
+	// support in combination with CocoaDocument
+  	asSCFont {
+    		var cocoa, scfont;
+		cocoa = GUI.get( \cocoa );
+    		^if( cocoa.notNil, {
+      		scfont = cocoa.font.new( name, size );
+      		if( this.bold, { scfont = scfont.boldVariant });
+      		scfont;
+    		});
+  	}
 }

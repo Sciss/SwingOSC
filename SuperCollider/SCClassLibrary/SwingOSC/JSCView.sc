@@ -2,7 +2,7 @@
  *	JSCView
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,27 +21,10 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *	- JSCDragView : added interpretDroppedStrings feature
- *	- JSCCompositeView coordinates fixed
- *	- JSCCompositeView is not opaque any more ; added opaque method
- *	- added JSCMultiSliderView ; fixed JSCH/VLayoutView
- *	- added resize functionality, fixed container views,
- *	  lots of bug fixes, fixed mouse-over behaviour, fixed opacities,
- *	  added envelope view, performance improvements
- *	- argServer argument removed, since server needs to be same as parent view!
  */
 
 /**
  *	For details, see JSCView.html and DeveloperInfo.html
- *
- *	@version		0.64, 28-Jan-10
- *	@author		Hanns Holger Rutz
- *
- *	@todo		should invoke custom dispose() methods on java gadgets
- *	@todo		need to check all default properties are readable
  */
 JSCView {  // abstract class
 	classvar <>currentDrag, <>currentDragString;

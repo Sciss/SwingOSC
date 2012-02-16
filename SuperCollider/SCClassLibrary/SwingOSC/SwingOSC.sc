@@ -2,7 +2,7 @@
  *	SwingOSC
  *	(SwingOSC classes for SuperCollider)
  *
- *  Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,23 +21,11 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog
- *		06-Mar-06		added fixes by AdC
- *		11-Jun-06		removed slowOSC stuff (fixed in SC)
- *		01-Oct-06		added SwingOptions and TCP mode
- *		18-Jan-08		added deathBounces to aliveThread
- *		28-Jan-08		bootServerApp adds -h option again
- *		27-Jun-10		does not subclass Model anymore
  */
 
 /**
  *	The client side representation of a SwingOSC server
  *	and its options.
- *
- *	@author		Hanns Holger Rutz
- *	@version		0.66, 20-Oct-11
  */
 SwingOptions
 {

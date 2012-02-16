@@ -1,5 +1,5 @@
 /*
- *	Insets
+ *	JSCStaticText
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,40 +23,23 @@
  *	contact@sciss.de
  */
 
-/**
- *	Helper class like java.awt.Insets, but unmutable.
- *	An Insets object is a representation of the borders of a container.
- *	It specifies the space that a container must leave at each of its edges. 
- */
-Insets {
-	var <top, <left, <bottom, <right;
-	var allZero;
-	
-	// ----------------- constructor -----------------
+JSCStaticText : JSCStaticTextBase {
 
-	*new { arg top = 0, left = 0, bottom = 0, right = 0;
-		^super.newCopyArgs( top, left, bottom, right ).prInit;
-	}
+	// ----------------- public class methods -----------------
 	
-	// ----------------- public instance methods -----------------
-
-	addTo { arg rect;
-		^if( allZero, rect, { rect.insetAll( left, top, right, bottom )});
-	}
-	
-	subtractFrom { arg rect;
-		^if( allZero, rect, { rect.insetAll( left.neg, top.neg, right.neg, bottom.neg )});
-	}
-	
-	leftTop {
-		^Point( left, top );
+	*paletteExample { arg parent, bounds;
+		var v;
+		v = this.new(parent, bounds);
+		v.string = "The lazy brown fox";
+		^v
 	}
 
-	storeArgs { ^[ top, left, bottom, right ]}
-	
 	// ----------------- private instance methods -----------------
 
-	prInit {
-		allZero = (top == 0) and: (left == 0) and: (right == 0) and: (bottom == 0);
+	prInitView {
+		properties.put( \canFocus, false );
+		^this.prSCViewNew([
+			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.Label", ']' ]
+		]);
 	}
 }

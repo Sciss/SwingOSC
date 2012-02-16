@@ -2,7 +2,7 @@
  *	UpdateListener
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2008 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,16 +21,10 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
  */
 
 /**
  *	Useful adapter for descendants/update mechanism
- *
- *	@author	Hanns Holger Rutz
- *	@version	0.58, 12-Jan-08
  */
 UpdateListener // interface
 {

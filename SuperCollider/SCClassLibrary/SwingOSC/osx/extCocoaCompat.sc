@@ -2,7 +2,7 @@
  *	Cocoa-Compatibility Extensions
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,18 +21,12 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
  */
 
 /**
  *	You can use this extension so that
  *	cocoa gui behaves exactly as swingOSC gui,
  *	at least has some more graceful fallbacks...
- *
- *	@version	0.62, 21-May-09
- *	@author	Hanns Holger Rutz
  */
 + SCDragView {
 	interpretDroppedStrings { ^false }

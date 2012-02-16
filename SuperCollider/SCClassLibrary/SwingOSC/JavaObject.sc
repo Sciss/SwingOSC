@@ -2,7 +2,7 @@
  *	JavaObject
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -21,11 +21,6 @@
  *
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
- *
- *
- *	Changelog:
- *		26-Jan-08  added double underscore syntax
- *		12-Aug-08  added JavaObjectD
  */
 
 /**
@@ -33,9 +28,6 @@
  *	calls to unknown methods in "doesNotUnderstand",
  *	we exploit this behaviour to create an easy wrapper
  *	class for Java object control in SwingOSC.
- *
- *	@version	0.64, 28-Jan-10
- *	@author	Hanns Holger Rutz
  */
 JavaObject {
 	classvar allObjects;

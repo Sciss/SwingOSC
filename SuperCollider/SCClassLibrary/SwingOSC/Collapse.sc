@@ -2,7 +2,7 @@
  *	Collapse
  *	(SwingOSC classes for SuperCollider)
  *
- *	Copyright (c) 2005-2010 Hanns Holger Rutz. All rights reserved.
+ *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU General Public License
@@ -47,9 +47,6 @@
  *	occur for the given delta time of 100ms. Continuous rotations will update the
  *	arguments (the controller value) while postponing the function until the
  *	user releases the dial.
- *
- *	@version	0.58, 31-Dec-07
- *	@author	Hanns Holger Rutz
  */
 Collapse : Object
 {

@@ -1,5 +1,5 @@
 /*
- *	Insets
+ *	JSCViews collection 1
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,40 +23,46 @@
  *	contact@sciss.de
  */
 
-/**
- *	Helper class like java.awt.Insets, but unmutable.
- *	An Insets object is a representation of the borders of a container.
- *	It specifies the space that a container must leave at each of its edges. 
- */
-Insets {
-	var <top, <left, <bottom, <right;
-	var allZero;
-	
-	// ----------------- constructor -----------------
+JSCAbstractMultiSliderView : JSCView { 
 
-	*new { arg top = 0, left = 0, bottom = 0, right = 0;
-		^super.newCopyArgs( top, left, bottom, right ).prInit;
-	}
-	
+	var <>metaAction;
+	var <size = 0;
+		
 	// ----------------- public instance methods -----------------
 
-	addTo { arg rect;
-		^if( allZero, rect, { rect.insetAll( left, top, right, bottom )});
-	}
+	step_ { arg stepSize; this.setPropertyWithAction( \step, stepSize )}
 	
-	subtractFrom { arg rect;
-		^if( allZero, rect, { rect.insetAll( left.neg, top.neg, right.neg, bottom.neg )});
-	}
+	step { ^this.getProperty( \step )}
 	
-	leftTop {
-		^Point( left, top );
-	}
+	selectionSize { ^this.getProperty( \selectionSize )}
 
-	storeArgs { ^[ top, left, bottom, right ]}
+	selectionSize_ { arg aval; this.setProperty( \selectionSize, aval )}
+
+	currentvalue { // returns value of selected index
+		^this.getProperty( \y );
+	}
 	
+	strokeColor_ { arg acolor; this.setProperty( \strokeColor, acolor )}
+
+	currentvalue_ { arg iny; this.setProperty( \y, iny )}
+	
+	drawLines { arg abool; this.setProperty( \drawLines, abool )}
+
+	drawLines_ { arg abool; this.drawLines( abool )}
+	
+	drawRects_ { arg abool; this.setProperty( \drawRects, abool )}
+
+	doMetaAction { // performed on ctrl click
+		metaAction.value( this );
+	} 
+
 	// ----------------- private instance methods -----------------
 
-	prInit {
-		allZero = (top == 0) and: (left == 0) and: (right == 0) and: (bottom == 0);
+	properties {
+		^super.properties ++ #[ \value, \strokeColor, \x, \y, \drawLines, \drawRects, \selectionSize, \step ]; // JJJ not thumbSize, thumbWidth, not absoluteX
 	}
+	
+	defaultCanReceiveDrag {	^true }
+			
+	prNeedsTransferHandler { ^true }
 }

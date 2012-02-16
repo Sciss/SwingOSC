@@ -1,5 +1,5 @@
 /*
- *	Insets
+ *	JSCSliderBase
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,40 +23,46 @@
  *	contact@sciss.de
  */
 
-/**
- *	Helper class like java.awt.Insets, but unmutable.
- *	An Insets object is a representation of the borders of a container.
- *	It specifies the space that a container must leave at each of its edges. 
- */
-Insets {
-	var <top, <left, <bottom, <right;
-	var allZero;
-	
-	// ----------------- constructor -----------------
+JSCSliderBase : JSCView {
 
-	*new { arg top = 0, left = 0, bottom = 0, right = 0;
-		^super.newCopyArgs( top, left, bottom, right ).prInit;
-	}
-	
+	var <>shift_scale = 100.0, <>ctrl_scale = 10.0, <>alt_scale = 0.1;
+
 	// ----------------- public instance methods -----------------
 
-	addTo { arg rect;
-		^if( allZero, rect, { rect.insetAll( left, top, right, bottom )});
-	}
-	
-	subtractFrom { arg rect;
-		^if( allZero, rect, { rect.insetAll( left.neg, top.neg, right.neg, bottom.neg )});
-	}
-	
-	leftTop {
-		^Point( left, top );
+	getScale { arg modifiers;
+		^case
+		{ (modifiers & 0x020000) != 0 } { shift_scale }
+		{ (modifiers & 0x040000) != 0 } { ctrl_scale }
+		{ (modifiers & 0x080000) != 0 } { alt_scale }
+		{ 1 };
 	}
 
-	storeArgs { ^[ top, left, bottom, right ]}
+	knobColor {
+		^this.getProperty(\knobColor, Color.new)
+	}
+	
+	knobColor_ { arg color;
+		this.setProperty(\knobColor, color)
+	}
+	
+	step_ { arg stepSize;
+		this.setPropertyWithAction(\step, stepSize);
+	}
+	step {
+		^this.getProperty(\step)
+	}
 	
 	// ----------------- private instance methods -----------------
 
-	prInit {
-		allZero = (top == 0) and: (left == 0) and: (right == 0) and: (bottom == 0);
+	properties {
+		^super.properties ++ #[ \knobColor, \step ];
+	}
+
+	prSnap { arg val;
+		if( this.step <= 0.0, {
+			^val.clip( 0.0, 1.0 );
+		}, {
+			^(val.clip( 0.0, 1.0 ) / this.step).round * this.step;
+		});
 	}
 }

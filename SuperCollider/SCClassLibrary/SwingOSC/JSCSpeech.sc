@@ -1,5 +1,5 @@
 /*
- *	JSpeech
+ *	JSCSpeech
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -26,7 +26,7 @@
 /**
  *	Replacement for (Cocoa) Speech
  */
-JSpeechChannel{
+JSCSpeechChannel{
 	var <channel, <pitch, <volume, <pitchMod, <voice, <rate;
 	var <wordDoneAction, <doneAction;
 	var <paused = false, isActive;
@@ -41,48 +41,48 @@ JSpeechChannel{
 	// ----------------- public instance methods -----------------
 
 	wordDoneAction_ { arg action;
-		JSpeech.wordDoneActions.put( channel, action );
+		JSCSpeech.wordDoneActions.put( channel, action );
 	}
 
 	doneAction_ { arg action;
-		JSpeech.doneActions.put( channel, action );
+		JSCSpeech.doneActions.put( channel, action );
 	}
 		
 	pitch_ { arg midinote;
 		pitch = midinote;
-		JSpeech.setSpeechPitch( channel, pitch );
+		JSCSpeech.setSpeechPitch( channel, pitch );
 	}
 	
 	volume_ { arg amp;
 		volume = amp;
-		JSpeech.setSpeechVolume( channel, volume );		
+		JSCSpeech.setSpeechVolume( channel, volume );		
 	}
 	
 	pitchMod_ {  arg mod;
 		pitchMod = mod;
-		JSpeech.setSpeechPitchMod( channel, pitchMod );
+		JSCSpeech.setSpeechPitchMod( channel, pitchMod );
 	}
 	
 	rate_ { arg ratein;
 		rate = ratein;
-		JSpeech.setSpeechRate( channel, rate );
+		JSCSpeech.setSpeechRate( channel, rate );
 	}
 	
 	voice_ { arg num;
 		voice = num;
-		JSpeech.setSpeechVoice( channel, voice );			
+		JSCSpeech.setSpeechVoice( channel, voice );			
 	}
 	
 	stop { arg when;
 		if( when.isNumber.not, {
-			when = JSpeech.stopMethods[ when ];
+			when = JSCSpeech.stopMethods[ when ];
 		});
-		JSpeech.stop( channel, when );
+		JSCSpeech.stop( channel, when );
 	}
 	
 	pause { arg bool;
 		paused = bool;
-		JSpeech.pause( channel, bool.binaryValue );
+		JSCSpeech.pause( channel, bool.binaryValue );
 	}
 	
 	isActive {
@@ -104,11 +104,11 @@ JSpeechChannel{
 	// ----------------- private instance methods -----------------
 	
 	prSpeak { arg channel, txt;
-		var result = JSpeech.initialized;
+		var result = JSCSpeech.initialized;
 //		_SpeakText
-		if( result.not, { result = JSpeech.init });	
+		if( result.not, { result = JSCSpeech.init });	
 		if( result, {
-			JSpeech.server.sendMsg( '/method', \speech, \speak, txt );
+			JSCSpeech.server.sendMsg( '/method', \speech, \speak, txt );
 		});
 	}
 	
@@ -117,7 +117,7 @@ JSpeechChannel{
 	}
 }
 
-JSpeech {
+JSCSpeech {
 	classvar <>wordActions, <>doneActions, <>wordAction, <>doneAction, <channels;
 	classvar <>initialized = false, <stopMethods;
 	
@@ -128,7 +128,7 @@ JSpeech {
 	// ----------------- public class methods -----------------
 
 	*setSpeechVoice { arg chan, voice;
-		"JSpeech.setSpeechVoice : not yet implemented".error;
+		"JSCSpeech.setSpeechVoice : not yet implemented".error;
 //		_SetSpeechVoice
 	}
 
@@ -171,7 +171,7 @@ JSpeech {
 
 	//when: 0 kImmediate, 1 kEndOfWord, 2 kEndOfSentence
 	*stop { arg chan, when = 0;
-		"JSpeech.stop : not yet implemented".error;
+		"JSCSpeech.stop : not yet implemented".error;
 //		_SetSpeechStopAt
 	}
 
@@ -190,7 +190,7 @@ JSpeech {
 	*init { arg num = 1;
 		if( server.isNil, { server = SwingOSC.default });
 		if( server.serverRunning.not, {
-			"JSpeech.init : SwingOSC server is not running".error;
+			"JSCSpeech.init : SwingOSC server is not running".error;
 			^false;
 		});
 		if( initialized.not, {
@@ -199,7 +199,7 @@ JSpeech {
 			wordActions = Array.newClear( num );
 			doneActions =  Array.newClear( num );
 			num.do { arg i;
-				channels.add( JSpeechChannel( i ));
+				channels.add( JSCSpeechChannel( i ));
 			};
 			stopMethods = (immediate: 0, endOfWord: 1, endOfSentence: 2);
 			ShutDown.add({ if( server.notNil and: { server.serverRunning }, {

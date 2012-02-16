@@ -138,7 +138,7 @@ JMouseBase : Object
 				});
 				JPen.stroke;
 				
-				JPen.font = JFont.default;
+				JPen.font = JSCFont.default;
 				JPen.fillColor = Color.white;
 				JPen.stringAtPoint( "shift = freeze", 16 @ 16 );
 			})

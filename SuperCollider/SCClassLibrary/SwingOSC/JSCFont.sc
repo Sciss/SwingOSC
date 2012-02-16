@@ -1,5 +1,5 @@
 /*
- *	JFont
+ *	JSCFont
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,7 +23,7 @@
  *	contact@sciss.de
  */
 
-JFont {
+JSCFont {
 	classvar <>verbose = false;
 
 	classvar <>default;
@@ -40,24 +40,24 @@ JFont {
 //	*prCreateDefaults {
 		switch( thisProcess.platform.name,
 		\osx, {
-			default			= JFont( "LucidaGrande", 11 );
+			default			= JSCFont( "LucidaGrande", 11 );
 			defaultSansFace	= "LucidaGrande";
 			defaultSerifFace	= "Times";
 			defaultMonoFace	= "Monaco";
 		},
 		\linux, {
-			default			= JFont( "Bitstream Vera Sans", 12 );
+			default			= JSCFont( "Bitstream Vera Sans", 12 );
 			defaultSansFace	= "Bitstream Vera Sans";
 			defaultSerifFace	= "Bitstream Vera Serif";
 			defaultMonoFace	= "Bitstream Vera Sans Mono";
 		}, 
 		\windows, {
-			default			= JFont( "Tahoma", 11 );
+			default			= JSCFont( "Tahoma", 11 );
 			defaultSansFace	= "Tahoma";
 			defaultSerifFace	= "Serif";
 			defaultMonoFace	= "Monospaced";
 		}, {
-			default			= JFont( "SansSerif", 12 );
+			default			= JSCFont( "SansSerif", 12 );
 			defaultSansFace	= "SansSerif";
 			defaultSerifFace	= "Serif";
 			defaultMonoFace	= "Monospaced";
@@ -74,7 +74,7 @@ JFont {
 		server	= server ?? { SwingOSC.default };
 		result	= servers !? { servers[ server.name ]};
 		if( result.notNil, { ^result });
-		"JFont.availableFonts : font cache not yet available".warn;
+		"JSCFont.availableFonts : font cache not yet available".warn;
 		^[ "Dialog", "DialogInput", "Monospaced", "SansSerif", "Serif" ];
 	}
 	
@@ -96,11 +96,11 @@ JFont {
 	}
 
 	*antiAliasing_ { arg flag = false;
-		if( verbose, { "JFont.antiAliasing : has no effect".error; });
+		if( verbose, { "JSCFont.antiAliasing : has no effect".error; });
 	}
 	
 	*smoothing_ { arg flag = false;
-		if( verbose, { "JFont.smoothing : has no effect".error; });
+		if( verbose, { "JSCFont.smoothing : has no effect".error; });
 	}
 
 	*defaultSansFace {
@@ -130,7 +130,7 @@ JFont {
 	*prQueryFontNames { arg server;
 		var qid, fonts, numFonts, reply, off, chunkSize, fontNames, success = true;
 		
-		if( verbose, { "JFont.availableFonts : querying...".postln });
+		if( verbose, { "JSCFont.availableFonts : querying...".postln });
 		server	= server ?? SwingOSC.default;
 		server.sendMsg( '/method', '[', '/local', \fnt, '[', '/new', 'java.util.ArrayList', ']', ']', \addAll,
 			'[', '/method', 'java.util.Arrays', \asList,
@@ -141,7 +141,7 @@ JFont {
 		if( reply.notNil, {
 			numFonts	= reply[ 2 ];
 		}, {
-			"JFont.availableFonts : timeout".error;
+			"JSCFont.availableFonts : timeout".error;
 			numFonts 	= 0;
 			success	= false;
 		});
@@ -157,12 +157,12 @@ JFont {
 				chunkSize.do({ arg i; fontNames.add( reply[ (i << 1) + 2 ].asString )});
 				off = off + chunkSize;
 			}, {
-				"JFont.availableFonts : timeout".error;
+				"JSCFont.availableFonts : timeout".error;
 				success	= false; // leave loop
 			});
 		});
 		server.sendMsg( '/free', \fnt );
-		if( verbose, { "JFont.availableFonts : query done.".postln });
+		if( verbose, { "JSCFont.availableFonts : query done.".postln });
 		^if( success, fontNames );
 	}
 
@@ -201,4 +201,61 @@ JFont {
       		scfont;
     		});
   	}
+}
+
+JFont : JSCFont {
+	*new { arg name, size, style = 0;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \new ));
+		^JSCFont.new( name, size, style );
+	}
+
+	*availableFonts { arg server;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \availableFonts ));
+		^JSCFont.availableFonts( server );
+	}
+	
+	*default {
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \default ));
+		^JSCFont.default;
+	}	
+
+	*default_ { arg value;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \default_ ));
+		^JSCFont.default_( value );
+	}	
+
+	*deleteCache {
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \deleteCache ));
+		^JSCFont.deleteCache;
+	}
+
+	*defaultSansFace {
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \defaultSansFace ));
+		^JSCFont.defaultSansFace;
+	}
+	
+	*defaultSerifFace {
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \defaultSerifFace ));
+		^JSCFont.defaultSerifFace;
+	}
+	
+	*defaultMonoFace {
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \defaultMonoFace ));
+		^JSCFont.defaultMonoFace;
+	}
+
+	*monospace { arg size, bold = false, italic = false;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \monospace ));
+		^JSCFont.monospace( size, bold, italic );
+	}
+
+	*serif { arg size, bold = false, italic = false;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \serif ));
+		^JSCFont.serif( size, bold, italic );
+	}
+
+	*sansSerif { arg size, bold = false, italic = false;
+		this.deprecated( thisMethod, Meta_JSCFont.findRespondingMethodFor( \sansSerif ));
+		^JSCFont.sansSerif( size, bold, italic );
+	}
 }

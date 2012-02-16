@@ -1,5 +1,5 @@
 /*
- *	JStethoscope
+ *	JSCStethoscope
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz, Marije Baalman. All rights reserved.
@@ -33,7 +33,7 @@
  *
  *	@author		Hanns Holger Rutz, Marije Baalman
  */
-JStethoscope {
+JSCStethoscope {
 	classvar ugenScopes;
 	var <server, <numChannels, <rate,  <index;
 	var <bufsize, buffer, <window, synth;
@@ -125,7 +125,7 @@ JStethoscope {
 	numChannels_ { arg n;
 		var isPlaying;
 		
-		if( n > 16, { "JStethoscope: Cannot display more than 16 channels at once".inform; n = 16 });
+		if( n > 16, { "JSCStethoscope: Cannot display more than 16 channels at once".inform; n = 16 });
 		if( n != numChannels and: { n > 0 }, {  
 			isPlaying = synth.isPlaying;
 			if( isPlaying, { synth.free; synth.isPlaying = false; synth = nil }); // immediate
@@ -227,7 +227,7 @@ JStethoscope {
 		audiospec = ControlSpec( 0, server.options.numAudioBusChannels, step: 1 );
 		controlspec = ControlSpec( 0, server.options.numControlBusChannels, step: 1 );
 
-		fnt = JFont( JFont.defaultMonoFace, 9 );
+		fnt = JSCFont.monospace( 9 );
 		
 		sl = JSCSlider( view, Rect( 10, 10, view.bounds.width - 100, 20 ));
 		sl.action = { arg x;

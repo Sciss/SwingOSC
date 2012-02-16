@@ -121,7 +121,7 @@ SwingOSC // : Model
 		Class.initClassTree( SwingOptions );
 		Class.initClassTree( OSCresponder );
 		Class.initClassTree( AppClock );
-		Class.initClassTree( JFont );	// because we read JFont.default in initTree !
+		Class.initClassTree( JSCFont );	// because we read JSCFont.default in initTree !
 		named		= IdentityDictionary.new;
 		set			= Set.new;
 		clock		= AppClock;
@@ -183,8 +183,8 @@ SwingOSC // : Model
 		try {
 			this.connect;
 			{
-				JFont.prMakeFontsAvailable( this );
-				this.listSendMsg([ '/local', \font ] ++ JFont.default.asSwingArg );
+				JSCFont.prMakeFontsAvailable( this );
+				this.listSendMsg([ '/local', \font ] ++ JSCFont.default.asSwingArg );
 				this.prRetrieveScreenBounds;
 				this.dumpOSC( dumpMode, dumpModeR );
 //				this.sendMsg( '/query', \status, '[', '/field', 'de.sciss.swingosc.SwingOSC', \VERSION, ']' );

@@ -57,7 +57,7 @@ SwingGUI {
 	*freqScope { ^JFreqScope }
 	*freqScopeView { ^JSCFreqScope }
 	*scopeView { ^JSCScope }
-	*stethoscope { ^JStethoscope }
+	*stethoscope { ^JSCStethoscope }
 
 	///////////////// Common -> GUI -> Base /////////////////
 
@@ -96,7 +96,7 @@ SwingGUI {
 	*ezRanger { ^EZRanger }	
 	
 	*knob { ^JKnob }		
-	*font { ^JFont }
+	*font { ^JSCFont }
 	*pen { ^JPen }
 	*image { ^JSCImage }
 	*webView { ^JSCWebView }
@@ -111,7 +111,7 @@ SwingGUI {
 	///////////////// Common -> OSX /////////////////
 
 	*dialog { ^SwingDialog }
-	*speech { ^JSpeech }
+	*speech { ^JSCSpeech }
 
 	///////////////// extras /////////////////
 			
@@ -133,7 +133,7 @@ SwingGUI {
 	/**
 	 *	Returns a Rect object describing the logical bounds of
 	 *	a given (String) string as rendered at standard scale using a
-	 *	given (JFont) font.
+	 *	given (JSCFont) font.
 	 *
 	 *	This method must be called from within a Routine, otherwise
 	 *	the asynchronous SwingOSC call cannot be made and only a coarse
@@ -149,7 +149,7 @@ SwingGUI {
 	 */
 	*stringBounds { arg string, font, server;
 		var msg, id;
-		font = font ?? { JFont.default };
+		font = font ?? { JSCFont.default };
 		if( thisThread.isKindOf( Routine ), {
 			if( server.isNil, { server = SwingOSC.default });
 			id		= server.nextNodeID;

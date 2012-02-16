@@ -3,7 +3,7 @@
  *	@author	Hanns Holger Rutz
  */
 // THIS IS EXPERIMENTAL AND SUBJECT TO CHANGES!!!
-JTexturePaint : JavaObject {
+JSCTexturePaint : JavaObject {
 	*fromImage { arg img;
 		var bufImg, tex, width, height, cm, bufG, anchor, server;
 		server	= img.server;

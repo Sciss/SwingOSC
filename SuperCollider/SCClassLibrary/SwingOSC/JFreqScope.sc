@@ -6,7 +6,6 @@
 // by Lance Putnam
 // lance@uwalumni.com
 
-//	@version	0.59, 30-Jan-08
 JFreqScope {
 	
 	var <scope, <window;
@@ -21,7 +20,7 @@ JFreqScope {
 		
 		rect = Rect(0, 0, width, height);
 		pad = [30, 38, 14, 10]; // l,r,t,b
-		font = JFont( JFont.defaultMonoFace, 9);
+		font = JSCFont.monospace( 9 );
 		freqLabel = Array.newClear(12);
 		freqLabelDist = rect.width/(freqLabel.size-1);
 		dbLabel = Array.newClear(17);

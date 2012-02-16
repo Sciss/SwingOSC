@@ -377,7 +377,7 @@ JSCPeakMeter : JSCView {
 //	    	.group_( outGroup )
 //	    	.bus_( outBus );
 	    	
-	    	fntSmall = JFont( "Helvetica", 8 );
+	    	fntSmall = JSCFont( "Helvetica", 8 );
 	    	
 	    	fLab = { arg name, numChannels, xOff; var comp;
 	  		comp = JSCCompositeView( win, Rect( xOff, meterHeight + 4, numChannels * chanWidth + 28, 18 ))

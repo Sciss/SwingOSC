@@ -30,7 +30,7 @@ JSCFreqScope : JSCScope {
 	}
 	
 	*audioServer {
-		^audioServer ?? { audioServer = JStethoscope.defaultServer };
+		^audioServer ?? { audioServer = JSCStethoscope.defaultServer };
 	}
 	
 	initSCFreqScope {

@@ -5,5 +5,4 @@ project/boot/
 .idea/
 .idea_modules/
 SwingOSC.jar
-lib/jxbrowser_runtime_license_for_swingosc.jar
-lib/jxbrowser_development_license_for_swingosc.jar
+sbt-launch.jar

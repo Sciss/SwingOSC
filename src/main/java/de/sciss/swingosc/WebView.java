@@ -30,6 +30,7 @@ import com.teamdev.jxbrowser.BrowserFactory;
 import com.teamdev.jxbrowser.events.NavigationEvent;
 import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
 import com.teamdev.jxbrowser.events.NavigationListener;
+import com.teamdev.jxbrowser.events.NavigationType;
 
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
@@ -60,6 +61,30 @@ public class WebView extends JPanel {
     private final Browser browser = BrowserFactory.createBrowser();
     private final List hyperlinkListeners   = new ArrayList();
     private ActionListener actionListener = null;
+
+    private String nonManualURL = "";
+
+    private final NavigationListener navListener = new NavigationListener() {
+        public void navigationStarted( NavigationEvent e ) {
+            final String url = e.getUrl();
+            if( VERBOSE ) System.out.println( "Navigation started " + url );
+            if( (e.getNavigationType() == NavigationType.NAVIGATE) && !url.equals( nonManualURL )) {
+                try {
+                    nonManualURL = "";
+//                    dispatchLinkActivated( new URI( url ).toURL() );
+                } catch( MalformedURLException e2 ) {
+                    e2.printStackTrace();
+                } catch( URISyntaxException e2 ) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+
+        public void navigationFinished( NavigationFinishedEvent e ) {
+            if( VERBOSE ) System.out.println( "Navigation finished" );
+            dispatchAction( ACTION_LOADED );
+        }
+    };
 
     public synchronized void addHyperlinkListener( HyperlinkListener l ) {
         hyperlinkListeners.add( l );
@@ -148,11 +173,13 @@ public class WebView extends JPanel {
     public void navigate( String url ) throws MalformedURLException {
         if( VERBOSE ) System.out.println( "navigate: " + url );
 
-        final int i = url.indexOf( ':' );
-        final String proto = url.substring( 0, i );
-        final String addr  = url.substring( i + 1 );
+//        final int i = url.indexOf( ':' );
+//        final String proto = url.substring( 0, i );
+//        final String addr  = url.substring( i + 1 );
         try {
-            navigate( new URI( proto, addr, "" ).toURL() );
+//        final URI uri = new URI( proto, addr, "" );
+            final URI uri = new URI( url );
+            navigate( uri.toURL() );
 
         } catch( URISyntaxException e ) {
             throw new MalformedURLException( url );
@@ -161,7 +188,14 @@ public class WebView extends JPanel {
     }
 
     public void navigate( URL url ) {
-        browser.navigate( url.toString() );
+//        browser.removeNavigationListener( navListener );
+//        try {
+        final String urlString = url.toString();
+        nonManualURL = urlString;
+            browser.navigate( urlString );
+//        } finally {
+//            browser.addNavigationListener( navListener );
+//        }
     }
 
     public void forward() {
@@ -182,17 +216,7 @@ public class WebView extends JPanel {
 
 //        browser.
 //
-        browser.addNavigationListener( new NavigationListener() {
-            public void navigationStarted( NavigationEvent e ) {
-                if( VERBOSE ) System.out.println("Navigation started");
-                // ...
-            }
-
-            public void navigationFinished( NavigationFinishedEvent e ) {
-                if( VERBOSE ) System.out.println( "Navigation finished" );
-                dispatchAction( ACTION_LOADED );
-            }
-        });
+        browser.addNavigationListener( navListener );
 
 //        addContentListener( new ContentListener() {
 //            public void contentSet( ContentEvent e ) {

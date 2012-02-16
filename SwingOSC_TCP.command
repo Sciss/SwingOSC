@@ -25,4 +25,4 @@ where=`followlink $0`
 where=`dirname ${where}`
 where=`absdir ${where}`
 cd ${where}
-java -Dapple.laf.useScreenMenuBar=true -Xmx512m -Xdock:icon=application.icns -Xdock:name=SwingOSC -jar target/SwingOSC-assembly-0.70-SNAPSHOT.jar -t 57111 -L -h 127.0.0.1:57120
+java -Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel -Dapple.laf.useScreenMenuBar=true -Xmx512m -Xdock:icon=application.icns -Xdock:name=SwingOSC -jar target/SwingOSC-assembly-0.70-SNAPSHOT.jar -t 57111 -L -h 127.0.0.1:57120

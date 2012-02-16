@@ -142,6 +142,7 @@ JSCMovieView : JSCView {
 	// ----------------- private instance methods -----------------
 
 	prInitView {
+		jinsets = Insets.new;  // none
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.MovieView", ']' ]		]);
 	}

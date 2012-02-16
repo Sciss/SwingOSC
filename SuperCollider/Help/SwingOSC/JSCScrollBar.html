@@ -40,7 +40,7 @@ A kind of range slider that is commonly used to specify the viewport into a virt
             <span class="cl">JPen</span>.translate( b.left, b.top );
             <span class="cl">JPen</span>.scale( b.width / (10 * h.extent), b.height / (10 * v.extent) );
             <span class="cl">JPen</span>.translate( h.value * -10, v.value * -10 );
-            <span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="st">&quot;Monospaced&quot;</span>, 2 );
+            <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;Monospaced&quot;</span>, 2 );
             5.do({ <span class="kw">arg</span> y;
                 <span class="cl">JPen</span>.fillColor = <span class="cl">Color</span>.hsv( y / 5, 1, 1 );
                 <span class="cl">JPen</span>.stringAtPoint( <span class="st">&quot;VIEWPORT&quot;</span>, 0.1 @ ((y &lt;&lt; 1) - 0.5) );

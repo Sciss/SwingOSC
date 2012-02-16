@@ -51,7 +51,7 @@ JSCContainerView : JSCView { // abstract class
 	}
 
 	decorator_ { arg decor;
-		if( relativeOrigin, {
+		if( relativeOrigin and: { decor.notNil }, {
 			decor.bounds = decor.bounds.moveTo( 0, 0 );
 			decor.reset;
 		});

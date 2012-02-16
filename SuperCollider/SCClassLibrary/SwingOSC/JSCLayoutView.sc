@@ -56,7 +56,6 @@ JSCLayoutView : JSCContainerView {
 
 	prSCViewNew { arg preMsg, postMsg;
 		properties.put( \spacing, 4 );
-		jinsets = Insets( 3, 3, 3, 3 );  // so focus borders of children are not clipped
 		^super.prSCViewNew( preMsg, postMsg );
 	}
 }

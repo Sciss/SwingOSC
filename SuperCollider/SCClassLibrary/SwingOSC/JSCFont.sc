@@ -43,7 +43,7 @@ JSCFont {
 			default			= JSCFont( "LucidaGrande", 11 );
 			defaultSansFace	= "LucidaGrande";
 			defaultSerifFace	= "Times";
-			defaultMonoFace	= "Monaco";
+			defaultMonoFace	= "Menlo";
 		},
 		\linux, {
 			default			= JSCFont( "Bitstream Vera Sans", 12 );

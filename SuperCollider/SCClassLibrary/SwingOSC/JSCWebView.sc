@@ -37,7 +37,8 @@ JSCWebView : JSCView {
 //	var selStart = 0, selStop = 0;
 	
 	*clearCache {
-		^thisMethod.notYetImplemented;
+//		^thisMethod.notYetImplemented;
+		this.prWarnNotYetImplemented( thisMethod );
 	}
 
 	url_ { arg path;
@@ -185,6 +186,7 @@ JSCWebView : JSCView {
 	}
 	
 	prInitView {
+		jinsets = Insets.new;	// none
 //		txResp = OSCpathResponder( server.addr, [ '/doc', this.id ], { arg time, resp, msg;
 //			var state, str;
 //			

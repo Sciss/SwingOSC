@@ -35,7 +35,6 @@ JSCCompositeView : JSCContainerView {
 	prChildOrder { arg child; ^0 }
 
 	prInitView {
-		jinsets = Insets( 3, 3, 3, 3 );  // so focus borders of children are not clipped
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.Panel", '[', '/new', "de.sciss.swingosc.ColliderLayout", ']', ']' ]
 		]);

@@ -343,7 +343,7 @@ JSCView {  // abstract class
 	prSCViewNew { arg preMsg, postMsg;
 		var bndl, argBounds, cnID = this.prContainerID;
 		
-		if( jinsets.isNil, { jinsets = Insets.new });
+		if( jinsets.isNil, { jinsets = SwingDefaults.nimbusInsets });
 		
 		bndl			= List.new;
 		bndl.addAll( preMsg );

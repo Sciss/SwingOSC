@@ -59,7 +59,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>this could possibly be fixed with some trick</p>
 <p class="p3"><span class="Apple-tab-span">	</span>switching chan #<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(bug) sometimes switching the # of channels results in wrong display</p>
 <p class="p5"><br></p>
-<p class="p6"><span class="s1"><b>JStethoscope</b></span><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><b>scope window</b></p>
+<p class="p6"><span class="s1"><b>JSCStethoscope</b></span><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><b>scope window</b></p>
 <p class="p7"><br></p>
 <p class="p6"><b>Note: please use the abstraction layer </b><a href="SC://Stethoscope"><span class="s3"><b>Stethoscope</b></span></a><b> if possible!</b></p>
 <p class="p7"><br></p>
@@ -225,7 +225,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p12">(</p>
 <p class="p12">w = <span class="s6">JSCWindow</span>.new( <span class="s8">"my own scope"</span>, <span class="s6">Rect</span>( 20, 20, 400, 500 ));</p>
 <p class="p12">w.view.decorator = <span class="s6">FlowLayout</span>( w.view.bounds );</p>
-<p class="p12">c = <span class="s6">JStethoscope</span>.new( s, view: w.view );</p>
+<p class="p12">c = <span class="s6">JSCStethoscope</span>.new( s, view: w.view );</p>
 <p class="p12">w.onClose = { c.free }; <span class="s7">// don't forget this</span></p>
 <p class="p12">w.front;</p>
 <p class="p12">)</p>

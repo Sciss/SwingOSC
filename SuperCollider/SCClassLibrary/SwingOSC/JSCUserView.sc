@@ -88,8 +88,6 @@ JSCUserView : JSCAbstractUserView {
 	}
 
 	prInitView {
-//		relativeOrigin	= false;
-		jinsets			= Insets( 3, 3, 3, 3 );
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.UserView", ']' ]
 		]);

@@ -488,7 +488,6 @@ JSCEnvelopeView : JSCAbstractMultiSliderView {
 		properties.put( \step, 0.0 );
 		properties.put( \clipThumbs, false );
 		selection	= [];
-		jinsets	= Insets( 3, 3, 3, 3 );
 		clpse	= Collapse({ this.doAction });
 //		items	= Array.new;
 		vlResp	= OSCpathResponder( server.addr, [ '/values', this.id ], { arg time, resp, msg;

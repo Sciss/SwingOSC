@@ -138,6 +138,9 @@ JSCScope : JSCView {
 		properties.put( \yZoom, 1.0 );
 		properties.put( \style, 0 );
 //		properties.put( \antiAliasing, true );
+
+		jinsets 		= Insets.new;	// none
+
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.ScopeView", ']' ],
 			[ '/method', this.id, \setServer, addr.hostname, addr.port, audioServer.options.protocol ],

@@ -10,7 +10,7 @@
 <div class="osc">
 <h2>SwingOSC &ndash; Java-based GUI classes</h2>
 <p>This class is meant as an emulation of SCFreqScope. last mod: 17-jul-09 sciss
-; for bugs and different behaviour, see also the <A HREF="JStethoscope.html">JStethoscope</A> help file.
+; for bugs and different behaviour, see also the <A HREF="JSCStethoscope.html">JSCStethoscope</A> help file.
 </p>
 <!-- <table> -->
 <!-- <tr><td colspan="2" class="oscTabSection">no-op / not working</td></tr> -->
@@ -25,10 +25,10 @@
 Note: please use the abstraction layer <A HREF="SC://ScopeView">ScopeView</A> if possible!
 </strong></p>
 <p>
-<code><span class="cl">JSCScope</span></code> shows a realtime view of a buffer, with horizontal axis corresponding to time (buffer frame offset) and vertical axis corresponding to amplitude. Most likely you will want to use <A HREF="JStethoscope.html">JStethoscope</A> instead which handles window creation, buffer recording from any input bus, and keyboard control. <code><span class="cl">JSCScope</span></code> can be useful if you want to combine it with other custom views, as shown in the following example:
+<code><span class="cl">JSCScope</span></code> shows a realtime view of a buffer, with horizontal axis corresponding to time (buffer frame offset) and vertical axis corresponding to amplitude. Most likely you will want to use <A HREF="JSCStethoscope.html">JSCStethoscope</A> instead which handles window creation, buffer recording from any input bus, and keyboard control. <code><span class="cl">JSCScope</span></code> can be useful if you want to combine it with other custom views, as shown in the following example:
 <pre>
 (
-s = <span class="cl">JStethoscope</span>.defaultServer.waitForBoot({
+s = <span class="cl">JSCStethoscope</span>.defaultServer.waitForBoot({
     b = <span class="cl">Buffer</span>.alloc( s, 1024 );
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;My Analyzer&quot;</span>, <span class="cl">Rect</span>( 0, 0, 284, 304 ), <span class="kw">false</span> );
     w.view.background = <span class="cl">Color</span>.hsv( 0.3, 0.5, 0.5 );
@@ -62,6 +62,6 @@ s = <span class="cl">JStethoscope</span>.defaultServer.waitForBoot({
 </pre>
 <P>Close window and the scope synth and buffer are killed.</P>
 <P>The example shows how the buffer is assigned using the <code>bufnum_</code> method, and how the sliders are used to do waveform scalling (<code>xZoom_</code> and <code>yZoom_</code>).</P>
-<P>Other customization methods include <code>waveColor_</code>, and <code>style_</code>. See the <A HREF="JStethoscope.html">JStethoscope</A> help file for more info on those.</P>
+<P>Other customization methods include <code>waveColor_</code>, and <code>style_</code>. See the <A HREF="JSCStethoscope.html">JSCStethoscope</A> help file for more info on those.</P>
 </body>
 </html>

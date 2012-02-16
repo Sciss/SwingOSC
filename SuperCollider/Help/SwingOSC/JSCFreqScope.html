@@ -10,7 +10,7 @@
 <div class="osc">
 <h2>SwingOSC &ndash; Java-based GUI classes</h2>
 <p>This class is meant as an emulation of SCFreqScope. last mod: 17-jul-09 sciss
-; for bugs and different behaviour, see also the <A HREF="JStethoscope.html">JStethoscope</A> help file.
+; for bugs and different behaviour, see also the <A HREF="JSCStethoscope.html">JSCStethoscope</A> help file.
 </p>
 <!-- <table> -->
 <!-- <tr><td colspan="2" class="oscTabSection">no-op / not working</td></tr> -->
@@ -25,7 +25,7 @@
 Note: please use the abstraction layer <A HREF="SC://FreqScopeView">FreqScopeView</A> if possible!
 </strong></p>
 <p>
-<code>JSCFreqScope</code> shows the frequency spectrum of a specified audio bus.  The scope will remain active after a command-period. To turn it off you must use the 'active' method. See also: <A HREF="JFreqScope.html">JFreqScope</A>, <A HREF="JSCView.html">JSCView</A>.
+<code>JSCFreqScope</code> shows the frequency spectrum of a specified audio bus.  The scope will remain active after a command-period. To turn it off you must use the 'active' method. See also: <A HREF="JSCFreqScopeWindow.html">JSCFreqScopeWindow</A>, <A HREF="JSCView.html">JSCView</A>.
 </p>
 <h2>Instantiation</h2>
 <PRE>
@@ -70,7 +70,7 @@ Note: please use the abstraction layer <A HREF="SC://FreqScopeView">FreqScopeVie
 <h2>Example</h2>
 <pre>
 <span class="cm">// Start local server</span>
-s = <span class="cl">JStethoscope</span>.defaultServer.boot;
+s = <span class="cl">JSCStethoscope</span>.defaultServer.boot;
 
 <span class="cm">// Create analyzer in a window</span>
 (

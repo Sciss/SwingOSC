@@ -6,7 +6,7 @@
 // by Lance Putnam
 // lance@uwalumni.com
 
-JFreqScope {
+JSCFreqScopeWindow {
 	
 	var <scope, <window;
 
@@ -99,7 +99,7 @@ JFreqScope {
 		rect = rect.resizeBy( 4, 0 );
 
 		JSCButton(window, Rect(pad[0] + rect.width, pad[2], pad[1], 16))
-			.states_([["Power", Color.white, Color.green(0.5)], ["Power", Color.white, Color.red(0.5)]])
+			.states_([["Power", Color.black, SwingDefaults.colrPowerOn], ["Power", Color.black, SwingDefaults.colrPowerOff]])
 			.action_({ arg view;
 				if(view.value == 0, {
 					scope.active_(true);

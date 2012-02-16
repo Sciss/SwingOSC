@@ -538,7 +538,6 @@ if( val == 2, { "JSCSoundFileView.style_ : lissajou not yet implemented".error; 
 		properties.put( \yZoom, 1.0 );
 		properties.put( \style, 0 );
 		properties.put( \selectionIndex, 0 );
-		jinsets		= Insets( 3, 3, 3, 3 );
 		selections	= Array.fill( 64, { IdentityDictionary.new });
 		
 		viewResp		= OSCpathResponder( server.addr, [ '/soundfile', this.id ], { arg time, resp, msg;

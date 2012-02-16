@@ -115,7 +115,6 @@ JSCButton : JSCView {
 
 	prInitView {
 		properties.put( \value, 0 );
-		jinsets = Insets( 2, 2, 2, 2 ); // ( 3, 3, 3, 3 )
 		acResp = OSCpathResponder( server.addr, [ '/action', this.id ], { arg time, resp, msg;
 			var value, modifiers;
 			value	= msg[4];

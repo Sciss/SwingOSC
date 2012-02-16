@@ -150,7 +150,7 @@ v.focusVisible = <span class="kw">false</span>;  <span class="cm">// don't paint
         c.keyDownAction = { <span class="kw">arg</span> view, char, modifiers, unicode, keycode;
             [char, modifiers, unicode, keycode].postln;
             c.drawFunc = {
-                <span class="cl">JPen</span>.font       = <span class="cl">JFont</span>( <span class="st">&quot;Helvetica&quot;</span>, 70 );
+                <span class="cl">JPen</span>.font       = <span class="cl">JSCFont</span>( <span class="st">&quot;Helvetica&quot;</span>, 70 );
                 <span class="cl">JPen</span>.fillColor  = <span class="cl">Color</span>.blue( 0.3, 0.5 );
                 <span class="cl">JPen</span>.stringAtPoint( char.asString, 180 @ 150 );
             };

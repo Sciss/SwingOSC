@@ -41,7 +41,10 @@ JSCPlugView : JSCView {
 		^basic.init( parent, bounds, javaObject.id );
 	}
 	
-	prInitView { ^this.prSCViewNew }
+	prInitView {
+		jinsets = Insets.new;	// none
+		^this.prSCViewNew;
+	}
 
 	// from JavaObject.sc
 

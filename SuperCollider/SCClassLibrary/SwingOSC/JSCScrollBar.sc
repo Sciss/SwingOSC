@@ -154,6 +154,7 @@ JSCScrollBar : JSCView {
 		properties.put( \extent, 1.0 );
 		properties.put( \blockIncrement, 1.0 );
 		properties.put( \unitIncrement, 0.1 );
+		jinsets		= Insets.new;	// none
 		b			= this.prBoundsReadOnly;
 		orientation	= if( b.width > b.height, 0, 1 );
 		clpse		= Collapse({ this.doAction });

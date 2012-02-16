@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<title>SwingOSC Help : JFont</title>
+<title>SwingOSC Help : JSCFont</title>
 <link type="text/css" href="swing.css" rel="stylesheet">
 </head>
 <body>
@@ -23,18 +23,18 @@
 </table>
 </div>
 <P>&nbsp;</P>
-<h1>JFont</h1>
+<h1>JSCFont</h1>
 <p><strong>
 Note: please use the abstraction layer <A HREF="SC://Font">Font</A> if possible!
 </strong></p>
 <P>
-<code><span class="cl">JFont</span></code> is a typeface description that can used with some <A HREF="JSCView.html">JSCView</A> objects to define the type of font used for text rendering. <A HREF="JSCStaticText.html">JSCStaticText</A>, <A HREF="JSCButton.html">JSCButton</A>, <A HREF="JSCView.html">JSCNumberBox</A>, <A HREF="JSCDragView.html">JSCDragView</A>, <A HREF="JSCView.html">JSCDragSink</A>, <A HREF="JSCDragBoth.html">JSCDragBoth</A>, <A HREF="JSCCheckBox.html">JSCCheckBox</A> can set their fonts.
+<code><span class="cl">JSCFont</span></code> is a typeface description that can used with some <A HREF="JSCView.html">JSCView</A> objects to define the type of font used for text rendering. <A HREF="JSCStaticText.html">JSCStaticText</A>, <A HREF="JSCButton.html">JSCButton</A>, <A HREF="JSCView.html">JSCNumberBox</A>, <A HREF="JSCDragView.html">JSCDragView</A>, <A HREF="JSCView.html">JSCDragSink</A>, <A HREF="JSCDragBoth.html">JSCDragBoth</A>, <A HREF="JSCCheckBox.html">JSCCheckBox</A> can set their fonts.
 </P><P>
 Besides, fonts can be used in user generated views : see <A HREF="JSCUserView.html">JSCUserView</A> and <A HREF="JPen.html">JPen</A> for details.
 </P>
 <h2>Instantiation</h2>
 <PRE>
-	<span class="cl">JFont</span>.new( <var>&lt;name&gt;</var>, <var>&lt;size&gt;</var>, <span class="op">[ </span><var>&lt;style&gt;</var><span class="op"> ]</span> )
+	<span class="cl">JSCFont</span>.new( <var>&lt;name&gt;</var>, <var>&lt;size&gt;</var>, <span class="op">[ </span><var>&lt;style&gt;</var><span class="op"> ]</span> )
 	
 </PRE>
 <UL>
@@ -62,15 +62,15 @@ w.view.decorator = f = <span class="cl">FlowLayout</span>( w.view.bounds, 4 @ 4,
     <span class="kw">var</span> v, s, n, spec, p, height = 16;
 
     v = <span class="cl">JSCStaticText</span>( w, <span class="cl">Rect</span>( 0, 0, 56, height + 2 ));
-    v.font = <span class="cl">JFont</span>( name, 13 );
+    v.font = <span class="cl">JSCFont</span>( name, 13 );
     v.string = name;
 
     s = <span class="cl">JSCButton</span>( w, <span class="cl">Rect</span>( 0, 0, 140, height + 2 ));
-    s.font = <span class="cl">JFont</span>( name, 13 );
+    s.font = <span class="cl">JSCFont</span>( name, 13 );
     s.states = [[ name ]];
     
     n = <span class="cl">JSCNumberBox</span>( w, <span class="cl">Rect</span>( 0, 0, 56, height + 2 ));
-    n.font = <span class="cl">JFont</span>( name, 13 );
+    n.font = <span class="cl">JSCFont</span>( name, 13 );
     n.object = pi;
 
     f.nextLine;
@@ -82,12 +82,12 @@ w.front;
 </pre>
 <h2>Retrieving All Available Fonts</h2>
 <PRE>
-    <span class="cl">JFont</span>.availableFonts
+    <span class="cl">JSCFont</span>.availableFonts
 	
 </PRE>
 <P><strong>Note:</strong> on SwingOSC this call is <strong>asynchronous</strong> the first time, because the names must be fetched from the server. this requires that the call is placed inside a <A HREF="SC://Routine">Routine</A>. Successive calls can be carried out normally. You can avoid the extra hassle by calling <code>*availableFonts</code> once in your startup procedure like this:
 </P>
-<pre>    { <span class="cl">JFont</span>.availableFonts }.fork( <span class="cl">AppClock</span> );
+<pre>    { <span class="cl">JSCFont</span>.availableFonts }.fork( <span class="cl">AppClock</span> );
 
 </pre>
 <P>Example:</P>
@@ -97,7 +97,7 @@ w.front;
 
 w       = <span class="cl">JSCWindow</span>( <span class="st">&quot;Fonts&quot;</span>, <span class="cl">Rect</span>( 128, 128, 800, (fontSize + 9) * 20 + 80 ), resizable: <span class="kw">false</span> );
 t       = <span class="cl">JSCTabbedPane</span>( w, w.view.bounds );
-names   = <span class="cl">JFont</span>.availableFonts;
+names   = <span class="cl">JSCFont</span>.availableFonts;
 stop        = 0;
 lastStop    = stop;
 while({ stop &lt; names.size }, {
@@ -115,7 +115,7 @@ while({ stop &lt; names.size }, {
         range = names.copyRange( lastStop, stop - 1 );
         t.setTitleAt( t.numTabs - 1, range.first.first ++ <span class="st">&quot; ... &quot;</span> ++ range.last.first );
         range.do({ <span class="kw">arg</span> name, i; <span class="kw">var</span> font;
-            font = <span class="cl">JFont</span>( name, 13 );
+            font = <span class="cl">JSCFont</span>( name, 13 );
             
             <span class="cl">JSCStaticText</span>( c, <span class="cl">Rect</span>( 0, 0, 56, fontSize + 7 ))
                 .font_( font )
@@ -143,9 +143,9 @@ w.front;
 <h2>Logical Names and Variants</h2>
 <P>Since it typically depends on your platform which fonts are available, convenient methods are provided to access some standard types of fonts and to get variants of fonts:</P>
 <pre>
-    <span class="cl">JFont</span>.defaultSansFace
-    <span class="cl">JFont</span>.defaultSerifFace
-    <span class="cl">JFont</span>.defaultMonoFace
+    <span class="cl">JSCFont</span>.defaultSansFace
+    <span class="cl">JSCFont</span>.defaultSerifFace
+    <span class="cl">JSCFont</span>.defaultMonoFace
     <var>&lt;aFont&gt;</var>.boldVariant
 
 </pre>
@@ -157,11 +157,11 @@ w = <span class="cl">JSCWindow</span>( <span class="st">&quot;Fonts&quot;</span>
 w.view.decorator = f = <span class="cl">FlowLayout</span>( w.view.bounds, 4 @ 4, 4 @ 2 );
 
 [
-<span class="st">&quot;sans&quot;</span>,  <span class="cl">JFont</span>.defaultSansFace,
-<span class="st">&quot;serif&quot;</span>, <span class="cl">JFont</span>.defaultSerifFace,
-<span class="st">&quot;mono&quot;</span>,  <span class="cl">JFont</span>.defaultMonoFace
+<span class="st">&quot;sans&quot;</span>,  <span class="cl">JSCFont</span>.defaultSansFace,
+<span class="st">&quot;serif&quot;</span>, <span class="cl">JSCFont</span>.defaultSerifFace,
+<span class="st">&quot;mono&quot;</span>,  <span class="cl">JSCFont</span>.defaultMonoFace
 ].pairsDo({ <span class="kw">arg</span> label, name;
-    font = <span class="cl">JFont</span>( name, 14 );
+    font = <span class="cl">JSCFont</span>( name, 14 );
     <span class="cl">JSCStaticText</span>( w, <span class="cl">Rect</span>( 0, 0, 100, 22 ))
         .font_( font )
         .string_( label );

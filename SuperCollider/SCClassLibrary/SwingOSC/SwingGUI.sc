@@ -33,13 +33,9 @@ SwingGUI {
 	
 	classvar boundsWarned = false;
 	
-	classvar <nimbusInsets;
-
 	*initClass {
 		Class.initClassTree( Event );
 		extraClasses = Event.new;
-		Class.initClassTree( Insets );
-		nimbusInsets = Insets( 2, 2, 2, 2 );
 		Class.initClassTree( GUI );
 		GUI.add( this );
 	}
@@ -54,7 +50,7 @@ SwingGUI {
 
 	///////////////// Common -> GUI /////////////////
 
-	*freqScope { ^JFreqScope }
+	*freqScope { ^JSCFreqScopeWindow }
 	*freqScopeView { ^JSCFreqScope }
 	*scopeView { ^JSCScope }
 	*stethoscope { ^JSCStethoscope }

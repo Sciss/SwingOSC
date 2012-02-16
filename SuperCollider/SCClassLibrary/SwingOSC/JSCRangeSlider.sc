@@ -181,7 +181,6 @@ JSCRangeSlider : JSCSliderBase {
 		properties.put( \lo, 0.0 );
 		properties.put( \hi, 1.0 );
 		properties.put( \step, 0.0 );
-		jinsets		= Insets( 3, 3, 3, 3 );
 		b			= this.prBoundsReadOnly;
 		orientation	= if( b.width > b.height, 0, 1 );
 		clpse		= Collapse({ this.doAction });

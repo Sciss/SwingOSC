@@ -474,6 +474,7 @@ JSCPeakMeter : JSCView {
 	}
 
 	prInitView {
+		jinsets = Insets.new;	// none
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/new', "de.sciss.gui.PeakMeterPanel", ']' ]
 		]);

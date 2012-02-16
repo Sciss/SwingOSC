@@ -36,7 +36,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 </P>
 <P>The following methods must be called within an <A HREF="JSCWindow.html">JSCWindow</A>-drawHook or a <A HREF="JSCUserView.html">JSCUserView</A>-drawFunc function, and will only be visible once the window or the view is refreshed. Each call to <A HREF="JSCWindow.html">JSCWindow</A>-refresh or <A HREF="JSCUserView.html">JSCUserView</A>-refresh will 'overwrite' all previous drawing by executing the currently defined function.
 </P>
-<P>See also: <A HREF="JSCUserView.html">JSCUserView</A>, <A HREF="JSCWindow.html">JSCWindow</A>, <A HREF="JSCTabletView.html">JSCTabletView</A>, <A HREF="SC://Color">Color</A>, <A HREF="JFont.html">JFont</A>, <A HREF="SC://Point">Point</A>, <A HREF="SC://Rect">Rect</A></P>
+<P>See also: <A HREF="JSCUserView.html">JSCUserView</A>, <A HREF="JSCWindow.html">JSCWindow</A>, <A HREF="JSCTabletView.html">JSCTabletView</A>, <A HREF="SC://Color">Color</A>, <A HREF="JSCFont.html">JSCFont</A>, <A HREF="SC://Point">Point</A>, <A HREF="SC://Rect">Rect</A></P>
 <P>&nbsp;</P>
 <h2>Shape Constructing Drawing Methods</h2>
 <P>The following methods define paths. You will need to call <code>*stroke</code> or <code>*fill</code> to actually draw them:</P>
@@ -637,7 +637,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 </pre>
 <P>&nbsp;</P>
 <h2>String Drawing Methods</h2>
-<P>These commands draw text. The font is configured by calling <code><span class="cl">JPen</span>.font_( <var>&lt;(JFont) font&gt;</var> )</code>. The text color is taken from <code><span class="cl">JPen</span>.fillColor_( <var>&lt;(Color) c&gt;</var> )</code>.</P>
+<P>These commands draw text. The font is configured by calling <code><span class="cl">JPen</span>.font_( <var>&lt;(JSCFont) font&gt;</var> )</code>. The text color is taken from <code><span class="cl">JPen</span>.fillColor_( <var>&lt;(Color) c&gt;</var> )</code>.</P>
 <h3>*stringAtPoint</h3>
 <pre>
 <span class="cl">JPen</span>.stringAtPoint( <var>&lt;(String) str&gt;</var>, <var>&lt;(Point) point&gt;</var> )
@@ -651,7 +651,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     w.drawHook = {
         <span class="kw">var</span> pt;
         
-        <span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="st">&quot;Monospaced&quot;</span>, 16 );
+        <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;Monospaced&quot;</span>, 16 );
         <span class="cl">JPen</span>.strokeColor = <span class="cl">Color</span>.red;
         
         12.do({
@@ -690,7 +690,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
         <span class="kw">var</span> rect, txt;
 
         txt = <span class="st">&quot;Il arrive que la r&eacute;alit&eacute; soit trop complexe pour la transmission orale.&quot;</span>;
-        <span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="st">&quot;SansSerif&quot;</span>, 14 );
+        <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;SansSerif&quot;</span>, 14 );
         
         <span class="cl">JPen</span>.strokeColor = <span class="cl">Color</span>.blue;
         rect    = <span class="cl">Rect</span>( 50, 50, 200, 100 );
@@ -923,14 +923,14 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
             <span class="cl">JPen</span>.line(b, d);
             <span class="cl">JPen</span>.stroke;
         
-        <span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="st">&quot;Helvetica-Bold&quot;</span>, 12 );
+        <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;Helvetica-Bold&quot;</span>, 12 );
         <span class="cl">JPen</span>.fillColor = <span class="cl">Color</span>.black;
             <span class="cl">JPen</span>.stringAtPoint( <span class="st">&quot;A&quot;</span>, a - 6 );
             <span class="cl">JPen</span>.stringAtPoint( <span class="st">&quot;B&quot;</span>, b - 6 );
             <span class="cl">JPen</span>.stringAtPoint( <span class="st">&quot;C&quot;</span>, c - (0 @ 6) );
             <span class="cl">JPen</span>.stringAtPoint( <span class="st">&quot;D&quot;</span>, d - (0 @ 6) );
         
-        <span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="st">&quot;Helvetica-Bold&quot;</span>, 10 );
+        <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;Helvetica-Bold&quot;</span>, 10 );
         <span class="cl">JPen</span>.stringInRect( <span class="st">&quot;a matrix test&quot;</span>, r.moveBy( 50, 50 ));
     };
 

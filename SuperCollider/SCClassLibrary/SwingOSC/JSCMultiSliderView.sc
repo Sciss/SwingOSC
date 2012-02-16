@@ -193,7 +193,6 @@ JSCMultiSliderView : JSCAbstractMultiSliderView {
 		properties.put( \x, 0 );
 		properties.put( \y, 0.0 );
 		properties.put( \step, 0.0 );
-		jinsets	= Insets( 3, 3, 3, 3 );
 		clpse	= Collapse({ this.doAction });
 		vlResp	= OSCpathResponder( server.addr, [ '/values', this.id ], { arg time, resp, msg;
 			var dirtyIndex, dirtySize, vals, selectedIndex;

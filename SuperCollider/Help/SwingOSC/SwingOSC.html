@@ -134,7 +134,7 @@ To quit the server press <code>Ctrl-C</code> in the terminal.
         
         win = <span class="cl">JSCWindow</span>( server: f );
         win.onClose = { f.quit; };
-        <span class="cl">JSCStaticText</span>( win.view, <span class="cl">Rect</span>( 40, 40, 100, 30 )).font_( <span class="cl">JFont</span>( <span class="st">&quot;Helvetica&quot;</span>, 36 )).string_( <span class="st">&quot;Kieka&quot;</span> );
+        <span class="cl">JSCStaticText</span>( win.view, <span class="cl">Rect</span>( 40, 40, 100, 30 )).font_( <span class="cl">JSCFont</span>( <span class="st">&quot;Helvetica&quot;</span>, 36 )).string_( <span class="st">&quot;Kieka&quot;</span> );
         win.front;
     });
     <span class="cm">// use this on MacOS 10.3.9 Panther if booting blocks:</span>

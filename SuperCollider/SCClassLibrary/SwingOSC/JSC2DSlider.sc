@@ -115,7 +115,6 @@ JSC2DSlider : JSCSliderBase {
 		properties.put( \x, 0.0 );
 		properties.put( \y, 0.0 );
 		properties.put( \step, 0.0 );
-		jinsets	= Insets( 3, 3, 3, 3 );
 		clpse	= Collapse({ this.doAction });
 		acResp	= OSCpathResponder( server.addr, [ '/action', this.id ], { arg time, resp, msg;
 			var newX, newY;

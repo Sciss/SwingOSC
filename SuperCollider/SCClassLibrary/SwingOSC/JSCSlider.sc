@@ -102,7 +102,6 @@ JSCSlider : JSCSliderBase {
 
 	prInitView {
 		var b;
-//		jinsets = Insets( 3, 3, 3, 3 );
 		properties.put( \value, 0.0 );
 		properties.put( \step, 0.0 );
 		if( scBounds.isNil, {

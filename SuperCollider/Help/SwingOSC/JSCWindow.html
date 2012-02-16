@@ -217,7 +217,7 @@ A window can be resized any time by calling the <code>bounds_</code> method with
 	w.drawHook = { <span class="kw">arg</span> win;
 		<span class="kw">var</span> b = win.view.bounds;
 		<span class="cl">JPen</span>.width = 6;
-		<span class="cl">JPen</span>.font = <span class="cl">JFont</span>( <span class="cl">JFont</span>.defaultSansFace, 32 ).boldVariant;
+		<span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="cl">JSCFont</span>.defaultSansFace, 32 ).boldVariant;
 		<span class="cl">JPen</span>.stringCenteredIn( <span class="st">&quot;%, %&quot;</span>.format( b.width, b.height ), b );
 		4.do({ <span class="kw">arg</span> i;
 			<span class="cl">JPen</span>.use({

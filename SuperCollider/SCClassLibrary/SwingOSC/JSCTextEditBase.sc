@@ -86,7 +86,6 @@ JSCTextEditBase : JSCStaticTextBase {
 	}
 
 	init { arg argParent, argBounds, id;
-		jinsets		= SwingGUI.nimbusInsets;
 		typingColor	= Color.red;
 		normalColor	= Color.black;
 		parent		= argParent.asView; // actual view

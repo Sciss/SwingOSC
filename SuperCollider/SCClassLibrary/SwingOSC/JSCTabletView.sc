@@ -63,7 +63,6 @@ JSCTabletView : JSCAbstractUserView {
 		
 		relativeOrigin	= true;
 		cocoaBorder		= if( parent.prGetWindow.border, 20, -2 );
-		jinsets			= Insets( 3, 3, 3, 3 );
 		bndl				= List.new;
 		bndl.add([ '/local', this.id, '[', '/new', "de.sciss.swingosc.TabletView", ']' ]);
 		this.prCreateTabletResponder( bndl );

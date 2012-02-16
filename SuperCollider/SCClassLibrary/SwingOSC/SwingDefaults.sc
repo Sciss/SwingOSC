@@ -1,5 +1,5 @@
 /*
- *	JSCStaticText
+ *	SwingDefaults
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,24 +23,16 @@
  *	contact@sciss.de
  */
 
-JSCStaticText : JSCStaticTextBase {
+SwingDefaults {
+	classvar <nimbusInsets;
+	classvar <colrPowerOn;
+	classvar <colrPowerOff;
 
-	// ----------------- public class methods -----------------
-	
-	*paletteExample { arg parent, bounds;
-		var v;
-		v = this.new(parent, bounds);
-		v.string = "The lazy brown fox";
-		^v
-	}
-
-	// ----------------- private instance methods -----------------
-
-	prInitView {
-		properties.put( \canFocus, false );
-		jinsets = Insets.new;	// none
-		^this.prSCViewNew([
-			[ '/local', this.id, '[', '/new', "de.sciss.swingosc.Label", ']' ]
-		]);
+	*initClass {
+		Class.initClassTree( Insets );
+		Class.initClassTree( Color );
+		nimbusInsets 	= Insets( 2, 2, 2, 2 );
+		colrPowerOn	= Color.new255( 128, 255, 128 );
+		colrPowerOff	= Color.new255( 255,  96, 112 );
 	}
 }

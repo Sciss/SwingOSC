@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -36,6 +37,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
 import java.net.URL;
 import java.util.Map;
 
@@ -65,6 +67,7 @@ implements FocusListener, MouseListener
 	private static Image dragImg		= null;
 	
 	private final int type;
+    private Insets focusInsets;
 	private Color bg;
 
 	public DragView( int type, String text, Icon icon, int horizontalAlignment )
@@ -126,11 +129,15 @@ implements FocusListener, MouseListener
 		}
 //		setBackground( new Color( 0, 0, 0, 0 ));
 		super.setBackground( new Color( 0, 0, 0, 0 ));
-		setFocusable( false );
-		focusBorder = new AquaFocusBorder();
+		setFocusable(false);
+		focusBorder = NimbusFocusBorder.getRoundedRectangle( 5 );
+        focusInsets = focusBorder.getBorderInsets( this );
 		putClientProperty( "insets", focusBorder.getBorderInsets( this ));
+//        setBorder( focusBorder );
 		setBorder( BorderFactory.createCompoundBorder( focusBorder,
 			BorderFactory.createEmptyBorder( 3, 6, 3, 6 )));
+//		setBorder( BorderFactory.createCompoundBorder( focusBorder,
+//			BorderFactory.createEmptyBorder( 2, 4, 2, 4 )));
 		addFocusListener( this );
 		addMouseListener( this );
 	}
@@ -146,11 +153,12 @@ implements FocusListener, MouseListener
 	public void paintComponent( Graphics g )
 	{
 		final Graphics2D	g2			= (Graphics2D) g;
+        final Insets        in          = focusInsets; // getInsets();
 //		final Color			bg			= getBackground();
-		final int			w			= getWidth() - 6;
+		final int			w			= getWidth() - (in.left + in.right); // 6;
 		final int			dx1			= Math.min( 9, w >> 1 );
 		final int			dx2			= w - Math.min( 16, w - dx1 );
-		final int			h			= getHeight() - 6;
+		final int			h			= getHeight() - (in.top + in.bottom); // 6;
 		final int			dy1			= Math.min( 10, h >> 1 );
 		final int			dy2			= h - Math.min( 10, h - dy1 );
 		final int			sx1			= type * 33;
@@ -163,25 +171,29 @@ implements FocusListener, MouseListener
 		final int			sy2			= 28 - (h - dy2);
 		final Map			origHints	= g2.getRenderingHints();
 		
-		g2.translate( 3, 3 );
-		if( (bg != null) && (bg.getAlpha() > 0) ) {
-			g2.setColor( bg );
-//			g2.fillRect( 0, 0, getWidth(), getHeight() );
-			g2.fillRoundRect( 0, 0, w - 1, h - 1, 8, 8 ); // why -1 ?
-		}
-		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
-		g2.setRenderingHint( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED );
-		g2.drawImage( dragImg, 0, 0, dx1, dy1, sx1, 0, sx2, dy1, this );
-		g2.drawImage( dragImg, dx1, 0, dx2, dy1, sx3, 0, sx4, dy1, this );
-		g2.drawImage( dragImg, dx2, 0, w, dy1, sx5, 0, sx6, dy1, this );
-		g2.drawImage( dragImg, 0, dy1, dx1, dy2, sx1, 10, sx2, sy1, this );
-		g2.drawImage( dragImg, dx2, dy1, w, dy2, sx5, 10, sx6, sy1, this );
-		g2.drawImage( dragImg, 0, dy2, dx1, h, sx1, 28 - (h - dy2), sx2, 28, this );
-		g2.drawImage( dragImg, dx1, dy2, dx2, h, sx3, sy2, sx4, 28, this );
-		g2.drawImage( dragImg, dx2, dy2, w, h, sx5, sy2, sx6, 28, this );
-		
-		g2.translate( -3, -3 );
-		g2.setRenderingHints( origHints );
+//        g2.translate( 3, 3 );
+        final AffineTransform atOrig = g2.getTransform();
+        try {
+            g2.translate( in.left, in.top );
+            if( (bg != null) && (bg.getAlpha() > 0) ) {
+                g2.setColor( bg );
+      //			g2.fillRect( 0, 0, getWidth(), getHeight() );
+                g2.fillRoundRect( 0, 0, w - 1, h - 1, 8, 8 ); // why -1 ?
+            }
+            g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
+            g2.setRenderingHint( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED );
+            g2.drawImage( dragImg, 0, 0, dx1, dy1, sx1, 0, sx2, dy1, this );
+            g2.drawImage( dragImg, dx1, 0, dx2, dy1, sx3, 0, sx4, dy1, this );
+            g2.drawImage( dragImg, dx2, 0, w, dy1, sx5, 0, sx6, dy1, this );
+            g2.drawImage( dragImg, 0, dy1, dx1, dy2, sx1, 10, sx2, sy1, this );
+            g2.drawImage( dragImg, dx2, dy1, w, dy2, sx5, 10, sx6, sy1, this );
+            g2.drawImage( dragImg, 0, dy2, dx1, h, sx1, 28 - (h - dy2), sx2, 28, this );
+            g2.drawImage( dragImg, dx1, dy2, dx2, h, sx3, sy2, sx4, 28, this );
+            g2.drawImage( dragImg, dx2, dy2, w, h, sx5, sy2, sx6, 28, this );
+        } finally {
+            g2.setTransform( atOrig );
+            g2.setRenderingHints( origHints );
+        }
 		super.paintComponent( g2 );
 	}
 

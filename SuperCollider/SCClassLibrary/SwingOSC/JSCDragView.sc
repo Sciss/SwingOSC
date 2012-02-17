@@ -47,7 +47,7 @@ JSCDragView : JSCStaticTextBase {
 
 	prSCViewNew { arg preMsg, postMsg;
 		properties.put( \canFocus, false );
-		jinsets = Insets( 3, 3, 3, 3 );
+//		jinsets = Insets( 3, 3, 3, 3 );
 		^super.prSCViewNew( preMsg, postMsg );
 	}
 }

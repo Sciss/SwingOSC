@@ -30,14 +30,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
-
-import de.sciss.gui.AquaFocusBorder;
 
 /**
  *	Abstract superclass of range and 2D sliders.
@@ -73,8 +72,9 @@ implements FocusListener
 	{
 		super();
 		setFocusable( true );
-		setBorder( new AquaFocusBorder() );
-		putClientProperty( "insets", getInsets() );
+//		setBorder( new AquaFocusBorder() );
+        setBorder( NimbusFocusBorder.getRectangle() );
+		putClientProperty("insets", getInsets());
 		addFocusListener( this );
 		setOpaque( false );
 		super.setBackground( new Color( 0, 0, 0, 0 ));
@@ -179,38 +179,41 @@ implements FocusListener
 		final int				cw		= getWidth() - ins.left - ins.right;
 		final int				ch		= getHeight() - ins.top - ins.bottom;
 		final AffineTransform atOrig	= g2.getTransform();
+		final Shape         clipOrig	= g2.getClip();
 
-		g2.translate( ins.left, ins.top );
-		
-		if( backgroundPainted ) {
-			if( (bg != null) && (bg.getAlpha() > 0) ) {
-				g2.setColor( bg );
-				g2.fillRect( 0, 0, cw, ch );
-			}
-	
-	//		g2.setColor( getBackground() );
-	//		g2.fillRect( 1, 2, cw - 2, ch - 4 );
-			g2.setColor( colrBg );
-			g2.fillRect( 1, 2, cw - 2, ch - 4 );
-			g2.setColor( colrBdT );
-	//		g2.drawLine( 0, 0, cw, 0 );
-			g2.drawLine( 0, 0, cw - 1, 0 );
-			g2.setColor( colrBdTSh1 );
-			g2.drawLine( 1, 1, cw - 2, 1 );
-			g2.setColor( colrBdTSh2 );
-			g2.drawLine( 1, 2, cw - 2, 2 );
-			g2.setColor( colrBdB );
-			g2.drawLine( 1, ch - 1, cw - 1, ch - 1 );
-			g2.setColor( colrBdLR );
-			g2.drawLine( 0, 1, 0, ch - 1 );
-			g2.drawLine( cw - 1, 1, cw - 1, ch - 1 );
-			g2.setColor( colrBdLRSh );
-			g2.drawLine( 1, 2, 1, ch - 2 );
-			g2.drawLine( cw - 2, 2, cw - 2, ch - 2 );
-		}
-		paintKnob( g2, cw, ch );
-		
-		g2.setTransform( atOrig );
+        try {
+            g2.translate( ins.left, ins.top );
+            if( backgroundPainted ) {
+                if( (bg != null) && (bg.getAlpha() > 0) ) {
+                    g2.setColor( bg );
+                    g2.fillRect( 0, 0, cw, ch );
+                }
+
+        //		g2.setColor( getBackground() );
+        //		g2.fillRect( 1, 2, cw - 2, ch - 4 );
+                g2.setColor( colrBg );
+                g2.fillRect( 1, 2, cw - 2, ch - 4 );
+                g2.setColor( colrBdT );
+        //		g2.drawLine( 0, 0, cw, 0 );
+                g2.drawLine( 0, 0, cw - 1, 0 );
+                g2.setColor( colrBdTSh1 );
+                g2.drawLine( 1, 1, cw - 2, 1 );
+                g2.setColor( colrBdTSh2 );
+                g2.drawLine( 1, 2, cw - 2, 2 );
+                g2.setColor( colrBdB );
+                g2.drawLine( 1, ch - 1, cw - 1, ch - 1 );
+                g2.setColor( colrBdLR );
+                g2.drawLine( 0, 1, 0, ch - 1 );
+                g2.drawLine( cw - 1, 1, cw - 1, ch - 1 );
+                g2.setColor( colrBdLRSh );
+                g2.drawLine( 1, 2, 1, ch - 2 );
+                g2.drawLine( cw - 2, 2, cw - 2, ch - 2 );
+            }
+            paintKnob( g2, cw, ch );
+        } finally {
+            g2.setTransform( atOrig );
+            g2.setClip( clipOrig );
+        }
 	}
 
 	protected abstract void paintKnob( Graphics2D g2, int w, int h );

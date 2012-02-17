@@ -36,21 +36,15 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
-import de.sciss.gui.AquaFocusBorder;
-
 /**
  *	Extends <code>Label</code> with
  *	added support for focus border
- *
- *	@author		Hanns Holger Rutz
- *	@version	0.62, 17-Jul-09
  */
 public class UserView
 extends JComponent
 implements FocusListener
 {
 	private boolean			focusBorderVisible	= true;
-	private AquaFocusBorder	border;
 	private Pen				pen;
 	private boolean			clear				= true;
 	private boolean			shouldPaintBg		= true;
@@ -77,9 +71,8 @@ implements FocusListener
 	
 	private void init()
 	{
-		border = new AquaFocusBorder();
-		setBorder( border );
-		putClientProperty( "insets", getInsets() );
+		setBorder( NimbusFocusBorder.getRectangle() );
+		putClientProperty("insets", getInsets());
 		setFocusable( true );
 		addFocusListener( this );
 		addMouseListener( new MouseAdapter() {
@@ -127,7 +120,8 @@ implements FocusListener
 	{
 		if( b != focusBorderVisible ) {
 			focusBorderVisible = b;
-			border.setVisible( b );
+//			border.setVisible( b );
+            putClientProperty( "swingosc.FocusVisible", b );
 		}
 	}
 

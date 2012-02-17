@@ -101,7 +101,7 @@ extends AbstractMultiSlider
 	protected void paintKnob( Graphics2D g2, int cw, int ch )
 	{
 //		final AffineTransform	atOrig	= g2.getTransform();
-		final Shape				clipOrig	= g2.getClip();
+//		final Shape				clipOrig	= g2.getClip();
 		final int				h, w;
 		final float				hm;
 		final Rectangle2D		r	= new Rectangle2D.Float();
@@ -216,7 +216,7 @@ extends AbstractMultiSlider
 			}
 		}
 //		g2.setTransform( atOrig );
-		g2.setClip( clipOrig );
+//		g2.setClip( clipOrig );
 	}
 	
 	public void setValues( float[] values )

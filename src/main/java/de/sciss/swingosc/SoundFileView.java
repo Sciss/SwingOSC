@@ -71,7 +71,6 @@ import de.sciss.app.EventManager;
 //import de.sciss.eisenkraut.io.MultiMappedAudioStake;
 //import de.sciss.eisenkraut.io.PrefCacheManager;
 //import de.sciss.eisenkraut.io.DecimatedTrail.AudioFileCacheInfo;
-import de.sciss.gui.AquaFocusBorder;
 import de.sciss.io.AudioFile;
 import de.sciss.io.AudioFileCacheInfo;
 import de.sciss.io.AudioFileDescr;
@@ -206,7 +205,8 @@ implements FocusListener
 //		setOpaque( true );
 		setBackground( Color.black );
 		setFocusable( true );
-		setBorder( new AquaFocusBorder() );
+//		setBorder( new AquaFocusBorder() );
+        setBorder( NimbusFocusBorder.getRectangle() );
 		putClientProperty( "insets", getInsets() );
 		
 		final MouseAdapter ma = new MouseAdapter();

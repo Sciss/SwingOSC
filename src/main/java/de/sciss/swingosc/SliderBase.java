@@ -205,7 +205,7 @@ implements FocusListener
 			g2.drawLine( 0, 1, 0, ch - 1 );
 			g2.drawLine( cw - 1, 1, cw - 1, ch - 1 );
 			g2.setColor( colrBdLRSh );
-			g2.drawLine( 1, 2, 0, ch - 2 );
+			g2.drawLine( 1, 2, 1, ch - 2 );
 			g2.drawLine( cw - 2, 2, cw - 2, ch - 2 );
 		}
 		paintKnob( g2, cw, ch );

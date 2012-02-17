@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<title>SwingOSC Help : JSC2DSlider</title>
+<title>SwingOSC Help : JSCSlider2D</title>
 <link type="text/css" href="swing.css" rel="stylesheet">
 </head>
 <body>
@@ -23,7 +23,7 @@
 </table>
 </div>
 <P>&nbsp;</P>
-<h1>JSC2DSlider</h1>
+<h1>JSCSlider2D</h1>
 <p><strong>
 Note: please use the abstraction layer <A HREF="SC://Slider2D">Slider2D</A> if possible!
 </strong></p>
@@ -34,13 +34,13 @@ A rectangular element that allows you to control two parameters simultaneously b
 (
     <span class="kw">var</span> win;
 
-    win = <span class="cl">JSCWindow</span>( <span class="st">&quot;JSC2DSlider&quot;</span>, <span class="cl">Rect</span>( 100, 100, 340, 140 ), resizable: <span class="kw">false</span> );
+    win = <span class="cl">JSCWindow</span>( <span class="st">&quot;JSCSlider2D&quot;</span>, <span class="cl">Rect</span>( 100, 100, 340, 140 ), resizable: <span class="kw">false</span> );
 
-    n = <span class="cl">JSC2DSlider</span>( win, <span class="cl">Rect</span>( 20, 20, 80, 80 )).x_( 1 ).y_( 1 );
+    n = <span class="cl">JSCSlider2D</span>( win, <span class="cl">Rect</span>( 20, 20, 80, 80 )).x_( 1 ).y_( 1 );
     n.knobColor_( <span class="cl">Color</span>( 0.75, 0.125, 0.25, 0.8 ));
-    n = <span class="cl">JSC2DSlider</span>( win, <span class="cl">Rect</span>( 120, 20, 80, 80 )).x_( 0.5 ).y_( 0.5 );
+    n = <span class="cl">JSCSlider2D</span>( win, <span class="cl">Rect</span>( 120, 20, 80, 80 )).x_( 0.5 ).y_( 0.5 );
     n.knobColor_( <span class="cl">Color</span>( 0.125, 0.6, 0.25, 0.8 ));
-    n = <span class="cl">JSC2DSlider</span>( win, <span class="cl">Rect</span>( 220, 20, 80, 80 )).x_( 0 ).y_( 0 );
+    n = <span class="cl">JSCSlider2D</span>( win, <span class="cl">Rect</span>( 220, 20, 80, 80 )).x_( 0 ).y_( 0 );
     n.knobColor_( <span class="cl">Color</span>( 0.125, 0.25, 0.75, 0.8 ));
     
     win.front;

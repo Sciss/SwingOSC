@@ -93,7 +93,7 @@ JSCWindow : Object {
 	*viewPalette {
 		var w, v, f, c, h, scrB;
 		
-		c = [JSCSlider, JSCRangeSlider, JSC2DSlider, JSCPopUpMenu, JSCButton, 
+		c = [JSCSlider, JSCRangeSlider, JSCSlider2D, JSCPopUpMenu, JSCButton, 
 			JSCNumberBox, JSCMultiSliderView,
 			JSCStaticText, JSCDragSource, JSCDragSink, JSCDragBoth,
 			JSCEnvelopeView, JSCUserView, JSCCheckBox, JSCScrollBar

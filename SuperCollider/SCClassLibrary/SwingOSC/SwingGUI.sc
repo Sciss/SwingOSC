@@ -64,7 +64,7 @@ SwingGUI {
 	*vLayoutView { ^JSCVLayoutView }
 	*slider { ^JSCSlider }
 	*rangeSlider { ^JSCRangeSlider }
-	*slider2D { ^JSC2DSlider }
+	*slider2D { ^JSCSlider2D }
 //     *tabletSlider2D { ^this.notImplemented( "TabletSlider2D" )}
 	*button { ^JSCButton }
 	*popUpMenu { ^JSCPopUpMenu }

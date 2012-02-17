@@ -1,5 +1,5 @@
 /*
- *	JSC2DSlider
+ *	JSCSlider2D
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -23,7 +23,7 @@
  *	contact@sciss.de
  */
 
-JSC2DSlider : JSCSliderBase {
+JSCSlider2D : JSCSliderBase {
 
 	var acResp;	// OSCpathResponder for action listening
 	var clpse;
@@ -154,5 +154,12 @@ JSC2DSlider : JSCSliderBase {
 			key = \stepSize;
 		};
 		^super.prSendProperty( key, value );
+	}
+}
+
+JSC2DSlider : JSCSlider2D {
+	*new { arg parent, bounds, id;
+		this.deprecated( thisMethod, Meta_JSCSlider2D.findRespondingMethodFor( \new ));
+		^JSCSlider2D.new( parent, bounds, id );
 	}
 }

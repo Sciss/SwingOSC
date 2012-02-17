@@ -181,7 +181,7 @@ All these functions are called with four arguments (the view, mouseX, mouseY, ke
         .stringColor_( <span class="cl">Color</span>.white )
         .align_( <span class="sy">\center</span> )
         .background_( <span class="cl">Color</span>.blue );
-    b = <span class="cl">JSC2DSlider</span>( w, <span class="cl">Rect</span>( 180, 10, 160, 160 ))
+    b = <span class="cl">JSCSlider2D</span>( w, <span class="cl">Rect</span>( 180, 10, 160, 160 ))
         .canFocus_( <span class="kw">false</span> );
     f = { <span class="kw">arg</span> view, x, y, modif; <span class="kw">var</span> bounds = view.bounds;
         b.setXY( x / bounds.width, 1.0 - (y / bounds.height) );

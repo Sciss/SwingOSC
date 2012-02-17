@@ -62,7 +62,7 @@ extends SliderBase
 		new MultiplyImageFilter( 0xFF, 0xFF, 0xFF, 0x7F );
 	
 	protected Color	colrKnob	= null;
-	protected Color	colrKnobD	= null;
+//	protected Color	colrKnobD	= null;
 	protected final MediumLightImageFilter fltKnob;
 
 	protected MonoSlider()
@@ -406,6 +406,10 @@ extends SliderBase
 			    (!vsEnabled || ((p.getY() >= knobY) && (p.getY() < knobY + knobHeight)))
 		);
 	}
+
+    protected void repaintKnob() {
+        repaint();  // XXX optimize region
+    }
 	
 	protected void waitForImage( Image img )
 	{
@@ -421,7 +425,7 @@ extends SliderBase
 	private class MouseAdapter
 	extends MouseInputAdapter
 	{
-		private boolean 	pressed 	= false;
+//		private boolean 	pressed 	= false;
 		private boolean 	moving		= false;
 		private float		dragFixX;
 		private float		dragFixY;
@@ -436,7 +440,7 @@ extends SliderBase
 
 			if( e.isControlDown() ) return;
 
-			pressed = true;
+			mousePressed = true;
 			
 			final Point2D vPt = screenToVirtual( e.getPoint() );
 				
@@ -476,13 +480,16 @@ extends SliderBase
 		
 		public void mouseReleased( MouseEvent e )
 		{
-			pressed 	= false;
-			moving		= false;
+            moving = false;
+            if( mousePressed ) {
+                mousePressed = false;
+                repaintKnob();
+            }
 		}
 		
 		public void mouseDragged( MouseEvent e )
 		{
-			if( !pressed || !isEnabled() ) return;
+			if( !mousePressed || !isEnabled() ) return;
 			
 			final Point2D vPt = screenToVirtual( e.getPoint() );
 			

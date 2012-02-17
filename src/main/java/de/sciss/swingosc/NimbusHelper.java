@@ -6,6 +6,11 @@ import javax.swing.UIManager;
 import java.awt.Color;
 
 public class NimbusHelper {
+    public static final int STATE_ENABLED   = 0x01;
+    public static final int STATE_OVER      = 0x02;
+    public static final int STATE_FOCUSED   = 0x04;
+    public static final int STATE_PRESSED   = 0x08;
+
     private static UIDefaults nimbusDefaults;
     private static final Color defaultFocusColor    = new Color( 115, 164, 209, 255 );
     private static final Color defaultBaseColor     = new Color(  51,  98, 140, 255 );
@@ -73,5 +78,18 @@ public class NimbusHelper {
         final int a1   = sameAlpha ? a0 : Math.max( 0, Math.min( 0xFF, a0 + alphaOffset ));
         final int rgba = (rgb & 0xFFFFFF) | (a1 << 24);
         return new Color( rgba, true );
+    }
+
+    public static Color mixColorWithAlpha( Color base, Color mix ) {
+        if( mix == null ) return base;
+        final int a0 = mix.getAlpha();
+        if( a0 == 0 ) { return base; } else if( a0 == 0xFF ) return mix;
+
+        final float wm = (float) a0 / 0xFF;
+        final float wb = 1f - wm;
+        final int r = (int) (base.getRed()   * wb + mix.getRed()   * wm + 0.5f);
+        final int g = (int) (base.getGreen() * wb + mix.getGreen() * wm + 0.5f);
+        final int b = (int) (base.getBlue()  * wb + mix.getBlue()  * wm + 0.5f);
+        return new Color( r, g, b );
     }
 }

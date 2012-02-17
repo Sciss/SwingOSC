@@ -88,7 +88,11 @@ extends MonoSlider
 		final int ky = (int) ((1.0f - knobY) * (h - kHandleHeight - 2)) + 1;
 
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-        thumb.paint( this, g2, kx, ky, kHandleWidth, kHandleHeight );
+        final int state = (isEnabled()  ? NimbusHelper.STATE_ENABLED : 0) |
+                          (hasFocus()   ? NimbusHelper.STATE_FOCUSED : 0) |
+                          (mouseOver    ? NimbusHelper.STATE_OVER    : 0) |
+                          (mousePressed ? NimbusHelper.STATE_PRESSED : 0);
+        thumb.paint( state, colrKnob, g2, kx, ky, kHandleWidth, kHandleHeight );
 		
 //		if( handleImg != null ) {
 //			if( isEnabled() ) {

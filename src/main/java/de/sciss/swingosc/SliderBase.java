@@ -62,6 +62,9 @@ implements FocusListener
 	protected static final Color	colrBdLRSh	= new Color( 0, 0, 0, 0x10 );
 	protected static final Color	colrBdB		= new Color( 0, 0, 0, 0x19 );
 	protected static final Color	colrBg		= new Color( 0, 0, 0, 0x0A );
+
+    protected boolean mouseOver     = false;
+    protected boolean mousePressed  = false;
 	
 	private	ActionListener al = null;
 	

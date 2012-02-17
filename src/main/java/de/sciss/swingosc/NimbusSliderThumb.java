@@ -82,9 +82,9 @@ public class NimbusSliderThumb {
                 MultipleGradientPaint.CycleMethod.NO_CYCLE );
     }
 
-    public void paint( JComponent c, Graphics2D g, int x, int y, int width, int height ) {
-        final Color base = NimbusHelper.getBaseColor();
-        if( c.isEnabled() ) {
+    public void paint( int state, Color c, Graphics2D g, int x, int y, int width, int height ) {
+        final Color base = NimbusHelper.mixColorWithAlpha( NimbusHelper.getBaseColor(), c );
+        if( (state & NimbusHelper.STATE_ENABLED) != 0 ) {
             paintEnabled( g, base, x, y, width, height );
         } else {
             paintDisabled( g, base, x, y, width, height );

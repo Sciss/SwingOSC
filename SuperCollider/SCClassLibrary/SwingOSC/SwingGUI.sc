@@ -65,11 +65,12 @@ SwingGUI {
 	*slider { ^JSCSlider }
 	*rangeSlider { ^JSCRangeSlider }
 	*slider2D { ^JSC2DSlider }
-//	*tabletSlider2D { ^JSC2DTabletSlider }
+     *tabletSlider2D { ^this.notImplemented( "TabletSlider2D" )}
 	*button { ^JSCButton }
 	*popUpMenu { ^JSCPopUpMenu }
 	*staticText { ^JSCStaticText }
 	*listView { ^JSCListView }
+     *treeView { ^this.notImplemented( "TreeView" )}
 	*dragSource { ^JSCDragSource }
 	*dragSink { ^JSCDragSink }
 	*dragBoth { ^JSCDragBoth }
@@ -81,6 +82,7 @@ SwingGUI {
 	*tabletView { ^JSCTabletView }
 	*soundFileView { ^JSCSoundFileView }
 	*movieView { ^JSCMovieView }
+     *levelIndicator { ^this.notImplemented( "LevelIndicator" )}
 	*textView { ^JSCTextView }
 //	*quartzComposerView { ^JSCQuartzComposerView }
 	*scrollView { ^JSCScrollView }
@@ -96,6 +98,13 @@ SwingGUI {
 	*pen { ^JPen }
 	*image { ^JSCImage }
 	*webView { ^JSCWebView }
+	
+	///////////////// Layout Managers /////////////////
+	
+	*hLayout { ^this.notImplemented( "HLayout" )}
+	*vLayout { ^this.notImplemented( "VLayout" )}
+	*gridLayout { ^this.notImplemented( "GridLayout" )}
+	*stackLayout { ^this.notImplemented( "StackLayout" )}
 	
 	///////////////// Common -> Audio /////////////////
 
@@ -119,6 +128,11 @@ SwingGUI {
 
 	///////////////// crucial /////////////////
 //	*startRow { ^JStartRow }
+
+	*notImplemented { arg class;
+    		("SwingGUI: " ++ class.asString ++ " is not implemented yet").postln;
+	    	^nil;
+  	}
 
 	// ----------------- private class methods -----------------
 

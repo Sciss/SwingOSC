@@ -34,7 +34,7 @@ Note: please use the abstraction layer <A HREF="SC://Pen">Pen</A> if possible!
 <P>
 A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="JSCUserView.html">JSCUserView</A>, or a <A HREF="JSCTabletView.html">JSCTabletView</A>. It cannot be instantiated but only provides static methods.
 </P>
-<P>The following methods must be called within an <A HREF="JSCWindow.html">JSCWindow</A>-drawHook or a <A HREF="JSCUserView.html">JSCUserView</A>-drawFunc function, and will only be visible once the window or the view is refreshed. Each call to <A HREF="JSCWindow.html">JSCWindow</A>-refresh or <A HREF="JSCUserView.html">JSCUserView</A>-refresh will 'overwrite' all previous drawing by executing the currently defined function.
+<P>The following methods must be called within an <A HREF="JSCWindow.html">JSCWindow</A>-drawFunc or a <A HREF="JSCUserView.html">JSCUserView</A>-drawFunc function, and will only be visible once the window or the view is refreshed. Each call to <A HREF="JSCWindow.html">JSCWindow</A>-refresh or <A HREF="JSCUserView.html">JSCUserView</A>-refresh will 'overwrite' all previous drawing by executing the currently defined function.
 </P>
 <P>See also: <A HREF="JSCUserView.html">JSCUserView</A>, <A HREF="JSCWindow.html">JSCWindow</A>, <A HREF="JSCTabletView.html">JSCTabletView</A>, <A HREF="SC://Color">Color</A>, <A HREF="JSCFont.html">JSCFont</A>, <A HREF="SC://Point">Point</A>, <A HREF="SC://Rect">Rect</A></P>
 <P>&nbsp;</P>
@@ -63,7 +63,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, rr;
     
         <span class="cl">JPen</span>.translate( 200, 200 );
@@ -111,7 +111,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, rr;
     
         <span class="cl">JPen</span>.translate( 200, 200 );
@@ -171,7 +171,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
     d = 0.0;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> ang1, ang2, rad1, rad2;
         <span class="kw">var</span> di = 1.0 - d;
     
@@ -233,7 +233,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
         <span class="cl">JPen</span>.line( p + (-6 @ 6), p + (6 @ -6) );
         <span class="cl">JPen</span>.stroke;
     };
-    w.drawHook = { <span class="kw">var</span> dp10, dp12, dp02, a, b, c, s, th, dist, tp1, tp2, ang, cp;
+    w.drawFunc = { <span class="kw">var</span> dp10, dp12, dp02, a, b, c, s, th, dist, tp1, tp2, ang, cp;
         <span class="cl">JPen</span>.strokeColor = <span class="cl">Color</span>.green;
         <span class="cl">JPen</span>.moveTo( ps[ 0 ]);
         <span class="cl">JPen</span>.lineTo( ps[ 1 ]);
@@ -296,7 +296,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.translate( 100, 100 );
         10.do {
             <span class="cl">JPen</span>.color = <span class="cl">Color</span>.red( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));
@@ -324,7 +324,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.translate( 100, 100 );
         10.do {
@@ -353,7 +353,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.translate( 100, 100 );
         500.do {
             <span class="cl">JPen</span>.color = <span class="cl">Color</span>.green( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));
@@ -387,7 +387,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, x1o, y1o, x2o, y2o, size;
     
         <span class="cl">JPen</span>.translate( 200, 200 );
@@ -439,7 +439,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.red;
         <span class="cl">JPen</span>.moveTo( 200 @ 100 );
@@ -467,7 +467,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.red;
         <span class="cl">JPen</span>.moveTo( 200 @ 100 );
@@ -503,7 +503,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_(<span class="cl">Color</span>.white);
-    w.drawHook = {
+    w.drawFunc = {
         4.do({ <span class="kw">arg</span> option; <span class="cl">JPen</span>.use({
             <span class="cl">JPen</span>.translate( (option &amp; 1) * 200, (option &amp; 2) * 100 );
             <span class="cl">JPen</span>.fillColor = <span class="cl">Color</span>.black;
@@ -533,7 +533,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 <pre>
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;strokeRect&quot;</span>, <span class="cl">Rect</span>( 128, 64, 360, 360 ));
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> r;
         r = <span class="cl">Rect</span>( 100, 100, 160, 80 );
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.black.alpha_( 0.8 );
@@ -547,7 +547,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 <PRE>
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;strokeRect&quot;</span>, <span class="cl">Rect</span>( 128, 64, 360, 360 ));
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> r;
         <span class="cl">JPen</span>.translate( 0.5, 0.5 );  <span class="cm">// !</span>
         r = <span class="cl">Rect</span>( 100, 100, 160, 80 );
@@ -569,7 +569,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;fillRect&quot;</span>, resizable: <span class="kw">false</span> );
     w.view.background = <span class="cl">Color</span>.white;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> r;
         200.do({
             <span class="cl">JPen</span>.color = <span class="cl">Color</span>.black.alpha_( 1.0.rand.pow( 6 ));
@@ -596,7 +596,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 <pre>
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;strokeOval&quot;</span>, <span class="cl">Rect</span>( 128, 64, 360, 360 ));
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> h, v, r;
         v = h = 300.0;
         r = <span class="cl">Rect</span>( 100, 100, 160, 80 );
@@ -619,7 +619,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;fillOval&quot;</span>, resizable: <span class="kw">false</span> );
     w.view.background = <span class="cl">Color</span>.black;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> r;
         200.do({
             <span class="cl">JPen</span>.color = <span class="cl">Color</span>.white.alpha_( 1.0.rand.pow( 6 ));
@@ -648,7 +648,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 <pre>
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;stringAtPoint&quot;</span>, <span class="cl">Rect</span>( 128, 64, 360, 360 ), <span class="kw">false</span> );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> pt;
         
         <span class="cl">JPen</span>.font = <span class="cl">JSCFont</span>( <span class="st">&quot;Monospaced&quot;</span>, 16 );
@@ -686,7 +686,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;String in Rect&quot;</span>, <span class="cl">Rect</span>( 128, 64, 300, 560 ), <span class="kw">false</span> ).front;
     w.view.background_(<span class="cl">Color</span>.white);
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> rect, txt;
 
         txt = <span class="st">&quot;Il arrive que la r&eacute;alit&eacute; soit trop complexe pour la transmission orale.&quot;</span>;
@@ -726,7 +726,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.blue;
         <span class="cl">JPen</span>.translate( 200, 100 );
@@ -748,7 +748,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     <span class="cm">// cumulative translations</span>
     (
     w = <span class="cl">JSCWindow</span>.new.front;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.black;
         <span class="cm">// draw 35 lines</span>
@@ -774,7 +774,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.green;
         <span class="cl">JPen</span>.translate( 200, 100 );
@@ -805,7 +805,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.green( 0.5, 0.8 );
         <span class="cl">JPen</span>.translate( 200, 100 );
@@ -837,7 +837,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
     c = 0;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.translate( 220, 200 );
         
         10.do({
@@ -910,8 +910,8 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     b = r.leftBottom;
     d = r.rightTop;
 
-    <span class="cm">// the drawHook</span>
-    w.drawHook = {
+    <span class="cm">// the drawFunc</span>
+    w.drawFunc = {
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.red;
             <span class="cl">JPen</span>.matrix = matrix;   <span class="cm">// !</span>
             <span class="cl">JPen</span>.width = 5;
@@ -949,7 +949,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
                 val = ez.value;
                 [ i, val.round(10e-4) ].postln;
                 matrix[ i ] = val;
-                w.refresh; <span class="cm">// reevaluate drawHook function</span>
+                w.refresh; <span class="cm">// reevaluate drawFunc function</span>
         }, matrix[ i ]);
         sliders.nextLine;
     }});
@@ -967,7 +967,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.blue( 0.5, 0.5 );
         <span class="cl">JPen</span>.translate( 200,100 );
@@ -1002,7 +1002,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     <span class="kw">var</span> width = 0;
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;Dash&quot;</span>, <span class="cl">Rect</span>( 100, 100, 920, 500 ), <span class="kw">false</span> ).front;
     w.view.background = <span class="cl">Color</span>.white;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.translate( 0.5, 0.5 );
         <span class="cl">JPen</span>.width = width;
         patterns.do({ <span class="kw">arg</span> pat;
@@ -1037,7 +1037,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;Join&quot;</span> ).front;
     w.view.background = <span class="cl">Color</span>.white;
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.translate( 0.5, 0.5 );
         <span class="cl">JPen</span>.width = 8;
         [ <span class="st">&quot;miter&quot;</span>, <span class="st">&quot;round&quot;</span>, <span class="st">&quot;bevel&quot;</span> ].do({ <span class="kw">arg</span> name, i;
@@ -1065,7 +1065,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     i = <span class="cl">JSCImage</span>.openURL( <span class="st">&quot;http://sciss.de/swingOSC/application.png&quot;</span> );
     w = <span class="cl">JSCWindow</span>.new.front;
-    w.drawHook = {
+    w.drawFunc = {
         (1..10).do({ <span class="kw">arg</span> j;
             <span class="cl">JPen</span>.alpha = j / 10;
             <span class="cl">JPen</span>.translate( 24 + 4.bilinrand, 24 + 4.bilinrand );
@@ -1089,7 +1089,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     <span class="cm">// modified by an example of Stefan Wittwer</span>
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">//paint origin</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.gray( 0, 0.5 );
         <span class="cl">JPen</span>.addArc( 0 @ 0, 20, 0, 2pi );
@@ -1131,7 +1131,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// set the Color</span>
         <span class="cl">JPen</span>.color = <span class="cl">Color</span>.blue;
         <span class="cl">JPen</span>.translate( 200, 100 );
@@ -1164,7 +1164,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cm">// outline the clipping path</span>
         <span class="cl">JPen</span>.addRect( <span class="cl">Rect</span>( 110, 110, 180, 30 ));
         <span class="cl">JPen</span>.addRect( <span class="cl">Rect</span>( 110, 145, 180, 30 ));
@@ -1201,7 +1201,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
     (
     w = <span class="cl">JSCWindow</span>.new.front;
     w.view.background_( <span class="cl">Color</span>.white );
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.width = 2;
         2.do({ <span class="kw">arg</span> i;
             <span class="cl">JPen</span>.smoothing = i == 1;
@@ -1221,7 +1221,7 @@ A helper class to draw on a <A HREF="JSCWindow.html">JSCWindow</A>, a <A HREF="J
 <span class="cm">// simple rotating and scaling</span>
 
     w = <span class="cl">JSCWindow</span>( <span class="st">&quot;Pen Rotation and Scaling&quot;</span>, <span class="cl">Rect</span>( 128, 64, 360, 360 ));
-    w.drawHook = {
+    w.drawFunc = {
         <span class="kw">var</span> h, v;
         v = h = 300.0;
         <span class="cl">JPen</span>.use({
@@ -1264,7 +1264,7 @@ w = <span class="cl">JSCWindow</span>(<span class="st">&quot;my name is... panel
 w.view.background = <span class="cl">Color</span>.white;
 w.onClose = { run = <span class="kw">false</span> };
 w.front;
-w.drawHook = {
+w.drawFunc = {
     <span class="cl">JPen</span>.use {
         <span class="cl">JPen</span>.width = 0.2;
         400.do {
@@ -1286,7 +1286,7 @@ w = <span class="cl">JSCWindow</span>(<span class="st">&quot;my name is... panel
 w.view.background = <span class="cl">Color</span>.white;
 w.onClose = { run = <span class="kw">false</span> };
 w.front;
-w.drawHook = {
+w.drawFunc = {
     <span class="cl">JPen</span>.use {
         <span class="cl">JPen</span>.width = 2;
         80.do {
@@ -1317,7 +1317,7 @@ w.onClose = { run = <span class="kw">false</span> }; <span class="cm">// stop th
 w.front;
 <span class="cm">// store an initial seed value for the random generator</span>
 seed = <span class="cl">Date</span>.seed;
-w.drawHook = {
+w.drawFunc = {
     <span class="cl">JPen</span>.width = 2;
     <span class="cl">JPen</span>.use {
         <span class="cm">// reset this thread's seed for a moment</span>
@@ -1359,7 +1359,7 @@ w = <span class="cl">JSCWindow</span>(<span class="st">&quot;my name is... panel
 w.view.background = <span class="cl">Color</span>.blue(0.4);
 w.onClose = { run = <span class="kw">false</span> };
 w.front;
-w.drawHook = {
+w.drawFunc = {
     <span class="cl">JPen</span>.use {
         if (0.02.coin) { seed = <span class="cl">Date</span>.seed };
         <span class="kw">thisThread</span>.randSeed = seed;
@@ -1408,7 +1408,7 @@ w = <span class="cl">JSCWindow</span>(<span class="st">&quot;affines&quot;</span
 w.view.background = <span class="cl">Color</span>.blue(0.4);
 w.onClose = { run = <span class="kw">false</span> };
 w.front;
-w.drawHook = {
+w.drawFunc = {
     <span class="kw">thisThread</span>.randSeed = <span class="cl">Date</span>.seed;
     if (0.0125.coin) { seed = <span class="cl">Date</span>.seed; phase = 0; zoom = 0.7; zoomf = exprand(1/1.01, 1.01) }
     { phase = phase + (2pi/80); zoom = zoom * zoomf };
@@ -1495,7 +1495,7 @@ w.drawHook = {
     yellowness=rrand(0.7,0.9);
     penwidth=rrand(2,3);
 
-    w.drawHook = {
+    w.drawFunc = {
         <span class="cl">JPen</span>.use {
             <span class="kw">var</span> xoscil, xsizoscil,yoscil, todraw, usedtime;
 
@@ -1537,7 +1537,7 @@ w.drawHook = {
                 ) 
     };
     lfunc = {<span class="kw">|val|</span>  1/ val ** i.fold(0, 1.1) * i.fold(val,2) * 0.5 };
-    w.drawHook = { 
+    w.drawFunc = { 
                 i = i + 0.01;
                 <span class="cl">JPen</span>.rotate(i, 240, 240);
                 <span class="cl">JPen</span>.translate(100,100);

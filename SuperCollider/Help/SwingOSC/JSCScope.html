@@ -37,7 +37,8 @@ s = <span class="cl">JSCStethoscope</span>.defaultServer.waitForBoot({
         .opaque_( <span class="kw">false</span> );  <span class="cm">// don't know why this is currently necessary ;-C</span>
     u = <span class="cl">JSCUserView</span>( w, f.bounds ).canFocus_( <span class="kw">false</span> )
         .drawFunc_({ <span class="kw">arg</span> view;
-            <span class="kw">var</span> b = view.bounds, corners = [ b.leftTop, b.rightTop, b.rightBottom, b.leftBottom ],
+            <span class="kw">var</span> b = view.bounds.moveTo( -1,-1 ),
+                corners = [ b.leftTop, b.rightTop, b.rightBottom, b.leftBottom ],
                 scales = [ 1 @ 1, -1 @ 1, -1 @ -1, 1 @ -1 ];
             <span class="cl">JPen</span>.fillColor = w.view.background;
             corners.do({ <span class="kw">arg</span> c, i;

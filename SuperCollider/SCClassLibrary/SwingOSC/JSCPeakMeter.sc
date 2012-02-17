@@ -23,8 +23,8 @@
  *	contact@sciss.de
  */
 
-JPeakMeterSettings {
-	classvar all;			// IdentityDictionary mapping SwingOSC to Server to JPeakMeterSettings
+JSCPeakMeterSettings {
+	classvar all;			// IdentityDictionary mapping SwingOSC to Server to JSCPeakMeterSettings
 
 	var <swing, <scsynth, <refreshRate = 30.0;
 	
@@ -66,14 +66,14 @@ JPeakMeterSettings {
 		var manager;
 		if( value != refreshRate, {
 			refreshRate	= value;
-			manager		= JPeakMeterManager.get( swing, scsynth );
+			manager		= JSCPeakMeterManager.get( swing, scsynth );
 			if( manager.notNil, { manager.refreshRate = refreshRate });
 		});
 	}
 }
 
-JPeakMeterManager {
-	classvar all;			// IdentityDictionary mapping JSCSynth to JPeakMeterManager
+JSCPeakMeterManager {
+	classvar all;			// IdentityDictionary mapping JSCSynth to JSCPeakMeterManager
 
 	var <id;				// server side manager id
 	
@@ -170,7 +170,7 @@ JPeakMeterManager {
 		if( inited.not, {
 			inited = true;
 			if( created.not, {
-				settings = JPeakMeterSettings.get( jscsynth.swing, jscsynth.scsynth );
+				settings = JSCPeakMeterSettings.get( jscsynth.swing, jscsynth.scsynth );
 				jscsynth.swing.listSendMsg([ '/set',
 					'[', '/local', id, '[', '/new', "de.sciss.swingosc.PeakMeterManager", ']', ']' ]
 					++ if( settings.notNil, {[ \refreshRate, (1000 / settings.refreshRate).round ]}) ++
@@ -241,7 +241,7 @@ JSCPeakMeter : JSCView {
 	var <orientation = \v;
 	
 	*setRefreshRate { arg rate, swing, scsynth;
-		JPeakMeterSettings.setRefreshRate( rate, swing ?? { SwingOSC.default }, scsynth ?? { Server.default });
+		JSCPeakMeterSettings.setRefreshRate( rate, swing ?? { SwingOSC.default }, scsynth ?? { Server.default });
 	}
 
 	// ----------------- public instance methods -----------------
@@ -496,7 +496,7 @@ JSCPeakMeter : JSCView {
 	
 	prRegister {
 		if( bus.notNil and: { bus.numChannels > 0 }, {
-			manager = JPeakMeterManager.newFrom( this.server, bus.server );
+			manager = JSCPeakMeterManager.newFrom( this.server, bus.server );
 			manager.protRegister( this );
 		});
 	}

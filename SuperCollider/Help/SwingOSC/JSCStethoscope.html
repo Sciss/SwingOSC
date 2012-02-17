@@ -161,7 +161,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p12"><span class="Apple-tab-span">	</span><span class="s6">SinOsc</span>.ar([225, 450, 900], 0, 0.2)<span class="Apple-converted-space"> </span></p>
 <p class="p12"><span class="Apple-tab-span">	</span>+ <span class="s6">LPF</span>.ar(</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">LFPulse</span>.ar(226 * [1, 2, 5],[0,0.1,0.1],0.2, 0.2),<span class="Apple-converted-space"> </span></p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">JMouseX</span>.kr(20, 10000, 1)</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">MouseX</span>.kr(20, 10000, 1)</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)<span class="Apple-converted-space"> </span></p>
 <p class="p12">}.scope;</p>
 <p class="p12">)</p>
@@ -172,7 +172,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p12"><span class="Apple-tab-span">	</span><span class="s6">SinOsc</span>.ar([225, 450, 900], 0, 0.2)<span class="Apple-converted-space"> </span></p>
 <p class="p12"><span class="Apple-tab-span">	</span>+ <span class="s6">LPF</span>.ar(</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">LFPulse</span>.ar(226 * [1, 2, 5],[0,0.1,0.1],0.2, 0.2),<span class="Apple-converted-space"> </span></p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">JMouseX</span>.kr(20, 10000, 1)</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">MouseX</span>.kr(20, 10000, 1)</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)<span class="Apple-converted-space"> </span></p>
 <p class="p12">}.scope;</p>
 <p class="p12">)</p>
@@ -183,12 +183,11 @@ span.Apple-tab-span {white-space:pre}
 <p class="p12"><span class="Apple-tab-span">	</span><span class="s6">SinOsc</span>.ar([225, 450, 900], 0, 0.2)<span class="Apple-converted-space"> </span></p>
 <p class="p12"><span class="Apple-tab-span">	</span>+ <span class="s6">LPF</span>.ar(</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">LFPulse</span>.ar(226 * [1, 2, 5],[0,0.1,0.1],0.2, 0.2),<span class="Apple-converted-space"> </span></p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">JMouseX</span>.kr(20, 10000, 1)</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">
+MouseX</span>.kr(20, 10000, 1)</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)<span class="Apple-converted-space"> </span></p>
 <p class="p12">}.scope( bufsize: 1024 );</p>
 <p class="p12">)</p>
-<p class="p11"><br></p>
-<p class="p13">JMouseBase<span class="s5">.makeGUI;</span></p>
 <p class="p11"><br></p>
 <p class="p10">// server.scope only changes the properies explicitly given:</p>
 <p class="p11"><br></p>
@@ -210,11 +209,9 @@ span.Apple-tab-span {white-space:pre}
 <p class="p12">a.scope;</p>
 <p class="p11"><br></p>
 <p class="p12">c = <span class="s6">Bus</span>.control( s, 3 );</p>
-<p class="p12">{ <span class="s6">WhiteNoise</span>.kr( 1.dup( 4 ) * <span class="s6">JMouseX</span>.kr )}.play( s, c.index );</p>
+<p class="p12">{ <span class="s6">WhiteNoise</span>.kr( 1.dup( 4 ) * <span class="s6">MouseX</span>.kr )}.play( s, c.index );</p>
 <p class="p11"><br></p>
 <p class="p12">c.scope;</p>
-<p class="p11"><br></p>
-<p class="p13">JMouseBase<span class="s5">.makeGUI;</span></p>
 <p class="p11"><br></p>
 <p class="p10">// note that scoping control rate buses shows block size interpolation</p>
 <p class="p9"><br></p>

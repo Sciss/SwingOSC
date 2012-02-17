@@ -65,12 +65,12 @@ SwingGUI {
 	*slider { ^JSCSlider }
 	*rangeSlider { ^JSCRangeSlider }
 	*slider2D { ^JSC2DSlider }
-     *tabletSlider2D { ^this.notImplemented( "TabletSlider2D" )}
+//     *tabletSlider2D { ^this.notImplemented( "TabletSlider2D" )}
 	*button { ^JSCButton }
 	*popUpMenu { ^JSCPopUpMenu }
 	*staticText { ^JSCStaticText }
 	*listView { ^JSCListView }
-     *treeView { ^this.notImplemented( "TreeView" )}
+//     *treeView { ^this.notImplemented( "TreeView" )}
 	*dragSource { ^JSCDragSource }
 	*dragSink { ^JSCDragSink }
 	*dragBoth { ^JSCDragBoth }
@@ -82,7 +82,7 @@ SwingGUI {
 	*tabletView { ^JSCTabletView }
 	*soundFileView { ^JSCSoundFileView }
 	*movieView { ^JSCMovieView }
-     *levelIndicator { ^this.notImplemented( "LevelIndicator" )}
+//     *levelIndicator { ^this.notImplemented( "LevelIndicator" )}
 	*textView { ^JSCTextView }
 //	*quartzComposerView { ^JSCQuartzComposerView }
 	*scrollView { ^JSCScrollView }
@@ -101,10 +101,10 @@ SwingGUI {
 	
 	///////////////// Layout Managers /////////////////
 	
-	*hLayout { ^this.notImplemented( "HLayout" )}
-	*vLayout { ^this.notImplemented( "VLayout" )}
-	*gridLayout { ^this.notImplemented( "GridLayout" )}
-	*stackLayout { ^this.notImplemented( "StackLayout" )}
+//	*hLayout { ^this.notImplemented( "HLayout" )}
+//	*vLayout { ^this.notImplemented( "VLayout" )}
+//	*gridLayout { ^this.notImplemented( "GridLayout" )}
+//	*stackLayout { ^this.notImplemented( "StackLayout" )}
 	
 	///////////////// Common -> Audio /////////////////
 

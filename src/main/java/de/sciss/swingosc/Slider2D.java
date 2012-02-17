@@ -31,20 +31,19 @@ import java.net.URL;
 
 /**
  *	A pane with a knob moveable in two dimensions.
- *
- *	@author		Hanns Holger Rutz
- *	@version	0.45, 02-Feb-07
  */
 public class Slider2D
 extends MonoSlider
 {
-	private static int kHandleWidth		= 15;
-	private static int kHandleHeight	= 15;
+	private static int kHandleWidth		= 17; // 15;
+	private static int kHandleHeight	= 17; // 15;
 	
-	private static Image handleImg		= null;
-	private static Image handleImgD		= null;
+//	private static Image handleImg		= null;
+//	private static Image handleImgD		= null;
+//
+//	private Image imgKnob 				= null;
 
-	private Image imgKnob 				= null;
+    private final NimbusSliderThumb thumb = new NimbusSliderThumb();
 
 	private static final Insets valInsets = new Insets(
 		(kHandleHeight >> 1) + 1, (kHandleWidth >> 1) + 1,
@@ -54,32 +53,32 @@ extends MonoSlider
 	{
 		super( true, true, false, false );
 
-		if( handleImg == null ) {
-			try {
-				final URL url = getClass().getResource( "handle.png" );
-				handleImg = Toolkit.getDefaultToolkit().getImage( url );
-				waitForImage( handleImg );
-			}
-			catch( NullPointerException e1 ) { System.out.println( e1 );}
-		}
+//		if( handleImg == null ) {
+//			try {
+//				final URL url = getClass().getResource( "handle.png" );
+//				handleImg = Toolkit.getDefaultToolkit().getImage( url );
+//				waitForImage( handleImg );
+//			}
+//			catch( NullPointerException e1 ) { System.out.println( e1 );}
+//		}
 	}
 
-	public void dispose()
-	{
-		if( imgKnob != null ) {
-			imgKnob.flush();
-			imgKnob = null;
-		}
-		super.dispose();
-	}
+//	public void dispose()
+//	{
+//		if( imgKnob != null ) {
+//			imgKnob.flush();
+//			imgKnob = null;
+//		}
+//		super.dispose();
+//	}
 	
 	public void setKnobColor( Color c )
 	{
-		if( imgKnob != null ) {
-			imgKnob.flush();
-			imgKnob = null;
-		}
-		
+//		if( imgKnob != null ) {
+//			imgKnob.flush();
+//			imgKnob = null;
+//		}
+//
 		super.setKnobColor( c );
 	}
 	
@@ -87,30 +86,33 @@ extends MonoSlider
 	{
 		final int kx = (int) (knobX * (w - kHandleWidth - 2)) + 1;
 		final int ky = (int) ((1.0f - knobY) * (h - kHandleHeight - 2)) + 1;
+
+        g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+        thumb.paint( this, g2, kx, ky, kHandleWidth, kHandleHeight );
 		
-		if( handleImg != null ) {
-			if( isEnabled() ) {
-				if( colrKnob != null ) {
-					if( imgKnob == null ) {
-						imgKnob = createImage( new FilteredImageSource(
-								handleImg.getSource(), fltKnob ));
-					}
-					g2.drawImage( imgKnob, kx, ky, this );
-				} else {
-					g2.drawImage( handleImg, kx, ky, this );
-				}
-				g2.setColor( colrBdLR );
-			} else {
-				if( handleImgD == null ) {
-					handleImgD = createImage( new FilteredImageSource(
-						handleImg.getSource(), fltKnobD ));
-				}
-				g2.drawImage( handleImgD, kx, ky, this );
-			}
-			g2.drawLine( kx, ky + kHandleHeight, kx + kHandleWidth - 1, ky + kHandleHeight );
-		} else {
-			g2.fillRect( kx, ky, kHandleWidth, kHandleHeight );
-		}
+//		if( handleImg != null ) {
+//			if( isEnabled() ) {
+//				if( colrKnob != null ) {
+//					if( imgKnob == null ) {
+//						imgKnob = createImage( new FilteredImageSource(
+//								handleImg.getSource(), fltKnob ));
+//					}
+//					g2.drawImage( imgKnob, kx, ky, this );
+//				} else {
+//					g2.drawImage( handleImg, kx, ky, this );
+//				}
+//				g2.setColor( colrBdLR );
+//			} else {
+//				if( handleImgD == null ) {
+//					handleImgD = createImage( new FilteredImageSource(
+//						handleImg.getSource(), fltKnobD ));
+//				}
+//				g2.drawImage( handleImgD, kx, ky, this );
+//			}
+//			g2.drawLine( kx, ky + kHandleHeight, kx + kHandleWidth - 1, ky + kHandleHeight );
+//		} else {
+//			g2.fillRect( kx, ky, kHandleWidth, kHandleHeight );
+//		}
 	}
 		
 	protected Insets getValueInsets()

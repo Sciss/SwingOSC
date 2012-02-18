@@ -76,12 +76,14 @@ implements FocusListener
 		super();
 		setFocusable( true );
 //		setBorder( new AquaFocusBorder() );
-        setBorder( NimbusFocusBorder.getRectangle() );
-		putClientProperty("insets", getInsets());
+        if( frameFocus() ) setBorder( NimbusFocusBorder.getRectangle() );
+		putClientProperty( "insets", getInsets() );
 		addFocusListener( this );
 		setOpaque( false );
 		super.setBackground( new Color( 0, 0, 0, 0 ));
 	}
+
+    protected abstract boolean frameFocus();
 
 	public void setBackground( Color c )
 	{

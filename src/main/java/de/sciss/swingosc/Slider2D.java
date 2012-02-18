@@ -35,8 +35,8 @@ import java.net.URL;
 public class Slider2D
 extends MonoSlider
 {
-	private static int kHandleWidth		= 17; // 15;
-	private static int kHandleHeight	= 17; // 15;
+	private static int kHandleWidth		= 13; // 17; // 15;
+	private static int kHandleHeight	= 13; // 17; // 15;
 	
 //	private static Image handleImg		= null;
 //	private static Image handleImgD		= null;
@@ -63,6 +63,8 @@ extends MonoSlider
 //		}
 	}
 
+    protected boolean frameFocus() { return true; }
+
 //	public void dispose()
 //	{
 //		if( imgKnob != null ) {
@@ -82,17 +84,16 @@ extends MonoSlider
 		super.setKnobColor( c );
 	}
 	
-	protected void paintKnob( Graphics2D g2, int w, int h )
-	{
-		final int kx = (int) (knobX * (w - kHandleWidth - 2)) + 1;
-		final int ky = (int) ((1.0f - knobY) * (h - kHandleHeight - 2)) + 1;
+	protected void paintKnob( Graphics2D g2, int w, int h ) {
+		final int kx = (int) (knobX * (w - kHandleWidth - 2)) - 1; // + 1;
+		final int ky = (int) ((1.0f - knobY) * (h - kHandleHeight - 2)) - 1; // + 1;
 
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         final int state = (isEnabled()  ? NimbusHelper.STATE_ENABLED : 0) |
-                          (hasFocus()   ? NimbusHelper.STATE_FOCUSED : 0) |
+//                          (hasFocus()   ? NimbusHelper.STATE_FOCUSED : 0) |
                           (mouseOver    ? NimbusHelper.STATE_OVER    : 0) |
                           (mousePressed ? NimbusHelper.STATE_PRESSED : 0);
-        thumb.paint( state, colrKnob, g2, kx, ky, kHandleWidth, kHandleHeight );
+        thumb.paint( state, colrKnob, g2, kx, ky, kHandleWidth + 4, kHandleHeight + 4 );
 		
 //		if( handleImg != null ) {
 //			if( isEnabled() ) {

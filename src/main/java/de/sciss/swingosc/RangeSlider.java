@@ -92,6 +92,8 @@ implements SwingConstants
 		}
 	}
 
+    protected boolean frameFocus() { return true; }
+
 	public void dispose()
 	{
 		if( progImgColr != null ) {

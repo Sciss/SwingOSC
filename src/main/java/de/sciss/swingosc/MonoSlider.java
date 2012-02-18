@@ -307,7 +307,7 @@ extends SliderBase
 		return vrEnabled;
 	}
 	
-	protected void setKnobTo( Point2D p )
+	protected void setKnobTo( Point2D p, boolean forceRepaint )
 	{
 		final float x, y;
 		
@@ -331,7 +331,9 @@ extends SliderBase
 			knobHeight	= 0f;
 			repaint();
 			fireActionPerformed();
-		}
+		} else if( forceRepaint ) {
+            repaintKnob();
+        }
 	}
 	
 	protected void resizeKnobTo( Point2D p, float fixX, float fixY )
@@ -407,8 +409,45 @@ extends SliderBase
 		);
 	}
 
+    protected boolean screenKnobContains( int x, int y ) {
+//System.out.println( "screenKnobContains( " + x + ", " + y + ")" );
+
+        final Insets gins = getInsets();
+        final int gx = gins.left;
+        final int gy = gins.top;
+        final int gw = getWidth()  - (gins.left + gins.right);
+        final int gh = getHeight() - (gins.top + gins.bottom);
+//System.out.println( "... widget " + gx + ", " + gy + ", " + (gx + gw) + ", " + (gy + gh) );
+        if( x < gx || y < gy || x >= gx + gw || y >= gy + gh ) return false;
+
+        final Insets kins = getValueInsets();
+        final int kw = (kins.left + kins.right);
+        final int giw = gw - kw;
+        final int kx = (int) (knobX * giw + 0.5f) + gx;
+//System.out.println( "... h-knob " + kx + ", " + (kx + kw) );
+        if( hsEnabled && (x < kx || x >= kx + kw) ) return false;
+
+        final int kh = (kins.top + kins.bottom);
+        final int gih = gh - kh;
+        final int ky = (int) ((1f-knobY) * gih + 0.5f) + gy;
+//System.out.println( "... v-knob " + ky + ", " + (ky + kh) );
+        return( !(vsEnabled && (y < ky || y >= ky + ky)) );
+    }
+
     protected void repaintKnob() {
-        repaint();  // XXX optimize region
+        final Insets gins = getInsets();
+        final Insets kins = getValueInsets();
+        final int gx = gins.left;
+        final int gy = gins.top;
+        final int gw = getWidth()  - (gins.left + gins.right);
+        final int gh = getHeight() - (gins.top + gins.bottom);
+        final int kw = (kins.left + kins.right);
+        final int giw = gw - kw;
+        final int kx = (int) (knobX * giw + 0.5f) + gx;
+        final int kh = (kins.top + kins.bottom);
+        final int gih = gh - kh;
+        final int ky = (int) ((1f-knobY) * gih + 0.5f) + gy;
+        repaint( kx, ky, kw, kh );
     }
 	
 	protected void waitForImage( Image img )
@@ -432,8 +471,8 @@ extends SliderBase
 		
 		protected MouseAdapter() { /* empty */ }
 		
-		public void mousePressed( MouseEvent e )
-		{
+		public void mousePressed( MouseEvent e ) {
+//System.out.println( "---p1" );
 			if( !isEnabled() ) return;
 
 			requestFocus();
@@ -443,8 +482,10 @@ extends SliderBase
 			mousePressed = true;
 			
 			final Point2D vPt = screenToVirtual( e.getPoint() );
-				
+//System.out.println( "---p2" );
+
 			if( e.isShiftDown() && (hrEnabled || vrEnabled) ) {
+//System.out.println( "---p3" );
 				if( hrEnabled ) {
 					if( Math.abs( vPt.getX() - knobX ) <
 						Math.abs( knobX + knobWidth - vPt.getX() )) {
@@ -465,21 +506,23 @@ extends SliderBase
 				}
 				resizeKnobTo( vPt, dragFixX, dragFixY );
 				
-			} else if( e.isAltDown() || !(hrEnabled || vrEnabled) ||
-				!knobContains( vPt )) {
-				
-				setKnobTo( vPt );
+			} else if( e.isAltDown() || (!hrEnabled && !vrEnabled && !screenKnobContains( e.getX(), e.getY() )) ||
+				    ((hrEnabled || vrEnabled) && knobContains( vPt )) ) { // j****
+//System.out.println( "---p4 " + !(hrEnabled || vrEnabled) );
+				setKnobTo( vPt, true );
 				dragFixX = knobX;
 				dragFixY = knobY;
 			} else {
+//System.out.println( "---p3" );
 				moving 	= true;
 				dragFixX = (float) vPt.getX() - knobX;
 				dragFixY = (float) vPt.getY() - knobY;
+                repaintKnob();
 			}
 		}
 		
-		public void mouseReleased( MouseEvent e )
-		{
+		public void mouseReleased( MouseEvent e ) {
+//System.out.println( "---r" );
             moving = false;
             if( mousePressed ) {
                 mousePressed = false;
@@ -487,27 +530,54 @@ extends SliderBase
             }
 		}
 		
-		public void mouseDragged( MouseEvent e )
-		{
-			if( !mousePressed || !isEnabled() ) return;
-			
-			final Point2D vPt = screenToVirtual( e.getPoint() );
-			
-			if( moving ) {
-				moveKnobTo( (float) vPt.getX() - dragFixX, (float) vPt.getY() - dragFixY );
-			} else if( hrEnabled || vrEnabled ) {
-				resizeKnobTo( vPt, dragFixX, dragFixY );
-			} else {
-				setKnobTo( vPt );
-			}
+		public void mouseDragged( MouseEvent e ) {
+            processDrag( e );
+        }
+
+        private void processDrag( MouseEvent e ) {
+//System.out.println( "---d1" );
+            if( !isEnabled() ) return;
+
+            if( mousePressed ) {
+//System.out.println( "---d2" );
+                final Point2D vPt = screenToVirtual( e.getPoint() );
+                if( moving ) {
+                    moveKnobTo( (float) vPt.getX() - dragFixX, (float) vPt.getY() - dragFixY );
+                } else if( hrEnabled || vrEnabled ) {
+                    resizeKnobTo( vPt, dragFixX, dragFixY );
+                } else {
+                    setKnobTo( vPt, false );
+                }
+            } else {
+//System.out.println( "---d3" );
+                final boolean over = screenKnobContains( e.getX(), e.getY() );
+                if( over != mouseOver ) {
+                    mouseOver = over;
+                    repaintKnob();
+                }
+            }
 		}
+
+        public void mouseEntered( MouseEvent e ) {
+            if( !isEnabled() ) return;
+
+            if (screenKnobContains( e.getX(), e.getY() )) {
+                mouseOver = true;
+                repaintKnob();
+            }
+        }
+
+        public void mouseExited( MouseEvent e ) {
+            if( !isEnabled() ) return;
+
+            if( mouseOver ) {
+                mouseOver = false;
+                repaintKnob();
+            }
+        }
 		
-		public void mouseMoved( MouseEvent e )
-		{
-			// on mac, ctrl+press and moving will
-			// not generate mouseDragged messages
-			// but mouseMoved instead
-			mouseDragged( e );
+		public void mouseMoved( MouseEvent e) {
+            processDrag( e );
 		}
 	}
 }

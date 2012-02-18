@@ -75,6 +75,8 @@ implements SwingConstants
 		super();
 	}
 		
+    protected boolean frameFocus() { return true; }
+
 	public final void setDrawLines( boolean onOff )
 	{
 		drawLines	= onOff;

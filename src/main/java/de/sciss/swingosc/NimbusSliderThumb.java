@@ -1,6 +1,5 @@
 package de.sciss.swingosc;
 
-import javax.swing.JComponent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
@@ -58,8 +57,8 @@ public class NimbusSliderThumb {
     private static Color[] pressedGrad2colr( Color base ) {
         return new Color[] {
             NimbusHelper.adjustColor( base, 2.9569864e-4f, -0.44943976f, 0.25098038f, 0 ),
-            NimbusHelper.adjustColor( base, 0.0f, 0.0f, 0.0f, 0 ),
-            NimbusHelper.adjustColor( base, 0.0f, 0.0f, 0.0f, 0 ),
+            base,
+            base,
             NimbusHelper.adjustColor( base, 8.9377165e-4f, -0.121094406f, 0.12156862f, 0 )
         };
     }
@@ -122,16 +121,43 @@ public class NimbusSliderThumb {
         final Color base = NimbusHelper.mixColorWithAlpha( NimbusHelper.getBaseColor(), c );
         if( (state & NimbusHelper.STATE_ENABLED) != 0 ) {
             if( (state & NimbusHelper.STATE_PRESSED) != 0 ) {
-                paintPressed( g, base, x, y, width, height );
+                if( (state & NimbusHelper.STATE_FOCUSED) != 0 ) {
+                    paintFocusedPressed( g, base, x, y, width, height );
+                } else {
+                    paintPressed( g, base, x, y, width, height );
+                }
             } else {
-                paintEnabled( g, base, x, y, width, height );
+                if( (state & NimbusHelper.STATE_FOCUSED) != 0 ) {
+                    paintFocused(g, base, x, y, width, height);
+                } else {
+                    paintEnabled( g, base, x, y, width, height );
+                }
             }
         } else {
             paintDisabled( g, base, x, y, width, height );
         }
     }
 
+    private void paintFocusedPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
+        paintFocusedBack( g, base, x, y, width, height );
+        paintPressedTop( g, base, x, y, width, height );
+    }
+
     private void paintPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
+        final float e1x = x + 2f;
+        final float e1y = y + 3f;
+        final float e1w = width - 4f;
+        final float e1h = height - 4f;
+        ellip.setFrame( e1x, e1y, e1w, e1h );
+        final Color c1 = NimbusHelper.adjustColor( NimbusHelper.getBlueGreyColor( base ),
+                0f, -0.110526316f, 0.25490195f, -121 );
+        g.setColor( c1 );
+        g.fill( ellip );
+
+        paintPressedTop( g, base, x, y, width, height );
+    }
+
+    private void paintPressedTop( Graphics2D g, Color base, int x, int y, int width, int height ) {
         final float e1x = x + 2f;
         final float e1y = y + 3f;
         final float e1w = width - 4f;
@@ -177,6 +203,21 @@ public class NimbusSliderThumb {
         g.fill( ellip );
     }
 
+    private void paintFocused( Graphics2D g, Color base, int x, int y, int width, int height ) {
+        paintFocusedBack( g, base, x, y, width, height );
+        paintEnabledTop( g, base, x, y, width, height );
+    }
+
+    private void paintFocusedBack( Graphics2D g, Color base, int x, int y, int width, int height ) {
+        final float e1x = x + 0.6f;
+        final float e1y = y + 0.6f;
+        final float e1w = width - 1.2f;
+        final float e1h = height - 1.2f;
+        ellip.setFrame( e1x, e1y, e1w, e1h );
+        g.setColor( NimbusHelper.getFocusColor() );
+        g.fill( ellip );
+    }
+
     private void paintEnabled( Graphics2D g, Color base, int x, int y, int width, int height ) {
         final float e1x = x + 2f;
         final float e1y = y + 3f;
@@ -188,6 +229,10 @@ public class NimbusSliderThumb {
         g.setColor( c1 );
         g.fill( ellip );
 
+        paintEnabledTop( g, base, x, y, width, height );
+    }
+
+    private void paintEnabledTop( Graphics2D g, Color base, int x, int y, int width, int height ) {
         final float e2x = x + 2f;
         final float e2y = y + 2f;
         final float e2w = width - 4f;

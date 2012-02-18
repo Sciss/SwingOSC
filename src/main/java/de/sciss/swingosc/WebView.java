@@ -69,7 +69,8 @@ public class WebView extends JPanel {
     }
 
     private final NavigationListener navListener = new NavigationListener() {
-        public void navigationStarted( NavigationEvent e ) {
+        public void navigationStarted( NavigationEvent _e ) {
+            final NavigationEvent e = _e;
             defer( new Runnable() {
                 public void run() {
                     try {

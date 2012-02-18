@@ -82,7 +82,7 @@ SwingGUI {
 	*tabletView { ^JSCTabletView }
 	*soundFileView { ^JSCSoundFileView }
 	*movieView { ^JSCMovieView }
-//     *levelIndicator { ^this.notImplemented( "LevelIndicator" )}
+	*levelIndicator { ^JSCLevelIndicator }
 	*textView { ^JSCTextView }
 //	*quartzComposerView { ^JSCQuartzComposerView }
 	*scrollView { ^JSCScrollView }

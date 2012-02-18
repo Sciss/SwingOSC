@@ -42,7 +42,8 @@ JSCEnvelopeView : JSCAbstractMultiSliderView {
 	*paletteExample { arg parent, bounds;
 		^this.new( parent, bounds )
 			.value_([ (0..7)/7, Array.fill( 8, { arg i; (i * pi / 8).sin })])
-			.thumbSize_( 4 ).selectionColor_( Color.red );
+			.thumbSize_( 4 ).selectionColor_( Color.red )
+			.horizontalEditMode_( \relay ).lockBounds_( true );
 	}
 
 	// ----------------- public instance methods -----------------

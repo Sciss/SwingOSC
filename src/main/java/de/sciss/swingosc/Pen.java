@@ -515,7 +515,7 @@ test:		if( (gc.at.getShearX() == 0.0) && (gc.at.getShearY() == 0.0) &&
 				}
 				this.shp	= atInv.createTransformedShape( shp );
 				at			= new AffineTransform( gc.at );
-				at.translate( -0.5, -0.5 ); 
+//				at.translate( -0.5, -0.5 );
 			}
 		}
 				
@@ -524,8 +524,8 @@ test:		if( (gc.at.getShearX() == 0.0) && (gc.at.getShearY() == 0.0) &&
 			final AffineTransform atOrig = g2.getTransform();
 			if( at != null ) {
 				g2.transform( at );
-			} else {
-				g2.translate( -0.5, -0.5 );
+//			} else {
+//				g2.translate( -0.5, -0.5 );
 			}
 			g2.setPaint( pnt );
 			g2.setStroke( strk );

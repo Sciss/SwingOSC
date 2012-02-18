@@ -81,7 +81,7 @@ JSCWebView : JSCView {
 
 	// Get the displayed content in html form.
 	html { 
-		this.prWarnNotYetImplemented( thisMethod );
+		this.class.prWarnNotYetImplemented( thisMethod );
 		^"";
 	}
 
@@ -110,21 +110,21 @@ JSCWebView : JSCView {
 
 	editable_ { arg bool;
 		if( bool, {
-			^this.prWarnNotYetImplemented( thisMethod );
+			^this.class.prWarnNotYetImplemented( thisMethod );
 		});
 //		editable = bool;
 //		server.sendMsg( '/set', this.id, \editable, bool );
 	}
 
 	selectedText { 
-		this.prWarnNotYetImplemented( thisMethod );
+		this.class.prWarnNotYetImplemented( thisMethod );
 		^"";
 //		^string.copyRange( selStart, selStop - 1 );  // stupid inclusive ending
 	}
 
 	// Try to extract plain text from html content and return it.
 	plainText { 
-		this.prWarnNotYetImplemented( thisMethod );
+		this.class.prWarnNotYetImplemented( thisMethod );
 		^"";
 	}
 
@@ -136,7 +136,7 @@ JSCWebView : JSCView {
 	linkActivated { arg linkString; onLinkActivated.value( this, linkString )}
 
 	findText { arg string, reverse = false;
-		^this.prWarnNotYetImplemented( thisMethod );
+		^this.class.prWarnNotYetImplemented( thisMethod );
 	}
 
 	enterInterpretsSelection_ { arg bool;
@@ -151,12 +151,13 @@ JSCWebView : JSCView {
 		^this.new( parent, bounds ).url_( "http://supercollider.sourceforge.net" );
 	}
 
-	// ----------------- private instance methods -----------------
+	// ----------------- private class methods -----------------
 	
-	prWarnNotYetImplemented { arg method;
-		(this.class.name ++ ":" ++ method.name ++ " -- no op, it is not yet implemented").warn;
+	*prWarnNotYetImplemented { arg method;
+		(this.name ++ ":" ++ method.name ++ " -- no op, it is not yet implemented").warn;
 	}
 	
+	// ----------------- private instance methods -----------------
 
 	prCreateLinkResponder {
 		if( hyResp.notNil, {

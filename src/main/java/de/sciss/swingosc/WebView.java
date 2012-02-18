@@ -64,27 +64,39 @@ public class WebView extends JPanel {
 
     private URL nonManualURL = null;
 
+    private void defer( Runnable r ) {
+        EventQueue.invokeLater( r );
+    }
+
     private final NavigationListener navListener = new NavigationListener() {
         public void navigationStarted( NavigationEvent e ) {
-            try {
-                final URL url = new URL( e.getUrl() );
-                if( url.equals( dummyURL )) return;
-                final boolean sameURL = url.equals( nonManualURL );
-                if( VERBOSE ) System.out.println( "Navigation started " + url.toString() + " / same? " + sameURL );
-                if( (e.getNavigationType() == NavigationType.NAVIGATE) && !sameURL ) {
-                    nonManualURL = null;
-                    dispatchLinkActivated( url );
+            defer( new Runnable() {
+                public void run() {
+                    try {
+                        final URL url = new URL( e.getUrl() );
+                        if( url.equals( dummyURL )) return;
+                        final boolean sameURL = url.equals( nonManualURL );
+                        if( VERBOSE ) System.out.println( "Navigation started " + url.toString() + " / same? " + sameURL );
+                        if( (e.getNavigationType() == NavigationType.NAVIGATE) && !sameURL ) {
+                            nonManualURL = null;
+                            dispatchLinkActivated( url );
+                        }
+                    } catch( MalformedURLException e2 ) {
+                        e2.printStackTrace();
+        //            } catch( URISyntaxException e2 ) {
+        //                e2.printStackTrace();
+                    }
                 }
-            } catch( MalformedURLException e2 ) {
-                e2.printStackTrace();
-//            } catch( URISyntaxException e2 ) {
-//                e2.printStackTrace();
-            }
+            });
         }
 
         public void navigationFinished( NavigationFinishedEvent e ) {
-            if( VERBOSE ) System.out.println( "Navigation finished" );
-            dispatchAction( ACTION_LOADED );
+            defer( new Runnable() {
+                public void run() {
+                    if( VERBOSE ) System.out.println( "Navigation finished" );
+                    dispatchAction( ACTION_LOADED );
+                }
+            });
         }
     };
 

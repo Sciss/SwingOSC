@@ -28,6 +28,7 @@ package de.sciss.swingosc;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 
 import javax.swing.event.DocumentListener;
 
@@ -73,20 +74,19 @@ extends de.sciss.gui.NumberField
 		super.setBackground( c );
 	}
 
-	public void paintComponent( Graphics g )
-	{
-//		final Insets		insets	= getInsets();
-		final int			w		= getWidth(); // - (insets.left + insets.right);
-		final int			h		= getHeight(); // - (insets.top + insets.bottom);
-		final Graphics2D	g2	 	= (Graphics2D) g;
-		final Color			colrBg	= getBackground();
-
-		if( (colrBg != null) && (colrBg.getAlpha() > 0) ) {
-//			g2.translate( insets.left, insets.top );
-			g2.setPaint( colrBg );
-			g2.fillRect( 0, 0, w, h );
-//			g2.translate( -insets.left, -insets.top );
-		}
-		super.paintComponent( g );
-	}
+//	public void paintComponent( Graphics g )
+//	{
+////		final Insets		insets	= getInsets();
+////		final int			w		= getWidth(); // - (insets.left + insets.right);
+////		final int			h		= getHeight(); // - (insets.top + insets.bottom);
+////		final Graphics2D	g2	 	= (Graphics2D) g;
+//		final Color			colrBg	= getBackground();
+//
+//		if( (colrBg != null) && (colrBg.getAlpha() > 0) ) {
+////            final Insets in = getInsets();
+//			g.setColor( colrBg );
+//            g.fillRect( 2, 2, getWidth() - 4, getHeight() - 4 );
+//		}
+//		super.paintComponent( g );
+//	}
 }

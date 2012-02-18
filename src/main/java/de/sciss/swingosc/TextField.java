@@ -27,6 +27,7 @@ package de.sciss.swingosc;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Insets;
 
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
@@ -89,14 +90,15 @@ extends JTextField
 		super.setBackground( c );
 	}
 
-	public void paintComponent( Graphics g )
-	{
-		final Color colrBg	= getBackground();
-
-		if( (colrBg != null) && (colrBg.getAlpha() > 0) ) {
-			g.setColor( colrBg );
-			g.fillRect( 0, 0, getWidth(), getHeight() );
-		}
-		super.paintComponent( g );
-	}
+//	public void paintComponent( Graphics g )
+//	{
+//		final Color colrBg	= getBackground();
+//
+//		if( (colrBg != null) && (colrBg.getAlpha() > 0) ) {
+////            final Insets in = getInsets();
+//			g.setColor( colrBg );
+//			g.fillRect( 2, 2, getWidth() - 4, getHeight() - 4 );
+//		}
+//		super.paintComponent( g );
+//	}
 }

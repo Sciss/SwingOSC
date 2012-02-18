@@ -1,3 +1,9 @@
+swingosc (0.66-SNAPSHOT)
+
+  * update source folder structure
+
+ -- Hanns Holger Rutz <contact@sciss.de>  Sat, 18 Feb 2012 18:31:00 +0100
+
 swingosc (0.64-0ubuntu1~lucid1) lucid; urgency=low
 
   * Slight tweaks to deb files for sending upstream to swingosc project

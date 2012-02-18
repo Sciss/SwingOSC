@@ -127,6 +127,12 @@ implements Icon
 		antiAliasOff.put( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
 		antiAliasOn.put( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC );
 		antiAliasOff.put( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR );
+
+        // this ensures subpixel rendering of shapes' borders, otherwise for example
+        // lines and rectangles are 'moved' to start at a fresh pixel, and we don't
+        // want that generally for user views. could make it a switch in the future, though...
+        antiAliasOn.put( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+      	antiAliasOff.put( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE );
 	}
 
 	public Pen()

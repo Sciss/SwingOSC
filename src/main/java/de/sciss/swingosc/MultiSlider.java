@@ -124,7 +124,8 @@ extends AbstractMultiSlider
 //		ch -= 2;
 		
 		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		
+        g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+
 		if( horizontal ) {
 			w	= cw; // getWidth() - 2;
 			h	= ch; // getHeight() - 2;

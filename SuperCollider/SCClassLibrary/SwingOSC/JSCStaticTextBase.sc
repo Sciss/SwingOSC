@@ -26,6 +26,12 @@
 JSCStaticTextBase : JSCView {
 	var <string, <object, <>setBoth = true;
 	
+	// ----------------- public class methods -----------------
+	
+	*paletteExample { arg parent, bounds;
+		this.new(parent, bounds).string_( "The lazy brown fox" );
+	}
+
 	// ----------------- public instance methods -----------------
 
 	font { ^this.getProperty( \font )}

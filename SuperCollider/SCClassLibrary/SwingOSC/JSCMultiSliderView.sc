@@ -34,6 +34,14 @@ JSCMultiSliderView : JSCAbstractMultiSliderView {
 	var <elasticMode = 0;
 	var <steady = false, <precision = 0.05;
 		
+	// ----------------- public class methods -----------------
+
+	*paletteExample { arg parent, bounds;
+		^this.new( parent, bounds ).elasticMode_( true )
+			.isFilled_( true )
+			.value_( Array.fill( 8, { arg i; (i * pi / 8).sin }));
+	}
+
 	// ----------------- public instance methods -----------------
 
 	elasticMode_{ arg mode;

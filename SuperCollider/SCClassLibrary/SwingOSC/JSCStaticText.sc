@@ -24,16 +24,6 @@
  */
 
 JSCStaticText : JSCStaticTextBase {
-
-	// ----------------- public class methods -----------------
-	
-	*paletteExample { arg parent, bounds;
-		var v;
-		v = this.new(parent, bounds);
-		v.string = "The lazy brown fox";
-		^v
-	}
-
 	// ----------------- private instance methods -----------------
 
 	prInitView {

@@ -33,8 +33,8 @@ JSCButton : JSCView {
 		var v;
 		v = this.new( parent, bounds );
 		v.states = [
-			[ "Push", Color.black, Color.red ],
-			[ "Pop", Color.white, Color.blue ]];
+			[ "Push" ], [ "Pop", Color.white, Color.new255( 50, 80, 180 )]
+		];
 		^v;
 	}
 	

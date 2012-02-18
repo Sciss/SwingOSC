@@ -40,7 +40,8 @@ JSCEnvelopeView : JSCAbstractMultiSliderView {
 	// ----------------- public class methods -----------------
 
 	*paletteExample { arg parent, bounds;
-		^this.new( parent, bounds ).value_([ (0..4)/4, sqrt( (0..4)/4 )])
+		^this.new( parent, bounds )
+			.value_([ (0..7)/7, Array.fill( 8, { arg i; (i * pi / 8).sin })])
 			.thumbSize_( 4 ).selectionColor_( Color.red );
 	}
 

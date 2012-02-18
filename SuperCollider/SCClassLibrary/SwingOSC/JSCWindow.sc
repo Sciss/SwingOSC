@@ -93,28 +93,41 @@ JSCWindow : Object {
 	*viewPalette {
 		var w, v, f, c, h, scrB;
 		
-		c = [JSCSlider, JSCRangeSlider, JSCSlider2D, JSCPopUpMenu, JSCButton, 
-			JSCNumberBox, JSCMultiSliderView,
-			JSCStaticText, JSCDragSource, JSCDragSink, JSCDragBoth,
-			JSCEnvelopeView, JSCUserView, JSCCheckBox, JSCScrollBar
+		c = [
+			[JSCButton, 1],
+			[JSCCheckBox, 1],
+			[JSCSlider, 1],
+			[JSCRangeSlider, 1],
+			[JSCSlider2D, 2],
+			[JSCPopUpMenu, 1],
+			[JSCListView, 2],
+			[JSCNumberBox, 1],
+			[JSCTextField, 1],
+			[JSCStaticText, 1],
+			[JSCMultiSliderView, 2],
+			[JSCEnvelopeView, 2],
+			[JSCDragSource, 1],
+			[JSCDragSink, 1],
+			[JSCDragBoth, 1],
+			[JSCUserView, 1],
+			[JSCScrollBar, 1]
 		];
 
-//		c = JSCView.allSubclasses.select({ arg cl; cl.class.findMethod( \paletteExample ).notNil })
-//			.sort({ arg a, b; a.name <= b.name });
-		
 		scrB	= this.screenBounds;
-		h	= c.size * 28 + 12;
+		h	= c.collect(_.at(1)).sum * 28 + 12;
 		w	= JSCWindow( "View Palette", Rect( (scrB.width - 300) / 2, (scrB.height - h) / 2, 300, h ),
 				resizable: false );
 		w.view.decorator = f = FlowLayout( w.view.bounds );
 
-		c.do({ arg item;
-			var n;
+		c.do({ arg e;
+			var n, item, height;
 
+			item   = e[0];
+			height = (e[1] * 24) + ((e[1] - 1) * 4);
 			n = JSCDragSource( w, Rect( 0, 0, 140, 24 ));
 			n.object = item;
 		
-			item.paletteExample( w, Rect( 0, 0, 140, 24 ));
+			item.paletteExample( w, Rect( 0, 0, 140, height ));
 		});
 		
 		^w.front;

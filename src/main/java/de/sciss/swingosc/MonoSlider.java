@@ -507,7 +507,7 @@ extends SliderBase
 				resizeKnobTo( vPt, dragFixX, dragFixY );
 				
 			} else if( e.isAltDown() || (!hrEnabled && !vrEnabled && !screenKnobContains( e.getX(), e.getY() )) ||
-				    ((hrEnabled || vrEnabled) && knobContains( vPt )) ) { // j****
+				    ((hrEnabled || vrEnabled) && !knobContains( vPt )) ) { // j****
 //System.out.println( "---p4 " + !(hrEnabled || vrEnabled) );
 				setKnobTo( vPt, true );
 				dragFixX = knobX;

@@ -1,5 +1,7 @@
-minor things
-============
+Convert Help to HelpSource
+
+OLD STUFF minor things
+======================
 
 JStethoscope gridColor
 

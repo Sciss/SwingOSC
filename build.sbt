@@ -18,6 +18,8 @@ crossPaths := false   // currently no scala involved, hence remove that from the
 
 seq( assemblySettings: _* )
 
+jarName in assembly <<= name( _ + ".jar" )  // i.e. output to target/SwingOSC.jar
+
 assembleArtifact in packageScala := false   // no scala-library.jar
 
 // assembleArtifact in packageBin := false     // no sources

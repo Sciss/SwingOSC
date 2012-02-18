@@ -1,8 +1,9 @@
 #!/bin/sh
 
-cp -a SuperCollider/SCClassLibrary/SwingOSC ~/share/SuperCollider/Extensions
-cp -a SuperCollider/Help/SwingOSC ~/share/SuperCollider/Extensions/SwingOSC/Help
+mkdir -p ~/share/SuperCollider/Extensions
+cp -a SuperCollider/SwingOSC ~/share/SuperCollider/Extensions
 mkdir ~/share/SuperCollider/SwingOSC
 cp -a SuperCollider/examples ~/share/SuperCollider/SwingOSC
 
-cp build/SwingOSC.jar ~/share/bin/
+mkdir -p ~/share/bin/
+cp target/SwingOSC.jar ~/share/bin/

@@ -54,7 +54,9 @@ JKnob {
 		keystep	= 0.01;
 		step		= 0.01;
 		value	= 0.0;
-		color	= [ Color.blue( 0.7, 0.5 ), Color.green( 0.8, 0.8 ), Color.black.alpha_( 0.3 ), Color.black.alpha_( 0.7 )];
+//		color	= [ Color.blue( 0.7, 0.5 ), Color.green( 0.8, 0.8 ), Color.black.alpha_( 0.3 ), Color.black.alpha_( 0.7 )];
+		color	= [ Color(0.618, 0.718, 0.8178), Color.black, Color(0.959, 0.959, 0.959), Color.black.alpha_( 0.7 )];
+
 		if( gui.id === \cocoa, {
 			modDrag	= 0x00100000;	// cmd key
 			modVert	= 0x00040000;	// ctrl key

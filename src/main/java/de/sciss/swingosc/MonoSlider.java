@@ -431,7 +431,7 @@ extends SliderBase
         final int gih = gh - kh;
         final int ky = (int) ((1f-knobY) * gih + 0.5f) + gy;
 //System.out.println( "... v-knob " + ky + ", " + (ky + kh) );
-        return( !(vsEnabled && (y < ky || y >= ky + ky)) );
+        return( !(vsEnabled && (y < ky || y >= ky + kh)) );
     }
 
     protected void repaintKnob() {

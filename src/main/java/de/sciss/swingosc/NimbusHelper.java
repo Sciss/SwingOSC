@@ -29,6 +29,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Transparency;
 
 public class NimbusHelper {
     public static final int STATE_ENABLED   = 0x01;
@@ -36,31 +37,33 @@ public class NimbusHelper {
     public static final int STATE_FOCUSED   = 0x04;
     public static final int STATE_PRESSED   = 0x08;
 
+//    private static LookAndFeel nimbusLAF;
     private static UIDefaults nimbusDefaults;
     private static final Color defaultFocusColor    = new Color( 115, 164, 209, 255 );
     private static final Color defaultBaseColor     = new Color(  51,  98, 140, 255 );
     private static final float[] hsbArr             = new float[ 3 ];
 
     static {
-        try {
+//        try {
             final LookAndFeel current = UIManager.getLookAndFeel();
             if( current.getName().toLowerCase().equals( "nimbus" )) {
+//                nimbusLAF       = current;
                 nimbusDefaults = current.getDefaults();
-            } else {
-                final UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-                for( int i = 0; i < infos.length; i++ ) {
-                    if( infos[ i ].getName().toLowerCase().equals( "nimbus" )) {
-                        final Class clz         = Class.forName( infos[ i ].getClassName(), true, Thread.currentThread().getContextClassLoader() );
-                        final LookAndFeel laf   = (LookAndFeel) clz.newInstance();
-                        nimbusDefaults          = laf.getDefaults();
-                        break;
-                    }
-                }
+//            } else {
+//                final UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+//                for( int i = 0; i < infos.length; i++ ) {
+//                    if( infos[ i ].getName().toLowerCase().equals( "nimbus" )) {
+//                        final Class clz         = Class.forName( infos[ i ].getClassName(), true, Thread.currentThread().getContextClassLoader() );
+//                        nimbusLAF               = (LookAndFeel) clz.newInstance();
+//                        nimbusDefaults          = nimbusLAF.getDefaults();
+//                        break;
+//                    }
+//                }
             }
-        }
-        catch( ClassNotFoundException e1 ) { /* ignore */ }
-        catch( InstantiationException e1 ) { /* ignore */ }
-        catch( IllegalAccessException e1 ) { /* ignore */ }
+//        }
+//        catch( ClassNotFoundException e1 ) { /* ignore */ }
+//        catch( InstantiationException e1 ) { /* ignore */ }
+//        catch( IllegalAccessException e1 ) { /* ignore */ }
     }
 
     public static Color getFocusColor() {
@@ -87,7 +90,9 @@ public class NimbusHelper {
         final boolean sameAlpha = alphaOffset == 0;
         if( sameColor ) {
             if( sameAlpha ) return c;
-            else return new Color( c.getRed(), c.getGreen(), c.getBlue(), Math.max( 0, Math.min( 0xFF, c.getAlpha() + alphaOffset )));
+            // don't know what's going on here. nimbus defaults ColorUIResources have alpha values of zero sometimes
+            final int cAlpha = /* c.getTransparency() == Transparency.TRANSLUCENT ? */ c.getAlpha() /* : 0xFF */;
+            return new Color( c.getRed(), c.getGreen(), c.getBlue(), Math.max( 0, Math.min( 0xFF, cAlpha + alphaOffset )));
         }
 
         Color.RGBtoHSB( c.getRed(), c.getGreen(), c.getBlue(), hsbArr );
@@ -99,9 +104,9 @@ public class NimbusHelper {
 //        final int r = (rgb >> 16) & 0xFF;
 //        final int g = (rgb >> 8) & 0xFF;
 //        final int b = rgb & 0xFF;
-        final int a0   = c.getAlpha();
-        final int a1   = sameAlpha ? a0 : Math.max( 0, Math.min( 0xFF, a0 + alphaOffset ));
-        final int rgba = (rgb & 0xFFFFFF) | (a1 << 24);
+        final int cAlpha = /* c.getTransparency() == Transparency.TRANSLUCENT ? */ c.getAlpha() /* : 0xFF */;
+        final int a = sameAlpha ? cAlpha : Math.max( 0, Math.min( 0xFF, cAlpha + alphaOffset ));
+        final int rgba = (rgb & 0xFFFFFF) | (a << 24);
         return new Color( rgba, true );
     }
 

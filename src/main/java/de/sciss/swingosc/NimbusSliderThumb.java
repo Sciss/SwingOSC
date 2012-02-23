@@ -204,11 +204,6 @@ public class NimbusSliderThumb {
         }
     }
 
-    private void paintFocusedPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
-        paintFocusedBack( g, base, x, y, width, height );
-        paintPressedTop( g, base, x, y, width, height );
-    }
-
     private void paintPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
         final float e1x = x + 2f;
         final float e1y = y + 3f;
@@ -220,6 +215,11 @@ public class NimbusSliderThumb {
         g.setColor( c1 );
         g.fill( ellip );
 
+        paintPressedTop( g, base, x, y, width, height );
+    }
+
+    private void paintFocusedPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
+        paintFocusedBack( g, base, x, y, width, height );
         paintPressedTop( g, base, x, y, width, height );
     }
 

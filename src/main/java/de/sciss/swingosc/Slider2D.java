@@ -26,8 +26,6 @@
 package de.sciss.swingosc;
 
 import java.awt.*;
-import java.awt.image.*;
-import java.net.URL;
 
 /**
  *	A pane with a knob moveable in two dimensions.
@@ -91,8 +89,8 @@ extends MonoSlider
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         final int state = (isEnabled()  ? NimbusHelper.STATE_ENABLED : 0) |
 //                          (hasFocus()   ? NimbusHelper.STATE_FOCUSED : 0) |
-                          (mouseOver    ? NimbusHelper.STATE_OVER    : 0) |
-                          (mousePressed ? NimbusHelper.STATE_PRESSED : 0);
+                          (mOver ? NimbusHelper.STATE_OVER    : 0) |
+                          (mPressed ? NimbusHelper.STATE_PRESSED : 0);
         thumb.paint( state, colrKnob, g2, kx, ky, kHandleWidth + 4, kHandleHeight + 4 );
 		
 //		if( handleImg != null ) {

@@ -479,7 +479,7 @@ extends SliderBase
 
 			if( e.isControlDown() ) return;
 
-			mousePressed = true;
+			mPressed = true;
 			
 			final Point2D vPt = screenToVirtual( e.getPoint() );
 //System.out.println( "---p2" );
@@ -524,8 +524,8 @@ extends SliderBase
 		public void mouseReleased( MouseEvent e ) {
 //System.out.println( "---r" );
             moving = false;
-            if( mousePressed ) {
-                mousePressed = false;
+            if(mPressed) {
+                mPressed = false;
                 repaintKnob();
             }
 		}
@@ -538,7 +538,7 @@ extends SliderBase
 //System.out.println( "---d1" );
             if( !isEnabled() ) return;
 
-            if( mousePressed ) {
+            if(mPressed) {
 //System.out.println( "---d2" );
                 final Point2D vPt = screenToVirtual( e.getPoint() );
                 if( moving ) {
@@ -551,8 +551,8 @@ extends SliderBase
             } else {
 //System.out.println( "---d3" );
                 final boolean over = screenKnobContains( e.getX(), e.getY() );
-                if( over != mouseOver ) {
-                    mouseOver = over;
+                if( over != mOver) {
+                    mOver = over;
                     repaintKnob();
                 }
             }
@@ -562,7 +562,7 @@ extends SliderBase
             if( !isEnabled() ) return;
 
             if (screenKnobContains( e.getX(), e.getY() )) {
-                mouseOver = true;
+                mOver = true;
                 repaintKnob();
             }
         }
@@ -570,8 +570,8 @@ extends SliderBase
         public void mouseExited( MouseEvent e ) {
             if( !isEnabled() ) return;
 
-            if( mouseOver ) {
-                mouseOver = false;
+            if(mOver) {
+                mOver = false;
                 repaintKnob();
             }
         }

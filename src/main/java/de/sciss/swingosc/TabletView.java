@@ -63,9 +63,9 @@
 //
 //		new DynamicAncestorAdapter( this ).addTo( this );
 //		addMouseListener( new MouseAdapter() {
-//			public void mousePressed( MouseEvent e )
+//			public void mPressed( MouseEvent e )
 //			{
-////System.out.println( "mousePressed " + isEnabled() );
+////System.out.println( "mPressed " + isEnabled() );
 //				if( isEnabled() ) {
 //					pressed = true;
 //				}

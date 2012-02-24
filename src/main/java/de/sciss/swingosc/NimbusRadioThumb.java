@@ -55,6 +55,24 @@ public class NimbusRadioThumb {
         };
     }
 
+    private Paint createEnabledGradient1( Color blueGrey, float shpX1, float shpY1, float shpW, float shpH ) {
+        final float startX = shpX1 + 0.49789915966386533f * shpW;
+        final float startY = shpY1 + -0.0042016806722689065f * shpH;
+        final float endX   = shpX1 + 0.5f * shpW;
+        final float endY   = shpY1 + 0.9978991596638656f * shpH;
+        return new LinearGradientPaint( startX, startY, endX, endY, grad1frac, enabledGrad1colr( blueGrey ),
+                MultipleGradientPaint.CycleMethod.NO_CYCLE );
+    }
+
+    private Paint createEnabledGradient2( Color blueGrey, float shpX1, float shpY1, float shpW, float shpH ) {
+        final float startX = shpX1 + 0.49754901960784303f * shpW;
+        final float startY = shpY1 + 0.004901960784313727f * shpH;
+        final float endX   = shpX1 + 0.507352941176471f * shpW;
+        final float endY   = shpY1 + 1.0f * shpH;
+        return new LinearGradientPaint( startX, startY, endX, endY, enabledGrad2frac, enabledGrad2colr( blueGrey ),
+                MultipleGradientPaint.CycleMethod.NO_CYCLE );
+    }
+
     public void paint( int state, Color c, Graphics2D g, int x, int y, int width, int height ) {
         final Color nimBase     = NimbusHelper.getBaseColor();
         final Color blueGrey    = NimbusHelper.mixColorWithAlpha( NimbusHelper.getBlueGreyColor( nimBase ), c );
@@ -100,34 +118,27 @@ public class NimbusRadioThumb {
 
     }
 
-    private void paintFocused( Graphics2D g, Color base, int x, int y, int width, int height ) {
-
+    private void paintFocused( Graphics2D g, Color blueGrey, int x, int y, int width, int height ) {
+        paintFocusedBack( g,           x, y, width, height );
+        paintEnabledTop(  g, blueGrey, x, y, width, height );
     }
 
-    private Paint createEnabledGradient1( Color blueGrey, float shpX1, float shpY1, float shpW, float shpH ) {
-        final float startX = shpX1 + 0.49789915966386533f * shpW;
-        final float startY = shpY1 + -0.0042016806722689065f * shpH;
-        final float endX   = shpX1 + 0.5f * shpW;
-        final float endY   = shpY1 + 0.9978991596638656f * shpH;
-        return new LinearGradientPaint( startX, startY, endX, endY, grad1frac, enabledGrad1colr( blueGrey ),
-                MultipleGradientPaint.CycleMethod.NO_CYCLE );
-    }
-
-    private Paint createEnabledGradient2( Color blueGrey, float shpX1, float shpY1, float shpW, float shpH ) {
-        final float startX = shpX1 + 0.49754901960784303f * shpW;
-        final float startY = shpY1 + 0.004901960784313727f * shpH;
-        final float endX   = shpX1 + 0.507352941176471f * shpW;
-        final float endY   = shpY1 + 1.0f * shpH;
-        return new LinearGradientPaint( startX, startY, endX, endY, enabledGrad2frac, enabledGrad2colr( blueGrey ),
-                MultipleGradientPaint.CycleMethod.NO_CYCLE );
+    private void paintFocusedBack( Graphics2D g, int x, int y, int width, int height ) {
+        final float e1x = x + 0.6f;
+        final float e1y = y + 0.6f;
+        final float e1w = width - 1.2f;
+        final float e1h = height - 1.2f;
+        ellip.setFrame( e1x, e1y, e1w, e1h);
+        g.setColor( NimbusHelper.getFocusColor() );
+        g.fill( ellip );
     }
 
     private void paintEnabled( Graphics2D g, Color blueGrey, int x, int y, int width, int height ) {
- //        System.out.println( "enabled " + x + ", " + y + ", " + width + ", " + height );
+        paintEnabledBack( g, blueGrey, x, y, width, height );
+        paintEnabledTop(  g, blueGrey, x, y, width, height );
+    }
 
-        g.setColor( Color.blue );
-        g.fillRect( x, y, width, height );
-
+    private void paintEnabledBack( Graphics2D g, Color blueGrey, int x, int y, int width, int height ) {
         // ---- shadow layer ----
 
         final float e1x = x + 2f;
@@ -137,7 +148,9 @@ public class NimbusRadioThumb {
         ellip.setFrame( e1x, e1y, e1w, e1h );
         g.setColor( NimbusHelper.adjustColor( blueGrey, 0.0f, 0.0f, 0.0f, -112 ));
         g.fill( ellip );
+    }
 
+    private void paintEnabledTop( Graphics2D g, Color blueGrey, int x, int y, int width, int height ) {
         // ---- button layer ----
 
         final float e2x = x + 2f;

@@ -26,14 +26,25 @@
 package de.sciss.swingosc;
 
 import javax.swing.JSlider;
+import java.awt.Color;
 
 public class RotaryKnob extends JSlider {
+    protected Color colrKnob	= null;
+
     public RotaryKnob() {
         this( 0, 100 );
     }
 
     public RotaryKnob( int min, int max ) {
-        super( min, max );
+        super(min, max);
+    }
+
+    public Color getKnobColor() { return colrKnob; }
+    public void setKnobColor( Color c ) {
+        if( (colrKnob == null && c != null) || (colrKnob != null && !colrKnob.equals( c ))) {
+            colrKnob = c;
+            repaint();
+        }
     }
 
     @Override public void updateUI() {

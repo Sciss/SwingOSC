@@ -863,7 +863,7 @@ extends JButton // AbstractButton
 
 // ---------------- Mouse(Motion)Listener interfaces ----------------
 
-//	public void mousePressed( MouseEvent e )
+//	public void mPressed( MouseEvent e )
 //	{
 //		if( !isEnabled() ) return;
 //

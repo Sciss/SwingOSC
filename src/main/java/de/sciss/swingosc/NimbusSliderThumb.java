@@ -219,7 +219,7 @@ public class NimbusSliderThumb {
     }
 
     private void paintFocusedPressed( Graphics2D g, Color base, int x, int y, int width, int height ) {
-        paintFocusedBack( g, base, x, y, width, height );
+        paintFocusedBack( g,      x, y, width, height );
         paintPressedTop( g, base, x, y, width, height );
     }
 
@@ -270,11 +270,11 @@ public class NimbusSliderThumb {
     }
 
     private void paintFocused( Graphics2D g, Color base, int x, int y, int width, int height ) {
-        paintFocusedBack( g, base, x, y, width, height );
+        paintFocusedBack( g,      x, y, width, height );
         paintEnabledTop( g, base, x, y, width, height );
     }
 
-    private void paintFocusedBack( Graphics2D g, Color base, int x, int y, int width, int height ) {
+    private void paintFocusedBack( Graphics2D g, int x, int y, int width, int height ) {
         final float e1x = x + 0.6f;
         final float e1y = y + 0.6f;
         final float e1w = width - 1.2f;
@@ -285,7 +285,7 @@ public class NimbusSliderThumb {
     }
 
     private void paintFocusedOver( Graphics2D g, Color base, int x, int y, int width, int height) {
-        paintFocusedBack( g, base, x, y, width, height);
+        paintFocusedBack( g,   x, y, width, height );
         paintOverTop( g, base, x, y, width, height );
     }
 

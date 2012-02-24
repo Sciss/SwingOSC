@@ -30,6 +30,7 @@ import java.awt.Color;
 
 public class RotaryKnob extends JSlider {
     protected Color colrKnob	= null;
+    protected Color colrHand    = null;
 
     public RotaryKnob() {
         this( 0, 100 );
@@ -43,6 +44,14 @@ public class RotaryKnob extends JSlider {
     public void setKnobColor( Color c ) {
         if( (colrKnob == null && c != null) || (colrKnob != null && !colrKnob.equals( c ))) {
             colrKnob = c;
+            repaint();
+        }
+    }
+
+    public Color getHandColor() { return colrHand; }
+    public void setHandColor( Color c ) {
+        if( (colrHand == null && c != null) || (colrHand != null && !colrHand.equals( c ))) {
+            colrHand = c;
             repaint();
         }
     }

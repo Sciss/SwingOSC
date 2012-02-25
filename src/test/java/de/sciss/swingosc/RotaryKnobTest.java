@@ -57,8 +57,11 @@ public class RotaryKnobTest implements Runnable {
         knob8.setValue(  47 );
         knob9.setValue(  33 );
 
+        knob1.setPaintTrack( false );
         constrain( knob1,  16 );
+        knob2.setPaintTrack( false );
         constrain( knob2,  23 );
+        knob3.setPaintTrack( false );
         constrain( knob3,  32 );
         constrain( knob4,  45 );
         constrain( knob5,  64 );

@@ -35,6 +35,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -66,8 +67,9 @@ public class RotaryKnobUI extends BasicSliderUI {
     private Shape shpHand                       = null;
     private final AffineTransform atHand        = new AffineTransform();
     private Area shpHandOut                     = null;
+    private final Insets trackBufIn             = new Insets( 0, 0, 0, 0 );
 
-    private static int focusInsets = 3;
+    private static int thumbFocusInsets = 3;
 //    private float handWidth = 0.5f;
 
 //private boolean GUGU = false;
@@ -83,8 +85,8 @@ public class RotaryKnobUI extends BasicSliderUI {
     }
 
     @Override public void paintThumb( Graphics g ) {
-        final int w = slider.getWidth();
-        final int h = slider.getHeight();
+//        final int w = slider.getWidth();
+//        final int h = slider.getHeight();
         final Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 //        g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
@@ -92,14 +94,15 @@ public class RotaryKnobUI extends BasicSliderUI {
                           (knob.hasFocus()  ? NimbusHelper.STATE_FOCUSED : 0) |
                           (mOver            ? NimbusHelper.STATE_OVER    : 0) |
                           (mPressed         ? NimbusHelper.STATE_PRESSED : 0);
-        thumb.paint( state, knob.getKnobColor(), g2, 0, 0, w, h );
+        thumb.paint( state, knob.getKnobColor(), g2, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
         g2.setColor( getHandColor() );
         g2.fill( shpHand );
     }
 
     @Override
     public void paintTrack( Graphics g ) {
-        // nada
+        g.setColor( Color.green );
+        g.fillRect( trackRect.x, trackRect.y, trackRect.width, trackRect.height );
     }
 
     @Override
@@ -113,11 +116,8 @@ public class RotaryKnobUI extends BasicSliderUI {
     protected int valueForPosition( int x, int y ) {
         final int min       = knob.getMinimum();
         final int max       = knob.getMaximum();
-        final float ins2    = focusInsets * 2;
-        final float xr      = (thumbRect.width  - ins2) * 0.5f;
-        final float yr      = (thumbRect.height - ins2) * 0.5f;
-        final float xc      = xr + focusInsets;
-        final float yc      = yr + focusInsets;
+        final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
+        final float yc      = thumbRect.height * 0.5f + thumbRect.y;
         final float dx      = x - xc;
         final double a      = Math.atan2( yc - y, dx );
         final double b      = Math.sin(a);
@@ -203,12 +203,17 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected Dimension getThumbSize() {
+//        knob.getPaintTrack();
 //        final int w = knob.getWidth();
 //        final int h = knob.getHeight();
-//        final int ins2 = focusInsets + focusInsets;
+//        final int ins2 = thumbFocusInsets + thumbFocusInsets;
 //        return new Dimension( Math.max( 1, w ), Math.max( 1, h - ins2 ));
-        return knob.getSize();
-//        return new Dimension( 26, 26 ); // 32, 32 ); // XXX
+        final int w     = knob.getWidth();
+        final int h     = knob.getHeight();
+        final int w1    = w - (trackBufIn.left + trackBufIn.right);
+        final int h1    = h - (trackBufIn.top + trackBufIn.bottom);
+        final int ext   = Math.min( w1, h1 );
+        return new Dimension( ext, ext );
     }
 
     @Override
@@ -223,24 +228,39 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected void calculateTrackRect() {
-        trackRect.x         = contentRect.x;
-        trackRect.y         = contentRect.y;
-        trackRect.width     = thumbRect.width;
-        trackRect.height    = thumbRect.height;
+        trackRect.x         = contentRect.x + trackBufIn.left;
+        trackRect.y         = contentRect.y + trackBufIn.top;
+        final int w         = contentRect.width  - (trackBufIn.left + trackBufIn.right);
+        final int h         = contentRect.height - (trackBufIn.top + trackBufIn.bottom);
+        final int ext       = Math.min( w, h );
+        trackRect.width     = ext;
+        trackRect.height    = ext;
+        trackRect.x        += (w - ext) >> 1;
+        trackRect.y        += (h - ext) >> 1;
 
         final double handWidth = Math.sqrt( thumbRect.width / 56.0 );
 
-        final double x = (thumbRect.width - handWidth) * 0.5;
-        final double h = (thumbRect.height - focusInsets - focusInsets) * 0.5 + handWidth;
-//        rectHand.setRoundRect( x, focusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
+//        final double x = (thumbRect.width - handWidth) * 0.5;
+//        final double h = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth;
+//        rectHand.setRoundRect( x, thumbFocusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
 
         final double hwh = handWidth * 0.5;
+        final double hwq = handWidth * 0.25;
+
+        final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
+//        final float yc      = thumbRect.height * 0.5f + thumbRect.y;
 
         pathHand.reset();
-        pathHand.moveTo( (thumbRect.width - hwh) * 0.5f, focusInsets );
-        pathHand.lineTo( (thumbRect.width + hwh) * 0.5f, focusInsets );
-        pathHand.lineTo( x + handWidth, focusInsets + h );
-        pathHand.lineTo( x, focusInsets + h );
+//        pathHand.moveTo( (thumbRect.width - hwh) * 0.5f, thumbFocusInsets );
+//        pathHand.lineTo( (thumbRect.width + hwh) * 0.5f, thumbFocusInsets );
+//        pathHand.lineTo( x + handWidth, thumbFocusInsets + h );
+//        pathHand.lineTo( x, thumbFocusInsets + h );
+        final int y1    = thumbRect.y + thumbFocusInsets;
+        final double y2 = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth + y1;
+        pathHand.moveTo( xc - hwq, y1 );
+        pathHand.lineTo( xc + hwq, y1 );
+        pathHand.lineTo( xc + hwh, y2 );
+        pathHand.lineTo( xc - hwh, y2 );
         pathHand.closePath();
     }
 
@@ -253,14 +273,8 @@ public class RotaryKnobUI extends BasicSliderUI {
         final int max       = knob.getMaximum();
         final double v      = (double) (knob.getValue() - min) / (max - min);
         final double ang    = v * arcExtent + arcStart;
-        final float ins2    = focusInsets * 2;
-        final float xr      = (thumbRect.width  - ins2) * 0.5f;
-        final float yr      = (thumbRect.height - ins2) * 0.5f;
-        final float xc      = xr + focusInsets;
-        final float yc      = yr + focusInsets;
-//        final double xh     = Math.cos( ang ) * xr + xc;
-//        final double yh     = -Math.sin( ang ) * yr + yc;
-//        System.out.println( "xr " + xr + ", yr " + yr + ", ang " + ang + ", xh " + xh + ", yh " + yh );
+        final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
+        final float yc      = thumbRect.height * 0.5f + thumbRect.y;
         atHand.setToRotation( ang, xc, yc );
         shpHand = atHand.createTransformedShape( pathHand );
         shpHandOut = new Area( strkOut.createStrokedShape( shpHand ));
@@ -268,10 +282,19 @@ public class RotaryKnobUI extends BasicSliderUI {
     }
 
     @Override
+    protected void installDefaults( JSlider slider ) {
+        super.installDefaults( slider );
+        focusInsets.left    = 0;
+        focusInsets.top     = 0;
+        focusInsets.right   = 0;
+        focusInsets.bottom  = 0;
+    }
+
+    @Override
     protected void calculateFocusRect() {
         focusRect.x         = insetCache.left;
         focusRect.y         = insetCache.top;
-        final int ext       = Math.min(knob.getWidth(), knob.getHeight());
+        final int ext       = Math.min( knob.getWidth(), knob.getHeight() );
         focusRect.width     = ext - (insetCache.left + insetCache.right);
         focusRect.height    = ext - (insetCache.top + insetCache.bottom);
     }
@@ -279,6 +302,17 @@ public class RotaryKnobUI extends BasicSliderUI {
     @Override
     protected void calculateTrackBuffer() {
         trackBuffer = 0;
+        if( knob.getPaintTrack() ) {
+            trackBufIn.left     = 8;
+            trackBufIn.top      = 8;
+            trackBufIn.right    = 8;
+            trackBufIn.bottom   = 4;
+        } else {
+            trackBufIn.left     = 0;
+            trackBufIn.top      = 0;
+            trackBufIn.right    = 0;
+            trackBufIn.bottom   = 0;
+        }
     }
 
     @Override
@@ -302,7 +336,7 @@ public class RotaryKnobUI extends BasicSliderUI {
         recalculateIfInsetsChanged();
         final Dimension d = new Dimension( getPreferredVerticalSize() );
 //        d.width  = insetCache.left + insetCache.right;
-//        d.width += focusInsets.left + focusInsets.right;
+//        d.width += thumbFocusInsets.left + thumbFocusInsets.right;
 //        d.width += trackRect.width + tickRect.width + labelRect.width;
         return d;
     }

@@ -78,7 +78,7 @@ JSCKnob : JSCSliderBase {
 	rangeColor_ { arg val;
 		if( colrRange != val, {
 			colrRange = val;
-			server.listSendMsg([ \set, this.id, rangeColor ] ++ val.asSwingArg );
+			server.listSendMsg([ \set, this.id, \rangeColor ] ++ val.asSwingArg );
 		})
 	}
 
@@ -86,7 +86,7 @@ JSCKnob : JSCSliderBase {
 	trackColor_ { arg val;
 		if( colrTrack != val, {
 			colrTrack = val;
-			server.listSendMsg([ \set, this.id, trackColor ] ++ val.asSwingArg );
+			server.listSendMsg([ \set, this.id, \trackColor ] ++ val.asSwingArg );
 		})
 	}
 
@@ -94,36 +94,23 @@ JSCKnob : JSCSliderBase {
 	handColor_ { arg val;
 		if( colrHand != val, {
 			colrHand = val;
-			server.listSendMsg([ \set, this.id, handColor ] ++ val.asSwingArg );
+			server.listSendMsg([ \set, this.id, \handColor ] ++ val.asSwingArg );
 		})
 	}
-	
-	increment { arg zoom = 1; ^this.valueAction = this.value + (max( this.step, this.pixelStep ) * zoom) }
-	decrement { arg zoom = 1; ^this.valueAction = this.value - (max( this.step, this.pixelStep ) * zoom) }
-	
+		
 	defaultKeyDownAction { arg char, modifiers, unicode, keycode;
-    		var zoom = this.getScale(modifiers);
-
 		// standard keydown
-		switch( char,
-			$r, { this.valueAction = 1.0.rand },
-			$n, { this.valueAction = 0.0 },
-			$x, { this.valueAction = 1.0 },
-			$c, { this.valueAction = 0.5 },
-
-			{
-				switch( keycode,
-					16r5b, { this.decrement(zoom) },
-					16r5d, { this.increment(zoom) },
-					16r1000013, { this.increment(zoom) },
-					16r1000014, { this.increment(zoom) },
-					16r1000015, { this.decrement(zoom) },
-					16r1000012, { this.decrement(zoom) },
-					{^this} // propagate on if the key is a no-op
-				)
-			}
-		);
-		^true;
+		if (char == $r, { this.valueAction = 1.0.rand; ^this });
+		if (char == $n, { this.valueAction = 0.0; ^this });
+		if (char == $x, { this.valueAction = 1.0; ^this });
+		if (char == $c, { this.valueAction = 0.5; ^this });
+		if (char == $], { this.increment( this.getScale( modifiers )); ^this });
+		if (char == $[, { this.decrement( this.getScale( modifiers )); ^this });
+		if (unicode == 0xF700, { this.increment( this.getScale( modifiers )); ^this });
+		if (unicode == 0xF703, { this.increment( this.getScale( modifiers )); ^this });
+		if (unicode == 0xF701, { this.decrement( this.getScale( modifiers )); ^this });
+		if (unicode == 0xF702, { this.decrement( this.getScale( modifiers )); ^this });
+		^nil		// bubble if it's an invalid key
 	}
 
 	increment { |zoom=1| ^this.valueAction = (this.value + (keystep * zoom)) }

@@ -32,6 +32,8 @@ import java.awt.Color;
 public class RotaryKnob extends JSlider {
     protected Color colrKnob	= null;
     protected Color colrHand    = null;
+    protected Color colrRange   = null;
+    protected Color colrTrack   = null;
 
     public RotaryKnob() {
         super();
@@ -61,6 +63,22 @@ public class RotaryKnob extends JSlider {
     public void setHandColor( Color c ) {
         if( (colrHand == null && c != null) || (colrHand != null && !colrHand.equals( c ))) {
             colrHand = c;
+            repaint();
+        }
+    }
+
+    public Color getRangeColor() { return colrRange; }
+    public void setRangeColor( Color c ) {
+        if( (colrRange == null && c != null) || (colrRange != null && !colrRange.equals( c ))) {
+            colrRange = c;
+            repaint();
+        }
+    }
+
+    public Color getTrackColor() { return colrTrack; }
+    public void setTrackColor( Color c ) {
+        if( (colrTrack == null && c != null) || (colrTrack != null && !colrTrack.equals( c ))) {
+            colrTrack = c;
             repaint();
         }
     }

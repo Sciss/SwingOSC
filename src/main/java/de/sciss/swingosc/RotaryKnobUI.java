@@ -86,6 +86,16 @@ public class RotaryKnobUI extends BasicSliderUI {
         return knob.isEnabled() ? c : NimbusHelper.adjustColor( c, 0f, 0f, 0f, -112 );
     }
 
+    private Color getTrackColor() {
+        final Color c = NimbusHelper.mixColorWithAlpha( NimbusHelper.getControlHighlighColor(), knob.getTrackColor() );
+        return knob.isEnabled() ? c : NimbusHelper.adjustColor( c, 0f, 0f, 0f, -112 );
+    }
+
+    private Color getRangeColor() {
+        final Color c = NimbusHelper.mixColorWithAlpha( NimbusHelper.getBaseColor(), knob.getRangeColor() );
+        return knob.isEnabled() ? c : NimbusHelper.adjustColor( c, 0f, 0f, 0f, -112 );
+    }
+
     @Override public void paintThumb( Graphics g ) {
 //        System.out.println( "::: paintThumb :::" );
 
@@ -111,12 +121,9 @@ public class RotaryKnobUI extends BasicSliderUI {
         g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
 //        g2.setColor( Color.green );
 //        g2.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
-        final Color c1 = NimbusHelper.getControlHighlighColor(); // getSelectedTextColor();
-        final boolean enabled = knob.isEnabled();
-        g2.setColor( enabled ? c1 : NimbusHelper.adjustColor( c1, 0f, 0f, 0f, -112 ));
+        g2.setColor( getTrackColor() );
         g2.fill( shpTrack );
-        final Color c2 = NimbusHelper.getBaseColor(); // .getSelectionBackgroundColor();
-        g2.setColor( enabled ? c2 : NimbusHelper.adjustColor( c2, 0f, 0f, 0f, -112 ));
+        g2.setColor( getRangeColor() );
         final Stroke strkOrig = g2.getStroke();
         g2.setStroke( strkTrackHigh );
         g2.draw( arcTrackHigh );

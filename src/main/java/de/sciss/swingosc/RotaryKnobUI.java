@@ -46,7 +46,9 @@ import java.awt.geom.RoundRectangle2D;
 
 public class RotaryKnobUI extends BasicSliderUI {
     private static final double arcStart        = Math.PI * 1.25;   // aka 7 h 30 mins
-    private static final double arcExtent       = Math.PI * -1.75;  // thus the arcStop is at 4 h 30 mins
+    private static final double arcExtent       = Math.PI * 1.50;  // thus the arcStop is at 4 h 30 mins
+    private static final double PI2             = Math.PI * 2;
+    private static final double argHemi         = arcStart - Math.PI * 0.5;
     private static final Line2D line            = new Line2D.Float();
     private static final NimbusRadioThumb thumb = new NimbusRadioThumb();
 //    private static final Stroke strkHand        = new BasicStroke( 0.5f );
@@ -65,7 +67,7 @@ public class RotaryKnobUI extends BasicSliderUI {
     private Area shpHandOut                     = null;
 
     private static int focusInsets = 3;
-    private static float handWidth = 0.5f;
+//    private float handWidth = 0.5f;
 
 //private boolean GUGU = false;
 
@@ -90,28 +92,7 @@ public class RotaryKnobUI extends BasicSliderUI {
                           (mOver            ? NimbusHelper.STATE_OVER    : 0) |
                           (mPressed         ? NimbusHelper.STATE_PRESSED : 0);
         thumb.paint( state, knob.getKnobColor(), g2, 0, 0, w, h );
-//        final int min       = knob.getMinimum();
-//        final int max       = knob.getMaximum();
-//        final double v      = (double) (knob.getValue() - min) / (max - min);
-//        final double ang    = v * arcExtent + arcStart;
-//        final float ins     = 3f; // 2.5f;
-//        final float ins2    = ins * 2;
-//        final float  xr     = (w - ins2) * 0.5f;
-//        final float  yr     = (h - ins2) * 0.5f;
-//        final float xc      = xr + ins;
-//        final float yc      = yr + ins;
-//        final double xh     = Math.cos( ang ) * xr + xc;
-//        final double yh     = -Math.sin( ang ) * yr + yc;
-////        System.out.println( "xr " + xr + ", yr " + yr + ", ang " + ang + ", xh " + xh + ", yh " + yh );
-
-//        line.setLine( xc, yc, xh, yh );
-//        final Stroke strkOrig = g2.getStroke();
         g2.setColor( getHandColor() );
-
-//if( GUGU ) g2.setColor( Color.red );
-//        g2.setStroke(strkHand);
-//        g2.draw( line );
-//        g2.setStroke(strkOrig);
         g2.fill( shpHand );
     }
 
@@ -126,6 +107,23 @@ public class RotaryKnobUI extends BasicSliderUI {
     @Override
     protected TrackListener createTrackListener( JSlider knob ) {
         return new RangeTrackListener();
+    }
+
+    protected int valueForPosition( int x, int y ) {
+        final int min       = knob.getMinimum();
+        final int max       = knob.getMaximum();
+        final float ins2    = focusInsets * 2;
+        final float xr      = (thumbRect.width  - ins2) * 0.5f;
+        final float yr      = (thumbRect.height - ins2) * 0.5f;
+        final float xc      = xr + focusInsets;
+        final float yc      = yr + focusInsets;
+        final float dx      = x - xc;
+        final double a      = Math.atan2( yc - y, dx );
+        final double b      = Math.sin( a );
+        final double c      = Math.min( argHemi, Math.acos( b ));
+        final double d      = (argHemi - c) / argHemi * 0.5;
+        final double v      = dx < 0 ? d : 1.0 - d;
+        return (int) (v * (max - min) + min + 0.5);
     }
 
     private class RangeTrackListener extends TrackListener {
@@ -148,10 +146,10 @@ public class RotaryKnobUI extends BasicSliderUI {
                     return;
                 }
 //GUGU = true;
-                mDragging = true;
-                mPressed = true;
-                knob.repaint();
-                return;
+//                mDragging = true;
+//                mPressed = true;
+//                knob.repaint();
+//                return;
             }
 
             if (!SwingUtilities.isLeftMouseButton(e)) {
@@ -159,9 +157,19 @@ public class RotaryKnobUI extends BasicSliderUI {
             }
 
             mPressed = true;
-            mDragging = false;
-            slider.setValueIsAdjusting( true );
+//            mDragging = false;
+            mDragging = true;
+
+            knob.setValueIsAdjusting( true );
+            knob.setValue( valueForPosition( e.getX(), e.getY() ));
             knob.repaint();
+        }
+
+        @Override
+        public void mouseDragged( MouseEvent e ) {
+            if( mDragging ) {
+                knob.setValue( valueForPosition( e.getX(), e.getY() ));
+            }
         }
 
         @Override
@@ -194,17 +202,22 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected Dimension getThumbSize() {
-        return new Dimension( 32, 32 ); // XXX
+//        final int w = knob.getWidth();
+//        final int h = knob.getHeight();
+//        final int ins2 = focusInsets + focusInsets;
+//        return new Dimension( Math.max( 1, w ), Math.max( 1, h - ins2 ));
+        return knob.getSize();
+//        return new Dimension( 26, 26 ); // 32, 32 ); // XXX
     }
 
     @Override
     public Dimension getPreferredHorizontalSize() {
-        return getThumbSize();
+        return new Dimension( 32, 32 ); // return getThumbSize();
     }
 
     @Override
     public Dimension getPreferredVerticalSize() {
-        return getThumbSize();
+        return new Dimension( 32, 32 ); // return getThumbSize();
     }
 
     @Override
@@ -214,9 +227,11 @@ public class RotaryKnobUI extends BasicSliderUI {
         trackRect.width     = thumbRect.width;
         trackRect.height    = thumbRect.height;
 
+        final double handWidth = Math.sqrt( thumbRect.width / 72.0 );
+
         final double x = (thumbRect.width - handWidth) * 0.5;
         final double h = (thumbRect.height - focusInsets - focusInsets) * 0.5;
-        rectHand.setRoundRect( x, focusInsets, handWidth, h, 2.0, 2.0 );
+        rectHand.setRoundRect( x, focusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
     }
 
     @Override
@@ -228,12 +243,11 @@ public class RotaryKnobUI extends BasicSliderUI {
         final int max       = knob.getMaximum();
         final double v      = (double) (knob.getValue() - min) / (max - min);
         final double ang    = v * arcExtent + arcStart;
-        final float ins     = 3f; // 2.5f;
-        final float ins2    = ins * 2;
+        final float ins2    = focusInsets * 2;
         final float xr      = (thumbRect.width  - ins2) * 0.5f;
         final float yr      = (thumbRect.height - ins2) * 0.5f;
-        final float xc      = xr + ins;
-        final float yc      = yr + ins;
+        final float xc      = xr + focusInsets;
+        final float yc      = yr + focusInsets;
 //        final double xh     = Math.cos( ang ) * xr + xc;
 //        final double yh     = -Math.sin( ang ) * yr + yc;
 //        System.out.println( "xr " + xr + ", yr " + yr + ", ang " + ang + ", xh " + xh + ", yh " + yh );

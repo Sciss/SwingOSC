@@ -87,15 +87,19 @@ public class NimbusRadioThumb {
         };
     }
 
+    // This is a more reasonable setting for colored knobs!
     private static Color[] overGrad2colr( Color blueGrey ) {
         return new Color[] {
-            NimbusHelper.adjustColor( blueGrey, -0.111111104f, -0.10655806f, 0.24313724f, 0 ),
-            NimbusHelper.adjustColor( blueGrey, 0.0f, -0.07333623f, 0.20392156f, 0 ),
-            NimbusHelper.adjustColor( blueGrey, 0.0f, -0.07333623f, 0.20392156f, 0 ),
+//                NimbusHelper.adjustColor( blueGrey, -0.111111104f, -0.10655806f, 0.24313724f, 0 ),
+            NimbusHelper.adjustColor( blueGrey, 0.055555582f, -0.10655806f, 0.24313724f, 0 ),
+            NimbusHelper.adjustColor( blueGrey, 0.0f, -0.17333623f, 0.20392156f, 0 ),
+//                NimbusHelper.adjustColor( blueGrey, 0.0f, -0.07333623f, 0.20392156f, 0 ),
+            NimbusHelper.adjustColor( blueGrey, 0.0f, -0.167389056f, 0.20392156f, 0 ),
 //                NimbusHelper.adjustColor( blueGrey, 0.08585858f -0.067389056f, 0.25490195f, 0 ),
-            // This is a more reasonable setting for colored knobs!
-            NimbusHelper.adjustColor( blueGrey, 0.03f, -0.067389056f, 0.24313724f, 0 ),
-            NimbusHelper.adjustColor( blueGrey, -0.111111104f, -0.10628903f, 0.18039215f, 0 )
+//                NimbusHelper.adjustColor( blueGrey, 0.03f, -0.067389056f, 0.24313724f, 0 ),
+            NimbusHelper.adjustColor( blueGrey, 0.015f, -0.17333623f, 0.20392156f, 0 ),
+//                NimbusHelper.adjustColor( blueGrey, -0.111111104f, -0.10628903f, 0.18039215f, 0 )
+            NimbusHelper.adjustColor( blueGrey, 0.03f, -0.16628903f, 0.24313724f, 0 )
         };
     }
 

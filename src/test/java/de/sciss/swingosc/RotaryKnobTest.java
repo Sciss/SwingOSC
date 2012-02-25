@@ -32,13 +32,13 @@ public class RotaryKnobTest implements Runnable {
         final RotaryKnob knob7 = new RotaryKnob();
         final RotaryKnob knob8 = new RotaryKnob();
         final RotaryKnob knob9 = new RotaryKnob();
-        knob2.setKnobColor(Color.red );
-        knob3.setKnobColor(Color.black );
-        knob3.setHandColor(Color.white);
+//        knob2.setKnobColor(Color.red );
+//        knob3.setKnobColor(Color.black );
+//        knob3.setHandColor(Color.white);
 //        knob4.setFocusable(false);
         knob5.setKnobColor(new Color(200, 100, 50)); // Color.red );
-        knob5.setFocusable(false);
-        knob6.setFocusable(false);
+//        knob5.setFocusable(false);
+//        knob6.setFocusable(false);
         knob6.setKnobColor(new Color(0, 100, 50));
         knob6.setHandColor(Color.white);
         knob7.setEnabled(false);
@@ -58,11 +58,11 @@ public class RotaryKnobTest implements Runnable {
         knob9.setValue(  33 );
 
         knob1.setPaintTrack( false );
-        constrain( knob1,  16 );
+//        constrain( knob1,  16 );
         knob2.setPaintTrack( false );
-        constrain( knob2,  23 );
-        knob3.setPaintTrack( false );
-        constrain( knob3,  32 );
+        constrain( knob2,  25 );
+//        knob3.setPaintTrack( false );
+//        constrain( knob3,  32 );
         constrain( knob4,  34 ); // 45 );
         constrain( knob5,  64 );
         constrain( knob6,  91 );

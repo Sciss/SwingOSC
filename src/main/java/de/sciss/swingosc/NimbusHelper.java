@@ -44,6 +44,7 @@ public class NimbusHelper {
     private static final Color defaultTextColor         = Color.black;
     private static final Color defaultSelectedTextColor = Color.white;
     private static final Color defaultControlHighlightColor  = new Color( 233, 236, 242, 255 );
+    private static final Color defaultSelectionBackgroundColor = new Color( 57, 105, 138, 255 );
     private static final float[] hsbArr                 = new float[ 3 ];
 
     static {
@@ -92,6 +93,11 @@ public class NimbusHelper {
     public static Color getControlHighlighColor() {
         final Color c = nimbusDefaults == null ? null : nimbusDefaults.getColor( "controlHighlight" );
         return c == null ? defaultControlHighlightColor : c;
+    }
+
+    public static Color getSelectionBackgroundColor() {
+        final Color c = nimbusDefaults == null ? null : nimbusDefaults.getColor( "nimbusSelectionBackground" );
+        return c == null ? defaultSelectionBackgroundColor : c;
     }
 
     public static Color getBlueGreyColor( Color base ) {

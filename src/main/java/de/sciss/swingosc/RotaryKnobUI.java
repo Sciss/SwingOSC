@@ -41,8 +41,8 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import java.awt.geom.RoundRectangle2D;
 
 public class RotaryKnobUI extends BasicSliderUI {
     private static final double arcStart        = Math.PI * 1.25;   // aka 7 h 30 mins
@@ -61,7 +61,8 @@ public class RotaryKnobUI extends BasicSliderUI {
 
 //    private final Color colrHand = Color.black; // new Color( 0, 0, 0, 204 );
 
-    private final RoundRectangle2D rectHand     = new RoundRectangle2D.Float();
+//    private final RoundRectangle2D rectHand     = new RoundRectangle2D.Float();
+    private final GeneralPath pathHand          = new GeneralPath();
     private Shape shpHand                       = null;
     private final AffineTransform atHand        = new AffineTransform();
     private Area shpHandOut                     = null;
@@ -119,8 +120,8 @@ public class RotaryKnobUI extends BasicSliderUI {
         final float yc      = yr + focusInsets;
         final float dx      = x - xc;
         final double a      = Math.atan2( yc - y, dx );
-        final double b      = Math.sin( a );
-        final double c      = Math.min( argHemi, Math.acos( b ));
+        final double b      = Math.sin(a);
+        final double c      = Math.min(argHemi, Math.acos(b));
         final double d      = (argHemi - c) / argHemi * 0.5;
         final double v      = dx < 0 ? d : 1.0 - d;
         return (int) (v * (max - min) + min + 0.5);
@@ -227,11 +228,20 @@ public class RotaryKnobUI extends BasicSliderUI {
         trackRect.width     = thumbRect.width;
         trackRect.height    = thumbRect.height;
 
-        final double handWidth = Math.sqrt( thumbRect.width / 72.0 );
+        final double handWidth = Math.sqrt( thumbRect.width / 56.0 );
 
         final double x = (thumbRect.width - handWidth) * 0.5;
-        final double h = (thumbRect.height - focusInsets - focusInsets) * 0.5;
-        rectHand.setRoundRect( x, focusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
+        final double h = (thumbRect.height - focusInsets - focusInsets) * 0.5 + handWidth;
+//        rectHand.setRoundRect( x, focusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
+
+        final double hwh = handWidth * 0.5;
+
+        pathHand.reset();
+        pathHand.moveTo( (thumbRect.width - hwh) * 0.5f, focusInsets );
+        pathHand.lineTo( (thumbRect.width + hwh) * 0.5f, focusInsets );
+        pathHand.lineTo( x + handWidth, focusInsets + h );
+        pathHand.lineTo( x, focusInsets + h );
+        pathHand.closePath();
     }
 
     @Override
@@ -252,7 +262,7 @@ public class RotaryKnobUI extends BasicSliderUI {
 //        final double yh     = -Math.sin( ang ) * yr + yc;
 //        System.out.println( "xr " + xr + ", yr " + yr + ", ang " + ang + ", xh " + xh + ", yh " + yh );
         atHand.setToRotation( ang, xc, yc );
-        shpHand = atHand.createTransformedShape( rectHand );
+        shpHand = atHand.createTransformedShape( pathHand );
         shpHandOut = new Area( strkOut.createStrokedShape( shpHand ));
         shpHandOut.add( new Area( shpHand ));
     }

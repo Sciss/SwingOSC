@@ -35,27 +35,27 @@ public class RotaryKnobTest implements Runnable {
         knob2.setKnobColor(Color.red );
         knob3.setKnobColor(Color.black );
         knob3.setHandColor(Color.white);
-        knob7.setEnabled(false);
         knob4.setFocusable(false);
         knob5.setKnobColor(new Color(200, 100, 50)); // Color.red );
         knob5.setFocusable(false);
+        knob6.setFocusable(false);
+        knob6.setKnobColor(new Color(0, 100, 50));
+        knob6.setHandColor(Color.white);
+        knob7.setEnabled(false);
         knob8.setKnobColor(Color.red);
         knob8.setEnabled(false);
         knob9.setKnobColor(Color.black);
         knob9.setHandColor(Color.white);
         knob9.setEnabled(false);
-        knob6.setFocusable(false);
-        knob6.setKnobColor(Color.black);
-        knob6.setHandColor(Color.white);
 
-        knob1.setValue(0);
-        knob2.setValue(20);
+        knob1.setValue(   0 );
+        knob2.setValue(  20 );
         knob3.setValue(  40 );
-        knob7.setValue(60);
-        knob4.setValue(80);
-        knob5.setValue(100);
-        knob8.setValue(47);
-        knob9.setValue(33);
+        knob7.setValue(  60 );
+        knob4.setValue(  80 );
+        knob5.setValue( 100 );
+        knob8.setValue(  47 );
+        knob9.setValue(  33 );
 
         constrain( knob1,  16 );
         constrain( knob2,  23 );

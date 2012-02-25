@@ -35,7 +35,7 @@ public class RotaryKnobTest implements Runnable {
         knob2.setKnobColor(Color.red );
         knob3.setKnobColor(Color.black );
         knob3.setHandColor(Color.white);
-        knob4.setFocusable(false);
+//        knob4.setFocusable(false);
         knob5.setKnobColor(new Color(200, 100, 50)); // Color.red );
         knob5.setFocusable(false);
         knob6.setFocusable(false);

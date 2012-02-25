@@ -41,16 +41,17 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 public class RotaryKnobUI extends BasicSliderUI {
-    private static final double arcStart        = Math.PI * 1.25;   // aka 7 h 30 mins
-    private static final double arcExtent       = Math.PI * 1.50;  // thus the arcStop is at 4 h 30 mins
-    private static final double PI2             = Math.PI * 2;
+    private static final float arcStartDeg      = -135f; // clock wise from 12 o'clock. thus 7 h 30 mins
+    private static final float arcExtentDeg     = 270f;  // arcExtent * 180 / Math.PI;
+    private static final double arcStart        = (-arcStartDeg + 90) * Math.PI / 180; // Math.PI * 1.25;   // aka 7 h 30 mins
+    private static final double arcExtent       = arcExtentDeg * Math.PI / 180; // Math.PI * 1.50;  // thus the arcStop is at 4 h 30 mins
+//    private static final double PI2             = Math.PI * 2;
     private static final double argHemi         = arcStart - Math.PI * 0.5;
-    private static final Line2D line            = new Line2D.Float();
     private static final NimbusRadioThumb thumb = new NimbusRadioThumb();
 //    private static final Stroke strkHand        = new BasicStroke( 0.5f );
     private static final Stroke strkOut         = new BasicStroke( 6f );
@@ -67,6 +68,8 @@ public class RotaryKnobUI extends BasicSliderUI {
     private Shape shpHand                       = null;
     private final AffineTransform atHand        = new AffineTransform();
     private Area shpHandOut                     = null;
+    private final Arc2D arc                     = new Arc2D.Float( 0, 0, 10, 10, arcStartDeg, -arcExtentDeg, Arc2D.PIE );
+    private Area shpTrack                       = null;
     private final Insets trackBufIn             = new Insets( 0, 0, 0, 0 );
 
     private static int thumbFocusInsets = 3;
@@ -101,8 +104,12 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     public void paintTrack( Graphics g ) {
-        g.setColor( Color.green );
-        g.fillRect( trackRect.x, trackRect.y, trackRect.width, trackRect.height );
+        final Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+//        g2.setColor( Color.green );
+//        g2.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
+        g2.setColor( NimbusHelper.getSelectedTextColor() );
+        g2.fill( shpTrack );
     }
 
     @Override
@@ -203,16 +210,40 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected Dimension getThumbSize() {
-//        knob.getPaintTrack();
-//        final int w = knob.getWidth();
-//        final int h = knob.getHeight();
-//        final int ins2 = thumbFocusInsets + thumbFocusInsets;
-//        return new Dimension( Math.max( 1, w ), Math.max( 1, h - ins2 ));
-        final int w     = knob.getWidth();
-        final int h     = knob.getHeight();
-        final int w1    = w - (trackBufIn.left + trackBufIn.right);
-        final int h1    = h - (trackBufIn.top + trackBufIn.bottom);
-        final int ext   = Math.min( w1, h1 );
+        final int w     = contentRect.width;
+        final int h     = contentRect.height;
+        final int ext;
+        if( knob.getPaintTrack() ) {
+//            trackBufIn.left     = 8;
+//            trackBufIn.top      = 8;
+//            trackBufIn.right    = 8;
+//            trackBufIn.bottom   = 4;
+            final int w1        = (int) (w * 0.75f);
+            final int h1        = (int) (h * 0.875f);
+            ext                 = Math.min( w1, h1 );
+            final int xo        = contentRect.x + ((w1 - ext) >> 1);
+            final int yo        = contentRect.y + ((h1 - ext) >> 1);
+            trackBufIn.left     = (w - ext) >> 1;
+            trackBufIn.top      = (h - ext) >> 1;
+            trackBufIn.right    = (w - ext + 1) >> 1;
+            trackBufIn.bottom   = 0;
+            final double exto   = ext / 0.75f;
+            final double exti   = ext / 0.875f;
+            final double ring   = (exto - exti) * 0.5;
+            arc.setFrame( xo, yo, exto, exto );
+            shpTrack = new Area( arc );
+            arc.setFrame( xo + ring, yo + ring, exti, exti );
+            shpTrack.subtract( new Area( arc ));
+
+        } else {
+            trackBufIn.left     = 0;
+            trackBufIn.top      = 0;
+            trackBufIn.right    = 0;
+            trackBufIn.bottom   = 0;
+            ext = Math.min( w, h );
+        }
+//        final int w1    = w - (trackBufIn.left + trackBufIn.right);
+//        final int h1    = h - (trackBufIn.top + trackBufIn.bottom);
         return new Dimension( ext, ext );
     }
 
@@ -302,17 +333,17 @@ public class RotaryKnobUI extends BasicSliderUI {
     @Override
     protected void calculateTrackBuffer() {
         trackBuffer = 0;
-        if( knob.getPaintTrack() ) {
-            trackBufIn.left     = 8;
-            trackBufIn.top      = 8;
-            trackBufIn.right    = 8;
-            trackBufIn.bottom   = 4;
-        } else {
-            trackBufIn.left     = 0;
-            trackBufIn.top      = 0;
-            trackBufIn.right    = 0;
-            trackBufIn.bottom   = 0;
-        }
+//        if( knob.getPaintTrack() ) {
+//            trackBufIn.left     = 8;
+//            trackBufIn.top      = 8;
+//            trackBufIn.right    = 8;
+//            trackBufIn.bottom   = 4;
+//        } else {
+//            trackBufIn.left     = 0;
+//            trackBufIn.top      = 0;
+//            trackBufIn.right    = 0;
+//            trackBufIn.bottom   = 0;
+//        }
     }
 
     @Override

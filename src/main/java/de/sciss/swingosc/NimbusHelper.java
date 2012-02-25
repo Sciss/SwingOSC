@@ -39,10 +39,11 @@ public class NimbusHelper {
 
 //    private static LookAndFeel nimbusLAF;
     private static UIDefaults nimbusDefaults;
-    private static final Color defaultFocusColor    = new Color( 115, 164, 209, 255 );
-    private static final Color defaultBaseColor     = new Color(  51,  98, 140, 255 );
-    private static final Color defaultTextColor     = new Color(   0,   0,   0, 255 );
-    private static final float[] hsbArr             = new float[ 3 ];
+    private static final Color defaultFocusColor        = new Color( 115, 164, 209, 255 );
+    private static final Color defaultBaseColor         = new Color(  51,  98, 140, 255 );
+    private static final Color defaultTextColor         = Color.black;
+    private static final Color defaultSelectedTextColor = Color.white;
+    private static final float[] hsbArr                 = new float[ 3 ];
 
     static {
 //        try {
@@ -80,6 +81,11 @@ public class NimbusHelper {
     public static Color getTextColor() {
         final Color c = nimbusDefaults == null ? null : nimbusDefaults.getColor( "text" );
         return c == null ? defaultTextColor : c;
+    }
+
+    public static Color getSelectedTextColor() {
+        final Color c = nimbusDefaults == null ? null : nimbusDefaults.getColor( "selectedText" );
+        return c == null ? defaultSelectedTextColor : c;
     }
 
     public static Color getBlueGreyColor( Color base ) {

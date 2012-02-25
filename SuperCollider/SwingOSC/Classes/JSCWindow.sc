@@ -97,6 +97,7 @@ JSCWindow : Object {
 			[JSCButton, 1],
 			[JSCCheckBox, 1],
 			[JSCSlider, 1],
+			[JSCKnob, 2],
 			[JSCRangeSlider, 1],
 			[JSCSlider2D, 2],
 			[JSCPopUpMenu, 1],

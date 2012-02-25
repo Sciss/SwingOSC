@@ -25,6 +25,7 @@
 
 package de.sciss.swingosc;
 
+import javax.swing.BoundedRangeModel;
 import javax.swing.JSlider;
 import java.awt.Color;
 
@@ -33,11 +34,19 @@ public class RotaryKnob extends JSlider {
     protected Color colrHand    = null;
 
     public RotaryKnob() {
-        this( 0, 100 );
+        super();
+    }
+
+    public RotaryKnob( BoundedRangeModel m ) {
+        super( m );
     }
 
     public RotaryKnob( int min, int max ) {
-        super(min, max);
+        super( min, max );
+    }
+
+    public RotaryKnob( int min, int max, int value ) {
+        super( min, max, value );
     }
 
     public Color getKnobColor() { return colrKnob; }

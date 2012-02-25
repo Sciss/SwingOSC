@@ -93,7 +93,7 @@ SwingGUI {
 	*ezNumber { ^EZNumber}
 	*ezRanger { ^EZRanger }	
 	
-	*knob { ^JKnob }		
+	*knob { ^JSCKnob }		
 	*font { ^JSCFont }
 	*pen { ^JPen }
 	*image { ^JSCImage }

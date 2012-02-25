@@ -124,13 +124,13 @@ public class RotaryKnobUI extends BasicSliderUI {
         g2.setRenderingHints( hintsOld );
     }
 
-    public void paint( Graphics g, JComponent c ) {
-        g.setColor( Color.green );
-        g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
-//        g.setColor( Color.yellow );
-//        g.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
-        super.paint( g, c );
-    }
+//    public void paint( Graphics g, JComponent c ) {
+//        g.setColor( Color.green );
+//        g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+////        g.setColor( Color.yellow );
+////        g.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
+//        super.paint( g, c );
+//    }
 
     @Override
     public void paintFocus( Graphics g ) {}
@@ -236,27 +236,31 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected void calculateThumbSize() {
-        final int w     = contentRect.width;
+        final int w     = contentRect.width; // - ((1 - contentRect.width) & 1);
         final int h     = contentRect.height;
         final int ext;
         if( knob.getPaintTrack() ) {
             final int w1        = (int) (w * 0.75f);
             final int h1        = (int) ((h - 1) * 0.875f); // nasty
             ext                 = Math.min( w1, h1 );
-            final float tt  = (h - ext) * 0.5f;
+//            final float tt  = (h - ext) * 0.5f;
+            final int tt  = (h - ext + 1) >> 1; // nasty
             trackBufIn.left     = (w - ext) >> 1;
             trackBufIn.top      = (int) (tt + 0.5f); // (h - ext) >> 1;
             trackBufIn.right    = (w - ext + 1) >> 1;
             trackBufIn.bottom   = 0;
-            final float exto   = ext / 0.75f;
+//            final float exto   = ext / 0.75f;
+            final int exto     = (int) (ext / 0.75f - 0.5f);  // nasty
             final float exti   = ext / 0.875f;
             final float extm   = (exti + exto) * 0.5f;
             final float ring   = (exto - exti) * 0.5f;
             final float ringo  = ring * 0.25f;
             final float ringh  = ring * 0.5f;
             final float exto2  = exto - (ringo + ringo);
+//            final float xo     = contentRect.x + (w - exto) * 0.5f;
             final float xo     = contentRect.x + (w - exto) * 0.5f;
-            final int yo     = (int) (contentRect.y + (h + tt - exto) * 0.5f + 0.5f);
+//            final int yo     = (int) (contentRect.y + (h + tt - exto) * 0.5f + 0.5f);
+            final float yo     = contentRect.y + (h + tt - exto) * 0.5f;
             arc.setFrame( xo + ringo, yo + ringo, exto2, exto2 );
             shpTrack = new Area( arc );
             final float exti2  = exti - (ringo + ringo);
@@ -289,9 +293,9 @@ public class RotaryKnobUI extends BasicSliderUI {
     @Override
     public Dimension getPreferredHorizontalSize() {
         if( knob.getPaintTrack() ) {
-            return new Dimension( 57, 32 );
+            return new Dimension( 37, 32 );
         } else {
-            return new Dimension( 45, 25 );
+            return new Dimension( 27, 27 );
         }
     }
 

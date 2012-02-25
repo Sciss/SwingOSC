@@ -1,5 +1,5 @@
 /*
- *	JSCSlider
+ *	JSCKnob
  *	(SwingOSC classes for SuperCollider)
  *
  *	Copyright (c) 2005-2012 Hanns Holger Rutz. All rights reserved.
@@ -22,10 +22,14 @@
  *	For further information, please contact Hanns Holger Rutz at
  *	contact@sciss.de
  */
-JSCSlider : JSCSliderBase {
+JSCKnob : JSCSliderBase {
 	var acResp;	// OSCpathResponder for action listening
-	var orientation;	// 0 for horiz, 1 for vert
 	var clpse;
+	var <mode = \round;
+	var <centered = false;
+	var colrRange, colrTrack, colrHand;
+
+	var <>keystep = 0.01;
 
 	// ----------------- public class methods -----------------
 
@@ -43,58 +47,94 @@ JSCSlider : JSCSliderBase {
 	
 	valueAction_ { arg val;
 		this.setPropertyWithAction( \value, this.prSnap( val ));
-	}	
+	}
+	
+	mode_ { arg inputMode;
+		// XXX currently not implemented
+		mode = inputMode;
+	}
+	
+	centered_ { arg bool;
+		// XXX currently not implemented
+		centered = bool;
+	}
+	
+	color {
+		^[ this.knobColor  ?? { Color.new255( 169,176,190 )},
+		   this.rangeColor ?? { Color.new255( 51,98,140 )},
+		   this.trackColor ?? { Color.new255( 233,236,242 )},
+		   this.handColor  ?? { Color.black }
+		];
+	}
+	
+	color_ { arg array;
+		this.knobColor  = array[ 0 ];
+		this.rangeColor = array[ 1 ];
+		this.trackColor = array[ 2 ];
+		this.handColor  = array[ 3 ];
+	}
+	
+	rangeColor { ^colrRange }
+	rangeColor_ { arg val;
+		if( colrRange != val, {
+			colrRange = val;
+			server.listSendMsg([ \set, this.id, rangeColor ] ++ val.asSwingArg );
+		})
+	}
+
+	trackColor { ^colrTrack  }
+	trackColor_ { arg val;
+		if( colrTrack != val, {
+			colrTrack = val;
+			server.listSendMsg([ \set, this.id, trackColor ] ++ val.asSwingArg );
+		})
+	}
+
+	handColor { ^colrHand  }
+	handColor_ { arg val;
+		if( colrHand != val, {
+			colrHand = val;
+			server.listSendMsg([ \set, this.id, handColor ] ++ val.asSwingArg );
+		})
+	}
 	
 	increment { arg zoom = 1; ^this.valueAction = this.value + (max( this.step, this.pixelStep ) * zoom) }
 	decrement { arg zoom = 1; ^this.valueAction = this.value - (max( this.step, this.pixelStep ) * zoom) }
 	
-	thumbSize { ^this.getProperty( \thumbSize, 12 )}
-	
-	thumbSize_ { arg size;
-	//	"JSCSlider.thumbSize_ : not yet implemented".warn;
-//		this.setProperty( \thumbSize, size );
-	}
-
-	pixelStep {
-		var b = this.prBoundsReadOnly;
-		// XXX thumbSize doesn't correspond to laf's thumbSize
-		^(if( orientation == 0, b.width, b.height ) - this.thumbSize).max( 1 ).reciprocal;
-	}
-	
-	bounds_ { arg rect;
-		var result;
-		result = super.bounds_( rect );
-		if( if( rect.width > rect.height, 0, 1 ) != orientation, {
-			orientation = 1 - orientation;
-			server.sendMsg( '/set', this.id, \orientation, orientation );
-		});
-		^result;
-	}
-
 	defaultKeyDownAction { arg char, modifiers, unicode, keycode;
+    		var zoom = this.getScale(modifiers);
+
 		// standard keydown
-		if (char == $r, { this.valueAction = 1.0.rand; ^this });
-		if (char == $n, { this.valueAction = 0.0; ^this });
-		if (char == $x, { this.valueAction = 1.0; ^this });
-		if (char == $c, { this.valueAction = 0.5; ^this });
-		if (char == $], { this.increment( this.getScale( modifiers )); ^this });
-		if (char == $[, { this.decrement( this.getScale( modifiers )); ^this });
-		if (unicode == 0xF700, { this.increment( this.getScale( modifiers )); ^this });
-		if (unicode == 0xF703, { this.increment( this.getScale( modifiers )); ^this });
-		if (unicode == 0xF701, { this.decrement( this.getScale( modifiers )); ^this });
-		if (unicode == 0xF702, { this.decrement( this.getScale( modifiers )); ^this });
-		^nil		// bubble if it's an invalid key
+		switch( char,
+			$r, { this.valueAction = 1.0.rand },
+			$n, { this.valueAction = 0.0 },
+			$x, { this.valueAction = 1.0 },
+			$c, { this.valueAction = 0.5 },
+
+			{
+				switch( keycode,
+					16r5b, { this.decrement(zoom) },
+					16r5d, { this.increment(zoom) },
+					16r1000013, { this.increment(zoom) },
+					16r1000014, { this.increment(zoom) },
+					16r1000015, { this.decrement(zoom) },
+					16r1000012, { this.decrement(zoom) },
+					{^this} // propagate on if the key is a no-op
+				)
+			}
+		);
+		^true;
 	}
+
+	increment { |zoom=1| ^this.valueAction = (this.value + (keystep * zoom)) }
+
+	decrement { |zoom=1| ^this.valueAction = (this.value - (keystep * zoom)) }
 	
 	defaultCanReceiveDrag { ^currentDrag.isNumber }
 	defaultGetDrag { ^this.value }
 	defaultReceiveDrag { this.valueAction = currentDrag }
 
 	// ----------------- private instance methods -----------------
-
-	properties {
-		^super.properties ++ #[ \thumbSize ];
-	}
 
 	prNeedsTransferHandler { ^true }
 
@@ -110,17 +150,10 @@ JSCSlider : JSCSliderBase {
 		var b;
 		properties.put( \value, 0.0 );
 		properties.put( \step, 0.0 );
-		if( scBounds.isNil, {
-			orientation = 0;
-		}, {
-			b			= this.prBoundsReadOnly;
-			orientation	= if( b.width > b.height, 0, 1 );
-		});
+		jinsets	= Insets.new;	// none
 		clpse	= Collapse({ this.doAction });
 		acResp	= OSCpathResponder( server.addr, [ '/action', this.id ], { arg time, resp, msg;
 			var newVal;
-		
-//			newVal = msg[4] / 0x40000000;
 			newVal = this.prSnap( msg[4] / 0x40000000 );
 			if( newVal != this.value, {
 				// don't call valueAction coz we'd create a loop
@@ -130,7 +163,7 @@ JSCSlider : JSCSliderBase {
 		}).add;
 		^this.prSCViewNew([
 			[ '/local', this.id,
-				'[', '/new', "de.sciss.swingosc.Slider", orientation, 0, 0x40000000, 0, ']',
+				'[', '/new', "de.sciss.swingosc.RotaryKnob2", 0, 0x40000000, 0, ']',
 				"ac" ++ this.id,
 				'[', '/new', "de.sciss.swingosc.ActionResponder", this.id, \value, ']' ]
 		]);
@@ -148,11 +181,11 @@ JSCSlider : JSCSliderBase {
 		}
 		{ key === \step }
 		{
-			value = max( 1, value * 0x40000000 ).asInteger;
+//			value = max( 1, value * 0x40000000 ).asInteger;
+////			server.sendMsg( '/set', this.id, \snapToTicks, value != 0,
+////							\minorTickSpacing, value, \extent, value );
 //			server.sendMsg( '/set', this.id, \snapToTicks, value != 0,
-//							\minorTickSpacing, value, \extent, value );
-			server.sendMsg( '/set', this.id, \snapToTicks, value != 0,
-							\majorTickSpacing, value ); // stupidly, using extent won't let you move the slider to the max
+//							\majorTickSpacing, value ); // stupidly, using extent won't let you move the slider to the max
 			^nil;
 		};
 		^super.prSendProperty( key, value );

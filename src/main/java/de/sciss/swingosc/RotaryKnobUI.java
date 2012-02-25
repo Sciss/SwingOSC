@@ -87,8 +87,8 @@ public class RotaryKnobUI extends BasicSliderUI {
     }
 
     @Override public void paintThumb( Graphics g ) {
-//        final int w = slider.getWidth();
-//        final int h = slider.getHeight();
+//        System.out.println( "::: paintThumb :::" );
+
         final Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 //        g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
@@ -103,6 +103,8 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     public void paintTrack( Graphics g ) {
+//        System.out.println( "::: paintTrack :::" );
+
         final Graphics2D g2 = (Graphics2D) g;
         final RenderingHints hintsOld = g2.getRenderingHints();
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
@@ -125,8 +127,8 @@ public class RotaryKnobUI extends BasicSliderUI {
     public void paint( Graphics g, JComponent c ) {
         g.setColor( Color.green );
         g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
-        g.setColor( Color.yellow );
-        g.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
+//        g.setColor( Color.yellow );
+//        g.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
         super.paint( g, c );
     }
 
@@ -227,7 +229,10 @@ public class RotaryKnobUI extends BasicSliderUI {
     }
 
     @Override
-    protected Dimension getThumbSize() { return thumbRect.getSize(); }
+    protected Dimension getThumbSize() {
+System.out.println( "getThumbSize() -> " + thumbRect.width + ", " + thumbRect.height );
+        return thumbRect.getSize();
+    }
 
     @Override
     protected void calculateThumbSize() {
@@ -235,17 +240,14 @@ public class RotaryKnobUI extends BasicSliderUI {
         final int h     = contentRect.height;
         final int ext;
         if( knob.getPaintTrack() ) {
-//            trackBufIn.left     = 8;
-//            trackBufIn.top      = 8;
-//            trackBufIn.right    = 8;
-//            trackBufIn.bottom   = 4;
             final int w1        = (int) (w * 0.75f);
             final int h1        = (int) (h * 0.875f);
             ext                 = Math.min( w1, h1 );
-            final int xo        = contentRect.x + ((w1 - ext) >> 1);
-            final int yo        = contentRect.y + ((h1 - ext) >> 1);
+//            final int xo        = contentRect.x + ((w1 - ext) >> 1);
+//            final int yo        = contentRect.y + ((h1 - ext) >> 1);
+            final float tt  = (h - ext) * 0.5f;
             trackBufIn.left     = (w - ext) >> 1;
-            trackBufIn.top      = (h - ext) >> 1;
+            trackBufIn.top      = (int) (tt + 0.5f); // (h - ext) >> 1;
             trackBufIn.right    = (w - ext + 1) >> 1;
             trackBufIn.bottom   = 0;
             final float exto   = ext / 0.75f;
@@ -255,6 +257,8 @@ public class RotaryKnobUI extends BasicSliderUI {
             final float ringo  = ring * 0.25f;
             final float ringh  = ring * 0.5f;
             final float exto2  = exto - (ringo + ringo);
+            final float xo     = contentRect.x + (w - exto) * 0.5f;
+            final float yo     = contentRect.y + (h + tt - exto) * 0.5f;
             arc.setFrame( xo + ringo, yo + ringo, exto2, exto2 );
             shpTrack = new Area( arc );
             final float exti2  = exti - (ringo + ringo);
@@ -264,6 +268,7 @@ public class RotaryKnobUI extends BasicSliderUI {
             final float[] dashTrackHigh = new float[] { dash, dash * 0.5f };
             strkTrackHigh       = new BasicStroke( ring, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.5f, dashTrackHigh, 0f );
             arcTrackHigh.setFrame( xo + ringh, yo + ringh, extm, extm );
+System.out.println( "calculateThumbSize(). w = " + w + ", h = " + h + ", w1 = " + w1 + ", h1 = " + h1 + ", ext = " + ext + ", xo = " + xo + ", yo " + yo + ", ringo = " + ringo );
 
         } else {
             trackBufIn.left     = 0;
@@ -271,6 +276,10 @@ public class RotaryKnobUI extends BasicSliderUI {
             trackBufIn.right    = 0;
             trackBufIn.bottom   = 0;
             ext = Math.min( w, h );
+//            trackBufIn.left     = (w - ext) >> 1;
+//            trackBufIn.top      = (h - ext) >> 1;
+//            trackBufIn.right    = (w - ext + 1) >> 1;
+//            trackBufIn.bottom   = (h - ext + 1) >> 1;
         }
 //        final int w1    = w - (trackBufIn.left + trackBufIn.right);
 //        final int h1    = h - (trackBufIn.top + trackBufIn.bottom);
@@ -295,7 +304,7 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected void calculateTrackRect() {
-        final int thumbFocusInsets = 3;
+//        final int thumbFocusInsets = 3;
 
         trackRect.x         = contentRect.x + trackBufIn.left;
         trackRect.y         = contentRect.y + trackBufIn.top;
@@ -307,30 +316,33 @@ public class RotaryKnobUI extends BasicSliderUI {
         trackRect.x        += (w - ext) >> 1;
         trackRect.y        += (h - ext) >> 1;
 
-        final double handWidth = Math.sqrt( thumbRect.width / 56.0 );
+System.out.println( "calculateTrackRect(). w = " + w + ", h = " + h + " -> " + trackRect.x + ", " + trackRect.y + ", " + trackRect.width + ", " + thumbRect.height );
 
-//        final double x = (thumbRect.width - handWidth) * 0.5;
-//        final double h = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth;
-//        rectHand.setRoundRect( x, thumbFocusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
-
-        final double hwh = handWidth * 0.5;
-        final double hwq = handWidth * 0.25;
-
-        final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
-//        final float yc      = thumbRect.height * 0.5f + thumbRect.y;
-
-        pathHand.reset();
-//        pathHand.moveTo( (thumbRect.width - hwh) * 0.5f, thumbFocusInsets );
-//        pathHand.lineTo( (thumbRect.width + hwh) * 0.5f, thumbFocusInsets );
-//        pathHand.lineTo( x + handWidth, thumbFocusInsets + h );
-//        pathHand.lineTo( x, thumbFocusInsets + h );
-        final int y1    = thumbRect.y + thumbFocusInsets;
-        final double y2 = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth + y1;
-        pathHand.moveTo( xc - hwq, y1 );
-        pathHand.lineTo( xc + hwq, y1 );
-        pathHand.lineTo( xc + hwh, y2 );
-        pathHand.lineTo( xc - hwh, y2 );
-        pathHand.closePath();
+//
+//        final double handWidth = Math.sqrt( thumbRect.width / 56.0 );
+//
+////        final double x = (thumbRect.width - handWidth) * 0.5;
+////        final double h = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth;
+////        rectHand.setRoundRect( x, thumbFocusInsets, handWidth, h, handWidth, handWidth ); // 2.0, 2.0 );
+//
+//        final double hwh = handWidth * 0.5;
+//        final double hwq = handWidth * 0.25;
+//
+//        final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
+////        final float yc      = thumbRect.height * 0.5f + thumbRect.y;
+//
+//        pathHand.reset();
+////        pathHand.moveTo( (thumbRect.width - hwh) * 0.5f, thumbFocusInsets );
+////        pathHand.lineTo( (thumbRect.width + hwh) * 0.5f, thumbFocusInsets );
+////        pathHand.lineTo( x + handWidth, thumbFocusInsets + h );
+////        pathHand.lineTo( x, thumbFocusInsets + h );
+//        final int y1    = thumbRect.y + thumbFocusInsets;
+//        final double y2 = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth + y1;
+//        pathHand.moveTo( xc - hwq, y1 );
+//        pathHand.lineTo( xc + hwq, y1 );
+//        pathHand.lineTo( xc + hwh, y2 );
+//        pathHand.lineTo( xc - hwh, y2 );
+//        pathHand.closePath();
     }
 
     @Override
@@ -346,11 +358,27 @@ public class RotaryKnobUI extends BasicSliderUI {
         final float xc      = thumbRect.width  * 0.5f + thumbRect.x;
         final float yc      = thumbRect.height * 0.5f + thumbRect.y;
         atHand.setToRotation( ang, xc, yc );
+
+        pathHand.reset();
+        final int thumbFocusInsets = 3;
+        final int y1    = thumbRect.y + thumbFocusInsets;
+        final double handWidth = Math.sqrt( thumbRect.width / 56.0 );
+        final double hwh = handWidth * 0.5;
+        final double hwq = handWidth * 0.25;
+        final double y2 = (thumbRect.height - thumbFocusInsets - thumbFocusInsets) * 0.5 + handWidth + y1;
+        pathHand.moveTo( xc - hwq, y1 );
+        pathHand.lineTo( xc + hwq, y1 );
+        pathHand.lineTo( xc + hwh, y2 );
+        pathHand.lineTo( xc - hwh, y2 );
+        pathHand.closePath();
+
         shpHand = atHand.createTransformedShape( pathHand );
         shpHandOut = new Area( strkOut.createStrokedShape( shpHand ));
         shpHandOut.add( new Area( shpHand ));
         arcTrackHigh.setAngleStart( arcStartDeg );
         arcTrackHigh.setAngleExtent( ext * -180 / Math.PI );
+
+        System.out.println( "calculateThumbLocation(). x = " + thumbRect.x + ", y = " + thumbRect.y + ", xc = " + xc + ", yc = " + yc );
     }
 
     @Override

@@ -107,8 +107,8 @@ public class RotaryKnobUI extends BasicSliderUI {
         final RenderingHints hintsOld = g2.getRenderingHints();
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
-        g2.setColor( Color.green );
-        g2.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
+//        g2.setColor( Color.green );
+//        g2.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
         final Color c1 = NimbusHelper.getControlHighlighColor(); // getSelectedTextColor();
         final boolean enabled = knob.isEnabled();
         g2.setColor( enabled ? c1 : NimbusHelper.adjustColor( c1, 0f, 0f, 0f, -112 ));
@@ -120,6 +120,14 @@ public class RotaryKnobUI extends BasicSliderUI {
         g2.draw( arcTrackHigh );
         g2.setStroke( strkOrig );
         g2.setRenderingHints( hintsOld );
+    }
+
+    public void paint( Graphics g, JComponent c ) {
+        g.setColor( Color.green );
+        g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+        g.setColor( Color.yellow );
+        g.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
+        super.paint( g, c );
     }
 
     @Override
@@ -274,9 +282,9 @@ public class RotaryKnobUI extends BasicSliderUI {
     @Override
     public Dimension getPreferredHorizontalSize() {
         if( knob.getPaintTrack() ) {
-            return new Dimension( 37, 32 );
+            return new Dimension( 57, 32 );
         } else {
-            return new Dimension( 25, 25 );
+            return new Dimension( 45, 25 );
         }
     }
 
@@ -354,14 +362,14 @@ public class RotaryKnobUI extends BasicSliderUI {
         focusInsets.bottom  = 0;
     }
 
-    @Override
-    protected void calculateFocusRect() {
-        focusRect.x         = insetCache.left;
-        focusRect.y         = insetCache.top;
-        final int ext       = Math.min( knob.getWidth(), knob.getHeight() );
-        focusRect.width     = ext - (insetCache.left + insetCache.right);
-        focusRect.height    = ext - (insetCache.top + insetCache.bottom);
-    }
+//    @Override
+//    protected void calculateFocusRect() {
+//        focusRect.x         = insetCache.left;
+//        focusRect.y         = insetCache.top;
+//        final int ext       = Math.min( knob.getWidth(), knob.getHeight() );
+//        focusRect.width     = ext - (insetCache.left + insetCache.right);
+//        focusRect.height    = ext - (insetCache.top + insetCache.bottom);
+//    }
 
     @Override
     protected void calculateTrackBuffer() {

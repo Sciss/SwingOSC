@@ -108,7 +108,8 @@ public class RotaryKnobUI extends BasicSliderUI {
         g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 //        g2.setColor( Color.green );
 //        g2.fillRect( contentRect.x, contentRect.y, contentRect.width, contentRect.height );
-        g2.setColor( NimbusHelper.getSelectedTextColor() );
+        final Color c = NimbusHelper.getControlHighlighColor(); // getSelectedTextColor();
+        g2.setColor( knob.isEnabled() ? c : NimbusHelper.adjustColor( c, 0f, 0f, 0f, -112 ));
         g2.fill( shpTrack );
     }
 

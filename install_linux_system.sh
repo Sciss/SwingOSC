@@ -5,4 +5,4 @@ cp -a SuperCollider/SwingOSC $1/share/SuperCollider/Extensions
 mkdir $1/share/SuperCollider/SwingOSC
 cp -a SuperCollider/examples $1/share/SuperCollider/SwingOSC
 
-cp target/SwingOSC.jar $1/bin/
+cp SwingOSC.jar $1/bin/

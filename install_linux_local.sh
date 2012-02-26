@@ -6,4 +6,4 @@ mkdir ~/share/SuperCollider/SwingOSC
 cp -a SuperCollider/examples ~/share/SuperCollider/SwingOSC
 
 mkdir -p ~/share/bin/
-cp target/SwingOSC.jar ~/share/bin/
+cp SwingOSC.jar ~/share/bin/

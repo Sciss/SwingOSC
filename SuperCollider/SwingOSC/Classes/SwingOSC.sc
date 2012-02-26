@@ -39,18 +39,12 @@ SwingOptions
 	var <>javaOptions;	// option string that is passed to the java VM
 
 	*initClass {
-		default = this.new.javaOptions_(
-			switch( thisProcess.platform.name,
-			\osx, {
-				"-Dapple.laf.useScreenMenuBar=true -Xdock:icon=application.icns -Xdock:name=SwingOSC";
-			},
-			\linux, {
-				"";
-			},
-			\windows, {
-				"";
-			})
-		);
+		var jo = "-Xmx512m";
+		if( thisProcess.platform.name == \osx, {
+			// weird bug with escaping quotes here
+			jo = jo + "-Dapple.laf.useScreenMenuBar=true " ++ $" ++ "-Xdock:icon=${DIR}/application.icns" ++ $" ++ " -Xdock:name=SwingOSC";
+		});
+		default = this.new.javaOptions_( jo );
 	}
 	
 	// ----------------- constructor -----------------
@@ -565,7 +559,8 @@ SwingOSC // : Model
 		// note : the -h option is used again because it significantly speeds
 		// up the connection.
 		localAddr = NetAddr.localAddr;
-		cmd = java + (options.javaOptions ? "") + "-jar \"" ++ program ++ "\" " ++ options.asOptionsString( addr.port ) +
+		cmd = java + (options.javaOptions ? "").replace( "${DIR}", program.dirname ) +
+			"-jar \"" ++ program ++ "\" " ++ options.asOptionsString( addr.port ) +
 			("-h " ++ localAddr.ip ++ ":" ++ localAddr.port);
 		("booting " ++ cmd).inform;
 		unixCmd( cmd );

@@ -163,6 +163,8 @@ extends JButton {
 	}
 
     private void stateUpdate() {
+        if( state < 0 || state >= collStateViews.size() ) return;
+
         final StateView sv = (StateView) collStateViews.get( state );
         final Color fg = getForeground();
         final Color bg = getBackground();

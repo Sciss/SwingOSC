@@ -34,6 +34,7 @@ SwingOptions
 	var <>protocol 	= \tcp;
 	var <>loopBack	= true;
 	var <>initGUI		= true;
+	var <>nimbus		= true;
 	var <>oscBufSize	= 65536;
 	var <>javaOptions;	// option string that is passed to the java VM
 
@@ -41,13 +42,13 @@ SwingOptions
 		default = this.new.javaOptions_(
 			switch( thisProcess.platform.name,
 			\osx, {
-				"-Dapple.laf.useScreenMenuBar=true -Xdock:icon=application.icns -Xdock:name=SwingOSC -Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // "-Dswing.defaultlaf=apple.laf.AquaLookAndFeel"
+				"-Dapple.laf.useScreenMenuBar=true -Xdock:icon=application.icns -Xdock:name=SwingOSC";
 			},
 			\linux, {
-				"-Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+				"";
 			},
 			\windows, {
-				"-Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+				"";
 			})
 		);
 	}
@@ -76,6 +77,9 @@ SwingOptions
 		if( initGUI, { 
 			o = o ++ " -i";
 		});
+		if( nimbus, { 
+			o = o ++ " --nimbus";
+		});
 		if( oscBufSize != 65536, {
 			o = o ++ " -b " ++ oscBufSize;
 		});
@@ -93,7 +97,7 @@ SwingOSC // : Model
 
 	// note this is the SC class lib version, not necessarily the
 	// server version (reflected by the instance variable serverVersion)
-	classvar <version = 0.66;
+	classvar <version = 0.70;
 
 	var <name, <addr, <clientID = 0;
 	var <isLocal;
@@ -161,6 +165,11 @@ SwingOSC // : Model
 //			server.startAliveThread( 0.7 );
 //		});
 //	}
+
+	*prVersionString { arg float;
+		var s = float.asString ++ "0";
+		^s.copyFromStart( s.indexOf( $. ) + 2 );
+	}
 	
 	// ----------------- public instance methods -----------------
 	
@@ -193,7 +202,8 @@ SwingOSC // : Model
 				if( result.notNil, {
 					serverVersion = result[2];
 					if( serverVersion != version, {
-						("SwingOSC version mismatch:\n  client (class-library) is v" ++ version ++ ", server (SwingOSC.jar) is v" ++ serverVersion ++ "!" ).warn;
+						("SwingOSC version mismatch:\n  client (class-library) is v" ++ SwingOSC.prVersionString( version ) ++ 
+						", server (SwingOSC.jar) is v" ++ SwingOSC.prVersionString( serverVersion ) ++ "!" ).warn;
 					});
 					onComplete.value;
 				}, onFailure );

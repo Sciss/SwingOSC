@@ -84,19 +84,11 @@ import de.sciss.util.URLClassLoaderManager;
  *	gadgets can be created by sending OSC commands to the server.
  *	Action listeners can be registered and are notified about button
  *	state changes.
- *
- *  @author		Hanns Holger Rutz
- *  @version	0.66, 20-Oct-11
- *
- *	@todo		rendezvous option (jmDNS)
- *	@todo		[NOT?] /n_notify (sending things like /n_go, n_end)
- *	@todo		since we invoke runLater already, we could add timetag flavors easily
- *	@todo		/import !!!check ImportText.xcodeproj!!! XXX
  */
 public class SwingOSC
 implements OSCListener, OSCProcessor, EventManager.Processor
 {
-	public static final double		VERSION			= 0.66;
+	public static final double		VERSION			= 0.70;
 
 	protected OSCServer				serv			= null;
 	
@@ -134,7 +126,8 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 		String					arg;
 		int						port		= 0;
 		boolean					loopBack	= false;
-		boolean					initSwing	= false;
+        boolean					initSwing	= false;
+		boolean					initNimbus  = false;
 		InetSocketAddress		hello		= null;
 		int						bufSize		= 65536;
 		String					protocol	= OSCChannel.UDP;
@@ -185,8 +178,11 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 					System.out.println( "-b option requires size specification! (-b <size>)" );
 				}
 				
-			} else if( arg.equals( "-i" )) {
-				initSwing	= true;
+            } else if( arg.equals( "-i" )) {
+         	    initSwing	= true;
+
+			} else if( arg.equals( "--nimbus" )) {
+				initNimbus = true;
 			
 			} else if( arg.equals( "-h" )) {
 				i++;
@@ -220,6 +216,7 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 									"   -b <size>       maximum size of OSC messages (default 65536).\n"+
 									"   -i              initialize GUI environment upon startup,\n"+
 									"                   i.e. create menubar and dock icon on mac os\n"+
+                                    "   --nimbus        set the Nimbus look-and-feel\n"+
 									"   -h <host:port>  send /swing hello message to specified address" );
 				
 				return 0;
@@ -241,7 +238,7 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 
 		try {
 			synchronized( instance ) {
-				instance.start( protocol, port, loopBack, bufSize, initSwing, hello );
+				instance.start( protocol, port, loopBack, bufSize, initSwing, initNimbus, hello );
 				instance.wait();
 				return instance.quit();
 			}
@@ -369,7 +366,7 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 	}
 	
 	public void start( String protocol, int port, boolean loopBack, int bufSize,
-					   boolean initSwing, InetSocketAddress helloAddr )
+					   boolean initSwing, final boolean initNimbus, InetSocketAddress helloAddr )
 	throws IOException
 	{
 		final InetSocketAddress	ourAddress;
@@ -390,12 +387,14 @@ implements OSCListener, OSCProcessor, EventManager.Processor
 //		serv.dumpIncomingOSC( 3, System.out );
 		serv.getCodec().setSupportMode( (OSCPacketCodec.MODE_GRACEFUL & ~OSCPacketCodec.MODE_WRITE_DOUBLE_AS_FLOAT) | OSCPacketCodec.MODE_WRITE_DOUBLE );
 		serv.start();
-		if( initSwing ) {
+		if( initSwing || initNimbus ) {
 			// calling one of AWT's method will make Mac OS X recognize we're
 			// a GUI app and hence launch the screen menu bar and put an icon in the dock
 			// ; since this takes a moment it can be useful to do it at startup
 			// and not lazily when the first OSC message comes in
-			EventQueue.invokeLater( new Runnable() { public void run() { /* empty */ }});
+			EventQueue.invokeLater( new Runnable() { public void run() {
+			    if( initNimbus ) Nimbus.setLookAndFeel();
+            }});
 		}
 		if( helloAddr != null ) {
 //			serv.send( new OSCMessage( "/swing", new Object[] {

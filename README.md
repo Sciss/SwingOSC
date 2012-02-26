@@ -23,7 +23,7 @@ SwingOSC now builds with the [Simple Build Tool](https://github.com/harrah/xsbt/
 
 You can also install sbt as explained on the sbt website, that is download the bootstrap jar version 0.11.2 and create a shell script `sbt` in your preferred `PATH`, e.g. as `~/bin/sbt`. You will need to perform this step on Windows.
 
-To compile and assemble SwingOSC, run `./sbt assembly`. The final fully self-contained jar file will be `target/SwingOSC.jar`. Make sure you adjust your `SwingOSC.program` settings in SuperCollider accordingly.
+To compile and assemble SwingOSC, run `./sbt assembly`. The final fully self-contained jar file will be `SwingOSC.jar` in the base directory. Make sure you adjust your `SwingOSC.program` settings in SuperCollider accordingly.
 
 ### creating an IntelliJ IDEA project
 

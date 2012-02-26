@@ -2,7 +2,7 @@
 
 ### statement
 
-SwingOSC is (C)opyright by 2015-2012 Hanns Holger. All rights reserved. It is released under the [GNU General Public License](http://github.com/Sciss/SwingOSC/blob/master/licenses/SwingOSC-License.txt). 
+SwingOSC is (C)opyright by 2005-2012 Hanns Holger. All rights reserved. It is released under the [GNU General Public License](http://github.com/Sciss/SwingOSC/blob/master/licenses/SwingOSC-License.txt).
 
 This is an __experimental__ v0.70-SNAPSHOT 'revamp' branch. See the old `readme.html` for more information about SwingOSC.
 
@@ -24,6 +24,8 @@ SwingOSC now builds with the [Simple Build Tool](https://github.com/harrah/xsbt/
 You can also install sbt as explained on the sbt website, that is download the bootstrap jar version 0.11.2 and create a shell script `sbt` in your preferred `PATH`, e.g. as `~/bin/sbt`. You will need to perform this step on Windows.
 
 To compile and assemble SwingOSC, run `./sbt assembly`. The final fully self-contained jar file will be `SwingOSC.jar` in the base directory. Make sure you adjust your `SwingOSC.program` settings in SuperCollider accordingly.
+
+To package distribution zip files in the `dist` directory, run `./sbt package-dist`.
 
 ### creating an IntelliJ IDEA project
 

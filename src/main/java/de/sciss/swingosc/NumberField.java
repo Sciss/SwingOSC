@@ -29,47 +29,84 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-/**
- *	@author		Hanns Holger Rutz
- *	@version	0.57, 25-Nov-07
- */
 public class NumberField
-extends de.sciss.gui.NumberField
-{
-	public NumberField()
-	{
+extends de.sciss.gui.NumberField {
+    private final List collChangeListeners = new ArrayList();
+    private DocumentListener docToChange;
+
+	public NumberField() {
 		super();
 	}
 	
-	public void setNumber( String s )
-	{
+	public void setNumber( String s ) {
 		setNumber( Double.valueOf( s ));
 	}
 	
 	// this is here to make DocumentResponder less complex
 	// (because now it can connect both Caret and Document listeners to the same object)
 	// ; this just forwards the request to the Document.
-	public void addDocumentListener( DocumentListener l )
-	{
-//		collDocListeners.add( l );
+	public void addDocumentListener( DocumentListener l ) {
 		getDocument().addDocumentListener( l );
 	}
 
-	public void removeDocumentListener( DocumentListener l )
-	{
-//		collDocListeners.remove( l );
+	public void removeDocumentListener( DocumentListener l ) {
 		getDocument().removeDocumentListener( l );
 	}
+
+    public void addChangeListener( ChangeListener l ) {
+        final boolean init = collChangeListeners.isEmpty();
+        collChangeListeners.add( l );
+        if( init ) addDocToChange();
+    }
+
+    public void removeChangeListener( ChangeListener l ) {
+        collChangeListeners.remove( l );
+        if( collChangeListeners.isEmpty() ) removeDocToChange();
+    }
+
+    private void fireChange() {
+        final ChangeEvent e = new ChangeEvent( this );
+        for( int i = 0; i < collChangeListeners.size(); i++ ) {
+            final ChangeListener l = (ChangeListener) collChangeListeners.get( i );
+            l.stateChanged( e );
+        }
+    }
+
+    private void addDocToChange() {
+        assert( docToChange == null );
+        docToChange = new DocumentListener() {
+            public void insertUpdate( DocumentEvent e ) {
+                fireChange();
+            }
+
+            public void removeUpdate( DocumentEvent e ) {
+                fireChange();
+            }
+
+            public void changedUpdate( DocumentEvent e ) {}
+        };
+        addDocumentListener( docToChange );
+    }
+
+    private void removeDocToChange() {
+        assert( docToChange != null );
+        removeDocumentListener( docToChange );
+        docToChange = null;
+    }
 
 	/**
 	 *	Overwritten to toggle the opacity settings
 	 *	when background colour is (semi)transparent
 	 */
-	public void setBackground( Color c )
-	{
+	public void setBackground( Color c ) {
 		setOpaque( (c != null) && (c.getAlpha() == 0xFF) );
 		super.setBackground( c );
 	}

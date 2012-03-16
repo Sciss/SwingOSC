@@ -31,7 +31,7 @@ JSCNumberBox : JSCTextEditBase {
 
 	var acResp;	// OSCpathResponder for action listening
 	var txResp;
-	var serverString = "";	// necessary coz we immediately store client-side on string_ !
+//	var serverString = "";	// necessary coz we immediately store client-side on string_ !
 
 	var <>shift_scale = 100.0, <>ctrl_scale = 10.0, <>alt_scale = 0.1;
 	var <>clipLo = -inf, <>clipHi = inf;
@@ -169,25 +169,10 @@ JSCNumberBox : JSCTextEditBase {
 			properties.put( \string, msg[4].asString );
 			{ this.doAction; }.defer;
 		}).add;
-		txResp = OSCpathResponder( server.addr, [ '/doc', this.id ], { arg time, resp, msg;
-			var state, str;
-
-			state = msg[2];
-	
-			case
-			{ state === \insert }
-			{
-				str = msg[5].asString;
-// doesn't work for UTF-8 chars, therefore don't print the warning at the moment ...
-//if( msg[4] != str.size, { ("JSCNumberBox. len is "++msg[4]++"; but string got "++str.size).postln });
-				serverString = serverString.insert( msg[3], str );
-				object = serverString.asFloat;
-			}
-			{ state === \remove }
-			{
-				serverString = serverString.keep( msg[3] ) ++ serverString.drop( msg[3] + msg[4] );
-				object = serverString.asFloat;
-			};
+		txResp = OSCpathResponder( server.addr, [ '/change', this.id ], { arg time, resp, msg;
+			string = msg[4].asString;
+			object = string.asFloat;
+			properties.put( \string, string );
 		}).add;
 		^this.prSCViewNew([
 			[ '/set', '[', '/local', this.id,
@@ -197,7 +182,7 @@ JSCNumberBox : JSCTextEditBase {
 			[ '/local', "ac" ++ this.id,
 				'[', '/new', "de.sciss.swingosc.NumberResponder", this.id, \number, ']',
 				"tx" ++ this.id,
-				'[', '/new', "de.sciss.swingosc.DocumentResponder", this.id, ']' ]
+				'[', '/new', "de.sciss.swingosc.ChangeResponder", this.id, \text, ']' ]
 		]);
 	}
 

@@ -425,7 +425,9 @@ JSCWindow : Object {
 		name			= argName.asString;
 		border		= argBorder;
 		resizable		= argResizable;
-		argBounds		= argBounds ?? { Rect.new( 128, 64, 400, 400 )};
+		argBounds		= argBounds ?? {
+			Rect( 0, 0, 400, 400 ).center_( JSCWindow.availableBounds( argServer ).center )
+		};
 		server		= argServer;
 		allWindows	= allWindows.add( this );
 		id			= server.nextNodeID;

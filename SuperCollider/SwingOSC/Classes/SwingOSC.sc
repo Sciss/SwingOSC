@@ -103,7 +103,9 @@ SwingOSC // : Model
 	var <>options; // , <>latency = 0.2, <notified=true;
 	var <nodeAllocator;
 
-	var <screenWidth, <screenHeight;
+	// these will be updated later
+	var <screenLeft = 0, <screenTop = 0, <screenWidth = 1024, <screenHeight = 768;
+	var <maxWindowLeft = 0, <maxWindowTop = 22, <maxWindowWidth = 1000, <maxWindowHeight = 740;
 	
 	var booting = false, aliveThread, statusWatcher;
 		// number of times the server is allowed to fail to respond to /status
@@ -689,9 +691,6 @@ SwingOSC // : Model
 		set.add( this );
 		this.newAllocators;
 
-		screenWidth	= 640;	// will be updated
-		screenHeight	= 480;
-		
 		// note: this can fail when sclang doesn't get port 57120
 		// which unfortunately happens from time to time. it would
 		// be better to use rendezvous
@@ -733,18 +732,41 @@ SwingOSC // : Model
 	
 	// needs to be called inside a routine!
 	prRetrieveScreenBounds {
-		var reply = this.sendMsgSync(
-			[ '/get', '[', '/local', \toolkit, '[', '/method', 'java.awt.Toolkit', \getDefaultToolkit, ']', ']',
-					 'screenSize.width', 'screenSize.height' ], [ '/set', \toolkit ]
-		);
+		var reply;
+//		var reply = this.sendMsgSync(
+//			[ '/get', '[', '/local', \toolkit, '[', '/method', 'java.awt.Toolkit', \getDefaultToolkit, ']', ']',
+//					 'screenSize.width', 'screenSize.height' ], [ '/set', \toolkit ]
+//		);
+//		if( reply.notNil, {
+//			reply.copyToEnd( 2 ).pairsDo({ arg key, value;
+//				switch( key.asString,
+//					"screenSize.width", { screenWidth = value.asInt; },
+//					"screenSize.height", { screenHeight = value.asInt; }
+//				);
+//			});
+//		});
+		this.sendMsg( '/local', "toolkit",      '[', '/method', "java.awt.Toolkit", "getDefaultToolkit", ']',
+			                   "screenBounds", '[', '/method', "de.sciss.swingosc.Frame", "getScreenBounds", ']',
+			                   "maxWinBounds", '[', '/method', "de.sciss.swingosc.Frame", "getMaximumWindowBounds", ']' );
+		reply = this.sendMsgSync([ '/query', 
+			"scrX", '[', '/field', "screenBounds", "x", ']',
+			"scrY", '[', '/field', "screenBounds", "y", ']',
+			"scrW", '[', '/field', "screenBounds", "width", ']',
+			"scrH", '[', '/field', "screenBounds", "height", ']',
+			"winX", '[', '/field', "maxWinBounds", "x", ']',
+			"winY", '[', '/field', "maxWinBounds", "y", ']',
+			"winW", '[', '/field', "maxWinBounds", "width", ']',
+			"winH", '[', '/field', "maxWinBounds", "height", ']' ], [ '/info', "scrX" ]);
 		if( reply.notNil, {
-			reply.copyToEnd( 2 ).pairsDo({ arg key, value;
-				switch( key.asString,
-					"screenSize.width", { screenWidth = value.asInt; },
-					"screenSize.height", { screenHeight = value.asInt; }
-				);
-			});
-		});			
+			screenLeft 		= reply[  2 ];
+			screenTop  		= reply[  4 ];
+			screenWidth		= reply[  6 ];
+			screenHeight  	= reply[  8 ];
+			maxWindowLeft 	= reply[ 10 ];
+			maxWindowTop  	= reply[ 12 ];
+			maxWindowWidth	= reply[ 14 ];
+			maxWindowHeight	= reply[ 16 ];
+		});
 	}
 	
 	serverRunning_ { arg val;

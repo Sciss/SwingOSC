@@ -89,6 +89,10 @@ JSCWindow : Object {
 	*screenBounds { arg server;
 		^this.prGetScreenBounds( Rect.new, server );
 	}
+		
+	*availableBounds { arg server;
+		^this.prGetMaxWindowBounds( Rect.new, server );
+	}
 	
 	*viewPalette {
 		var w, v, f, c, h, scrB;
@@ -392,7 +396,12 @@ JSCWindow : Object {
 	
 	*prGetScreenBounds { arg argBounds, server;
 		server = server ?? { SwingOSC.default };
-		^argBounds.set( 0, 0, server.screenWidth, server.screenHeight );
+		^argBounds.set( server.screenLeft, server.screenTop, server.screenWidth, server.screenHeight );
+	}
+
+	*prGetMaxWindowBounds { arg argBounds, server;
+		server = server ?? { SwingOSC.default };
+		^argBounds.set( server.maxWindowLeft, server.maxWindowTop, server.maxWindowWidth, server.maxWindowHeight );
 	}
 
 	// ----------------- private instance methods -----------------

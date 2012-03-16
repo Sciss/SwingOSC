@@ -31,6 +31,7 @@
 package de.sciss.swingosc;
 
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -141,7 +142,16 @@ extends AppWindow
 //	{
 //		return topView;
 //	}
-	
+
+    public static Rectangle getScreenBounds() {
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+                .getDefaultConfiguration().getBounds();
+    }
+
+    public static Rectangle getMaximumWindowBounds() {
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    }
+
 	public void setDefaultCloseOperation( int mode )
 	{
 		super.setDefaultCloseOperation( mode );

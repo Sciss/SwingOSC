@@ -340,43 +340,57 @@ extends AppWindow
      *	A slightly modified version of what was published here
      *	http://www.beatniksoftware.com/jujitsu/svn/trunk/src/e/util/GuiUtilities.java
      */
-    public void setAlpha( float alpha )
-    {
+    public void setAlpha( float alpha ) {
+        final Component w = getWindow();
+        // first, let's see if we are on Java 7
     	try {
-	    	final Field peerField = Component.class.getDeclaredField( "peer" );
-	    	peerField.setAccessible( true );
-	    	final Object peer = peerField.get( getWindow() );
-	    	if( peer == null ) {
-//	    		System.err.println( "peer == null" );
-	    		return;
-	    	}
-	    	
-	    	if( SwingOSC.isMacOS() ) {
-	    		final Class cWindowClass = Class.forName("apple.awt.CWindow");
-	    		if( cWindowClass.isInstance( peer )) {
-	    			// ((apple.awt.CWindow) peer).setAlpha( alpha );
-	    			final Method setAlphaMethod = cWindowClass.getMethod( "setAlpha", new Class[] { float.class });
-	                setAlphaMethod.invoke( peer, new Object[] { new Float( alpha )});
-	    		}
-	    	} else if( SwingOSC.isWindows() ) {
-	    		// FIXME: can we do this on Windows?
-	        } else {
-	           	// long windowId = peer.getWindow();
-	        	final Class xWindowPeerClass = Class.forName( "sun.awt.X11.XWindowPeer" );
-	        	final Method getWindowMethod = xWindowPeerClass.getMethod( "getWindow", new Class[ 0 ]);
-	        	final long windowId = ((Long) getWindowMethod.invoke( peer, new Object[ 0 ])).longValue();
-	        	final long value = (int) (0xFF * alpha) << 24;
-	            // sun.awt.X11.XAtom.get("_NET_WM_WINDOW_OPACITY").setCard32Property(windowId, value);
-	        	final Class xAtomClass = Class.forName("sun.awt.X11.XAtom");
-	            final Method getMethod = xAtomClass.getMethod( "get", new Class[] { String.class });
-	            final Method setCard32PropertyMethod = xAtomClass.getMethod( "setCard32Property", new Class[] { long.class, long.class });
-	            setCard32PropertyMethod.invoke( getMethod.invoke( null, new Object[] { "_NET_WM_WINDOW_OPACITY" }), new Object[] { new Long( windowId ), new Long( value )});
-	        }
-    	} catch( Exception ex ) {
-    		ex.printStackTrace();
-    		return;
+            final Method m1 = w.getClass().getMethod( "setOpacity", Float.TYPE );
+            m1.invoke( w, alpha );
+        } catch( Exception e1 ) {
+            // then let's try if we are on Oracle Java 6
+            try {
+                final Class awtUtilities = Class.forName( "com.sun.awt.AWTUtilities" );
+                final Method m2 = awtUtilities.getMethod( "setWindowOpacity", Window.class, Float.TYPE );
+                m2.invoke( null, w, alpha );
+            } catch( Exception e2 ) {
+                // give up...
+            }
         }
     }
+
+//        try {
+//	    	final Field peerField = Component.class.getDeclaredField( "peer" );
+//	    	peerField.setAccessible( true );
+//	    	final Object peer = peerField.get( getWindow() );
+//	    	if( peer == null ) {
+////	    		System.err.println( "peer == null" );
+//	    		return;
+//	    	}
+//
+//	    	if( SwingOSC.isMacOS() ) {
+//	    		final Class cWindowClass = Class.forName("apple.awt.CWindow");
+//	    		if( cWindowClass.isInstance( peer )) {
+//	    			// ((apple.awt.CWindow) peer).setAlpha( alpha );
+//	    			final Method setAlphaMethod = cWindowClass.getMethod( "setAlpha", new Class[] { float.class });
+//	                setAlphaMethod.invoke( peer, new Object[] { new Float( alpha )});
+//	    		}
+//	    	} else if( SwingOSC.isWindows() ) {
+//	    		// FIXME: can we do this on Windows?
+//	        } else {
+//	           	// long windowId = peer.getWindow();
+//	        	final Class xWindowPeerClass = Class.forName( "sun.awt.X11.XWindowPeer" );
+//	        	final Method getWindowMethod = xWindowPeerClass.getMethod( "getWindow", new Class[ 0 ]);
+//	        	final long windowId = ((Long) getWindowMethod.invoke( peer, new Object[ 0 ])).longValue();
+//	        	final long value = (int) (0xFF * alpha) << 24;
+//	            // sun.awt.X11.XAtom.get("_NET_WM_WINDOW_OPACITY").setCard32Property(windowId, value);
+//	        	final Class xAtomClass = Class.forName("sun.awt.X11.XAtom");
+//	            final Method getMethod = xAtomClass.getMethod( "get", new Class[] { String.class });
+//	            final Method setCard32PropertyMethod = xAtomClass.getMethod( "setCard32Property", new Class[] { long.class, long.class });
+//	            setCard32PropertyMethod.invoke( getMethod.invoke( null, new Object[] { "_NET_WM_WINDOW_OPACITY" }), new Object[] { new Long( windowId ), new Long( value )});
+//	        }
+//    	} catch( Exception ex ) {
+//    		ex.printStackTrace();
+//        }
 
     private class ActionClose
 	extends MenuAction

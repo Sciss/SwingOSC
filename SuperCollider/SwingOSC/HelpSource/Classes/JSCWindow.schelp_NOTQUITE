@@ -1,0 +1,477 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf320
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf0 CLASS:: JSCWindow\
+summary:: Top-level container of views\
+categories:: GUI>Views\
+related:: Classes/JSCView\
+\
+DESCRIPTION::\
+A class representing a user interface window.\
+\
+A child view is added into a window by passing the window to the view's constructor. See link::Classes/JSCView#*new::.\
+\
+SUBSECTION:: Instantiation\
+\
+METHOD:: new\
+Creates a new window instance. You will need to call link::#-front:: on it before it will be visible.\
+\
+SUBSECTION:: Monitoring all open windows\
+\
+METHOD:: allWindows\
+\
+returns:: an {\field{\*\fldinst{HYPERLINK "SC://Array"}}{\fldrslt Array}} of all open windows.\
+\
+METHOD:: closeAll\
+closes all all open window instances.\
+\
+METHOD:: initAction\
+A function can be registered which gets called every time a window is opened:\
+\
+code::\
+JSCWindow.initAction = \{ arg win; "Opened '%'!\\n".postf( win.name )\};\
+JSCWindow( "Huhu" ).front;\
+::\
+\
+CLASSMETHODS::\
+\
+METHOD:: nativeDecoration\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: internalFrames\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: verbose\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: initClass\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+argument:: name\
+(describe argument here)\
+\
+argument:: bounds\
+(describe argument here)\
+\
+argument:: resizable\
+(describe argument here)\
+\
+argument:: border\
+(describe argument here)\
+\
+argument:: server\
+(describe argument here)\
+\
+argument:: scroll\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: screenBounds\
+(describe method here)\
+\
+argument:: server\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: availableBounds\
+(describe method here)\
+\
+argument:: server\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: viewPalette\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prGetScreenBounds\
+(describe method here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+argument:: server\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prGetMaxWindowBounds\
+(describe method here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+argument:: server\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+\
+INSTANCEMETHODS::\
+\
+METHOD:: name\
+(describe method here)\
+\
+argument:: argName\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: onClose\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: view\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: userCanClose\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: alwaysOnTop\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: drawFunc\
+(describe method here)\
+\
+argument:: func\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: acceptsMouseOver\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: acceptsClickThrough\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: toFrontAction\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: endFrontAction\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: server\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: id\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: visible\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: resizable\
+(describe method here)\
+\
+argument:: bool\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: border\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: drawHook\
+(describe method here)\
+\
+argument:: aFunction\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: asView\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: addFlowLayout\
+(describe method here)\
+\
+argument:: margin\
+(describe argument here)\
+\
+argument:: gap\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: close\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: isClosed\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: addToOnClose\
+(describe method here)\
+\
+argument:: function\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: removeFromOnClose\
+(describe method here)\
+\
+argument:: function\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: fullScreen\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: endFullScreen\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: pack\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: front\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: refresh\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: minimize\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: unminimize\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: alpha\
+(describe method here)\
+\
+argument:: alpha\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: setTopLeftBounds\
+(describe method here)\
+\
+argument:: rect\
+(describe argument here)\
+\
+argument:: menuSpacer\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: setInnerExtent\
+(describe method here)\
+\
+argument:: w\
+(describe argument here)\
+\
+argument:: h\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: bounds\
+(describe method here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: play\
+(describe method here)\
+\
+argument:: function\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: findByID\
+(describe method here)\
+\
+argument:: id\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: asPageLayout\
+(describe method here)\
+\
+argument:: title\
+(describe argument here)\
+\
+argument:: bounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: asFlowView\
+(describe method here)\
+\
+argument:: bounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: flow\
+(describe method here)\
+\
+argument:: func\
+(describe argument here)\
+\
+argument:: bounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: add\
+(describe method here)\
+\
+argument:: aView\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: closed\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: initSCWindow\
+(describe method here)\
+\
+argument:: argName\
+(describe argument here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+argument:: argResizable\
+(describe argument here)\
+\
+argument:: argBorder\
+(describe argument here)\
+\
+argument:: scroll\
+(describe argument here)\
+\
+argument:: argServer\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prInit\
+(describe method here)\
+\
+argument:: argName\
+(describe argument here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+argument:: resizable\
+(describe argument here)\
+\
+argument:: border\
+(describe argument here)\
+\
+argument:: scroll\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prClose\
+(describe method here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prGetBounds\
+(describe method here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+METHOD:: prSetBounds\
+(describe method here)\
+\
+argument:: argBounds\
+(describe argument here)\
+\
+returns:: (returnvalue)\
+\
+\
+EXAMPLES::\
+\
+code::\
+(some example code)\
+::\
+}

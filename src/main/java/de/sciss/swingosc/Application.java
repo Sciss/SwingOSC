@@ -29,6 +29,9 @@ package de.sciss.swingosc;
 import java.io.File;
 
 import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JMenuBar;
+import javax.swing.plaf.MenuBarUI;
 //import javax.swing.KeyStroke;
 
 import de.sciss.app.AbstractApplication;
@@ -47,7 +50,9 @@ extends BasicApplication
 	private final boolean	lafDeco;
 	private final boolean	internalFrames;
 	private final boolean	floating;
-	
+
+    private MenuBarUI aquaMenuBarUI;
+
 	public Application()
 	{
 		this( false, false, false );
@@ -60,6 +65,16 @@ extends BasicApplication
 		this.lafDeco		= lafDeco;
 		this.internalFrames	= internalFrames;
 		this.floating		= floating;
+
+        if( SwingOSC.isMacOS() && Boolean.parseBoolean( System.getProperty( "apple.laf.useScreenMenuBar", "false" ))) {
+            try {
+                final Class aquaClazz = Class.forName( "com.apple.laf.AquaMenuBarUI" );
+                aquaMenuBarUI = (MenuBarUI) aquaClazz.newInstance();
+            } catch( Exception e1 ) {
+                // ignore
+            }
+        }
+
 		init();
 	}
 	
@@ -83,7 +98,12 @@ extends BasicApplication
 	
 	protected BasicWindowHandler createWindowHandler()
 	{
-		return new BasicWindowHandler( this, lafDeco, internalFrames, floating );
+		return new BasicWindowHandler( this, lafDeco, internalFrames, floating ) {
+            @Override
+            public boolean usesScreenMenuBar() {
+                return aquaMenuBarUI != null;
+            }
+        };
 	}
 	
 	protected BasicMenuFactory createMenuFactory()
@@ -111,6 +131,15 @@ extends BasicApplication
 			public void showPreferences() { /* none */ }
 			public void openDocument( File f ) { /* none */ }
 			public Action getOpenAction() { return null; }
+
+            @Override
+            protected JComponent createComponent( Action a ) {
+                final JMenuBar mb = new JMenuBar();
+                if( aquaMenuBarUI != null ) {
+                    mb.setUI( aquaMenuBarUI );
+                }
+                return mb;
+           	}
 		};
 	}
 	

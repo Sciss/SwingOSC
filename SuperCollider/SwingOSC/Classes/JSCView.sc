@@ -35,7 +35,7 @@ JSCView {  // abstract class
 
 	var dataptr, <parent, <>action, <background;
 	var <mouseDownAction, <mouseUpAction, <mouseOverAction, <mouseMoveAction;
-	var <mouseEnterAction, <mouseLeaveAction;
+	var <mouseEnterAction, <mouseLeaveAction, <mouseWheelAction;
 		var <>keyDownAction, <>keyUpAction, <>keyTyped, <>keyModifiersChangedAction;
 		var <beginDragAction,<>canReceiveDragHandler,<receiveDragHandler;
 	var <>onClose;
@@ -238,6 +238,11 @@ JSCView {  // abstract class
 	mouseLeaveAction_ { arg func;
 		if( func.notNil && mouseResp.isNil, { this.prCreateMouseResponder });
 		mouseLeaveAction = func;
+	}
+
+	mouseWheelAction_ { arg func;
+		if( func.notNil && mouseResp.isNil, { this.prCreateMouseResponder });
+		mouseWheelAction = func;
 	}
 
 	beginDragAction_ { arg func;
@@ -725,6 +730,10 @@ JSCView {  // abstract class
 			{ state === \exited }
 			{
 				{ this.mouseLeave }.defer;
+			}
+			{ state === \wheel }
+			{
+				{ this.mouseWheel( x, y, modifiers, msg[6], msg[7] )}.defer;
 			};
 		});
 		mouseResp.add;
@@ -760,7 +769,10 @@ JSCView {  // abstract class
 		^mouseLeaveAction.value( this );
 	}
 
-	
+	mouseWheel { arg x, y, modifiers, xDelta, yDelta;
+		mouseWheelAction.value( this, x, y, modifiers, xDelta, yDelta );
+	}
+
 //	prRemove { }
 
 	prContainerID { ^this.id }

@@ -32,9 +32,12 @@ package de.sciss.swingosc;
 
 import java.awt.Container;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -65,10 +68,9 @@ import de.sciss.net.OSCMessage;
  */
 public class MouseResponder
 extends AbstractMouseResponder
-implements MouseListener, MouseMotionListener
-{
-	private static final Class[] listenerClasses	= { MouseListener.class, MouseMotionListener.class };
-	private static final String[] listenerNames	= { "MouseListener", "MouseMotionListener" };
+implements MouseListener, MouseMotionListener, MouseWheelListener {
+	private static final Class[] listenerClasses = { MouseListener.class, MouseMotionListener.class, MouseWheelListener.class };
+	private static final String[] listenerNames	= { "MouseListener", "MouseMotionListener", "MouseWheelListener" };
 	
 	private final boolean	absCoords;
 	
@@ -111,8 +113,11 @@ implements MouseListener, MouseMotionListener
 		return "/mouse";
 	}
 
-	private void reply( String stateName, MouseEvent e )
-	{
+	private void reply( String stateName, MouseEvent e ) {
+        reply( stateName, e, new Integer( e.getButton() ), new Integer( e.getClickCount() ));
+    }
+
+    private void reply( String stateName, MouseEvent e, Object arg5, Object arg6 ) {
 		try {
 			final Point p;
 			
@@ -120,8 +125,8 @@ implements MouseListener, MouseMotionListener
 			// in SwingUtilities.convertMouseEvent, some
 			// modifiers may be swallowed
 			replyArgs[ 4 ] = new Integer( e.getModifiers() );
-			replyArgs[ 5 ] = new Integer( e.getButton() );
-			replyArgs[ 6 ] = new Integer( e.getClickCount() );
+			replyArgs[ 5 ] = arg5;
+			replyArgs[ 6 ] = arg6;
 			if( absCoords ) {
 				final Container cp = SwingUtilities.getRootPane( e.getComponent() ).getContentPane();
 //				e = SwingUtilities.convertMouseEvent( e.getComponent(), e, cp );
@@ -175,4 +180,20 @@ implements MouseListener, MouseMotionListener
 	{
 		if( acceptsMouseOver && e.getComponent().isEnabled() ) reply( "moved", e );
 	}
+
+	// -------- MouseWheelListener interface --------
+
+    public void mouseWheelMoved( MouseWheelEvent e ) {
+        if( e.getComponent().isEnabled() && (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) ) {
+            final int amount = -e.getScrollAmount() * e.getWheelRotation(); // QtGUI has reversed polarity
+            if( e.isShiftDown() ) { // used by OS X to simulate horizontal wheel
+                final MouseEvent e2 = new MouseEvent( e.getComponent(), e.getID(), e.getWhen(),
+                        e.getModifiers() & ~InputEvent.SHIFT_MASK, e.getX(), e.getY(),
+                        e.getClickCount(), e.isPopupTrigger() );
+                reply( "wheel", e2, new Integer( amount ), new Integer( 0 ));
+            } else {
+                reply( "wheel", e, new Integer( 0 ), new Integer( amount ));
+            }
+        }
+    }
 }

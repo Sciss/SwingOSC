@@ -619,7 +619,7 @@ Now all classes in those two jars should be accessible via SwingOSC. We create a
     plot = <span class="cl">JavaObject</span>( <span class="st">"org.jfree.chart.plot.PiePlot"</span>, <span class="kw">nil</span>, data ); data.destroy;
     gen = <span class="cl">JavaObject</span>( <span class="st">"org.jfree.chart.labels.StandardPieSectionLabelGenerator"</span>, <span class="kw">nil</span>, <span class="st">"{0} ({1})"</span> );
     plot.setLabelGenerator( gen ); gen.destroy;
-    ~chart = <span class="cl">JavaObject</span>( <span class="st">"org.jfree.chart.JFreeChart"</span>, <span class="kw">nil</span>, <span class="st">"Ten Poorest Countries"</span>, <span class="cl">JFont</span>( <span class="st">"Helvetica"</span>, 24 ), plot, <span class="kw">true</span> ); plot.destroy;
+    ~chart = <span class="cl">JavaObject</span>( <span class="st">"org.jfree.chart.JFreeChart"</span>, <span class="kw">nil</span>, <span class="st">"Ten Poorest Countries"</span>, <span class="cl">JSCFont</span>( <span class="st">"Helvetica"</span>, 24 ), plot, <span class="kw">true</span> ); plot.destroy;
 )
 
 </pre>

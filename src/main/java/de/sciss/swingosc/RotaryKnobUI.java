@@ -44,6 +44,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class RotaryKnobUI extends BasicSliderUI {
     private static final float arcStartDeg      = -135f; // clock wise from 12 o'clock. thus 7 h 30 mins
@@ -75,6 +77,14 @@ public class RotaryKnobUI extends BasicSliderUI {
     private final Arc2D arcTrackHigh            = new Arc2D.Float( 0, 0, 10, 10, arcStartDeg, 0, Arc2D.OPEN );
 
 //private boolean GUGU = false;
+
+    private final PropertyChangeListener trackCentered = new PropertyChangeListener() {
+        public void propertyChange( PropertyChangeEvent e ) {
+//System.out.println( "PROPERTY CHANGE" );
+            calculateThumbLocation();
+            knob.repaint();
+        }
+    };
 
     public RotaryKnobUI( final RotaryKnob knob ) {
         super( knob );
@@ -358,8 +368,14 @@ public class RotaryKnobUI extends BasicSliderUI {
         shpHand = atHand.createTransformedShape( pathHand );
         shpHandOut = new Area( strkOut.createStrokedShape( shpHand ));
         shpHandOut.add( new Area( shpHand ));
-        arcTrackHigh.setAngleStart( arcStartDeg );
-        arcTrackHigh.setAngleExtent( ext * -180 / Math.PI );
+
+        if( knob.isCentered() ) {
+            arcTrackHigh.setAngleStart( 90 );
+            arcTrackHigh.setAngleExtent( ((0.5 - v) * arcExtent) * 180 / Math.PI );
+        } else {
+            arcTrackHigh.setAngleStart( arcStartDeg );
+            arcTrackHigh.setAngleExtent( ext * -180 / Math.PI );
+        }
 
 //        System.out.println( "calculateThumbLocation(). x = " + thumbRect.x + ", y = " + thumbRect.y + ", xc = " + xc + ", yc = " + yc );
     }
@@ -371,6 +387,18 @@ public class RotaryKnobUI extends BasicSliderUI {
         focusInsets.top     = 0;
         focusInsets.right   = 0;
         focusInsets.bottom  = 0;
+    }
+
+    @Override
+    protected void installListeners( JSlider slider ) {
+        super.installListeners( slider );
+        slider.addPropertyChangeListener( "centered", trackCentered );
+    }
+
+    @Override
+    protected void uninstallListeners( JSlider slider ) {
+        super.uninstallListeners( slider );
+        slider.removePropertyChangeListener( "centered", trackCentered );
     }
 
 //    @Override

@@ -55,7 +55,7 @@ JSCKnob : JSCSliderBase {
 	}
 	
 	centered_ { arg bool;
-		// XXX currently not implemented
+		server.sendMsg( \set, this.id, \centered, bool );
 		centered = bool;
 	}
 	

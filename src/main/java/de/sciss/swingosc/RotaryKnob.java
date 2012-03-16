@@ -35,6 +35,8 @@ public class RotaryKnob extends JSlider {
     protected Color colrRange   = null;
     protected Color colrTrack   = null;
 
+    private boolean centered    = false;
+
     public RotaryKnob() {
         super();
     }
@@ -49,6 +51,14 @@ public class RotaryKnob extends JSlider {
 
     public RotaryKnob( int min, int max, int value ) {
         super( min, max, value );
+    }
+
+    public boolean isCentered() { return centered; }
+    public void setCentered( boolean b ) {
+        if( centered != b ) {
+            centered = b;
+            firePropertyChange( "centered", !b, b );
+        }
     }
 
     public Color getKnobColor() { return colrKnob; }

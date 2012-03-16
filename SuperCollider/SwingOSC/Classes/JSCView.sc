@@ -34,7 +34,10 @@ JSCView {  // abstract class
 	classvar unicodeMap;
 
 	var dataptr, <parent, <>action, <background;
-	var <mouseDownAction, <mouseUpAction, <mouseOverAction, <mouseMoveAction;	var <>keyDownAction, <>keyUpAction, <>keyTyped, <>keyModifiersChangedAction;	var <beginDragAction,<>canReceiveDragHandler,<receiveDragHandler;
+	var <mouseDownAction, <mouseUpAction, <mouseOverAction, <mouseMoveAction;
+	var <mouseEnterAction, <mouseLeaveAction;
+		var <>keyDownAction, <>keyUpAction, <>keyTyped, <>keyModifiersChangedAction;
+		var <beginDragAction,<>canReceiveDragHandler,<receiveDragHandler;
 	var <>onClose;
 	var <>focusGainedAction, <>focusLostAction;
 
@@ -225,6 +228,16 @@ JSCView {  // abstract class
 	mouseMoveAction_ { arg func;
 		if( func.notNil && mouseResp.isNil, { this.prCreateMouseResponder });
 		mouseMoveAction = func;
+	}
+
+	mouseEnterAction_ { arg func;
+		if( func.notNil && mouseResp.isNil, { this.prCreateMouseResponder });
+		mouseEnterAction = func;
+	}
+
+	mouseLeaveAction_ { arg func;
+		if( func.notNil && mouseResp.isNil, { this.prCreateMouseResponder });
+		mouseLeaveAction = func;
 	}
 
 	beginDragAction_ { arg func;
@@ -704,13 +717,15 @@ JSCView {  // abstract class
 			{ state === \dragged }
 			{
 				clpseMouseDrag.instantaneous( x, y, modifiers );
+			}
+			{ state === \entered }
+			{
+				{ this.mouseEnter }.defer;
+			}
+			{ state === \exited }
+			{
+				{ this.mouseLeave }.defer;
 			};
-// note: entered is followed by moved with equal coordinates
-// so we can just ignore it
-//			{ state === \entered }
-//			{
-//				{ this.mouseOver( x, y, modifiers )}.defer;
-//			};
 		});
 		mouseResp.add;
 		msg = [ '/local', "mse" ++ this.id, '[', '/new', "de.sciss.swingosc.MouseResponder", this.id, false, this.prGetWindow.id, ']' ];
@@ -736,6 +751,15 @@ JSCView {  // abstract class
 	mouseOver { arg x, y, modifiers;
 		mouseOverAction.value( this, x, y, modifiers );
 	}
+
+	mouseEnter {
+		^mouseEnterAction.value( this );
+	}
+
+	mouseLeave {
+		^mouseLeaveAction.value( this );
+	}
+
 	
 //	prRemove { }
 

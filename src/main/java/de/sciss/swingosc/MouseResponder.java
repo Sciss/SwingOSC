@@ -156,12 +156,12 @@ implements MouseListener, MouseMotionListener
 	
 	public void mouseEntered( MouseEvent e )
 	{
-		if( acceptsMouseOver && e.getComponent().isEnabled() ) reply( "entered", e );
+		if( /* acceptsMouseOver && */ e.getComponent().isEnabled() ) reply( "entered", e );
 	}
 
 	public void mouseExited( MouseEvent e )
 	{
-		if( acceptsMouseOver && e.getComponent().isEnabled() ) reply( "exited", e );
+		if( /* acceptsMouseOver && */ e.getComponent().isEnabled() ) reply( "exited", e );
 	}
 
 	// -------- MouseMotionListener interface --------

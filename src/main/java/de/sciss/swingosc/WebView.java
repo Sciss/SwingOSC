@@ -27,6 +27,7 @@ package de.sciss.swingosc;
 
 import com.teamdev.jxbrowser.Browser;
 import com.teamdev.jxbrowser.BrowserFactory;
+import com.teamdev.jxbrowser.BrowserType;
 import com.teamdev.jxbrowser.events.NavigationEvent;
 import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
 import com.teamdev.jxbrowser.events.NavigationListener;

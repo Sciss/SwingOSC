@@ -440,7 +440,8 @@ JSCView {  // abstract class
 			if( state !== \typed, {
 				keyCode		= msg[3];
 				unicode		= msg[4];
-				modifiers		= msg[5];
+				char			= msg[5];
+				modifiers		= msg[6];
 				propagate		= unicode != 0xFFFF;
 				// java->cocoa ; this translates shift (1), ctrl (2), cmd (4), alt (8)
 				modifiers		= ((modifiers & 3) << 17) |
@@ -482,7 +483,8 @@ JSCView {  // abstract class
 					unicode	= unicodeMap.atFail( keyCode, unicode );
 				});
 				if( propagate, {
-					char = unicode.asAscii;
+					// char = unicode.asAscii;
+					if( char.size == 1, { char = char[0]}); // otherwise keep String which has valid UTF-8 character
 					if( state === \pressed, {
 						{ this.keyDown( char, modifiers, unicode, keyCode )}.defer;
 					}, { // "released

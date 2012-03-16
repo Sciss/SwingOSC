@@ -65,7 +65,8 @@ implements KeyListener
 	public KeyResponder( Object objectID )
 	throws IllegalAccessException, NoSuchMethodException, InvocationTargetException
 	{
-		super( objectID, 5 );
+//        super( objectID, 5 );
+		super( objectID, 6 );
 		add();
 	}
 
@@ -91,8 +92,9 @@ implements KeyListener
 			replyArgs[ 1 ] = stateName;
 			replyArgs[ 2 ] = new Integer( e.getKeyCode() );
 //			replyArgs[ 3 ] = new Integer( Character.getNumericValue( e.getKeyChar() ));
-			replyArgs[ 3 ] = new Integer( e.getKeyChar() );
-			replyArgs[ 4 ] = new Integer( e.getModifiers() );
+            replyArgs[ 3 ] = new Integer( e.getKeyChar() );
+			replyArgs[ 4 ] = Character.toString( e.getKeyChar() );
+			replyArgs[ 5 /* 4 */ ] = new Integer( e.getModifiers() );
 			client.reply( new OSCMessage( getOSCCommand(), replyArgs ));
 		}
 		catch( IOException ex ) {

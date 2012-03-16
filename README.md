@@ -1,4 +1,4 @@
-![logo](application.png)
+![logo](http://sciss.de/swingOSC/application.png)
 
 ## SwingOSC
 

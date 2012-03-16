@@ -25,13 +25,8 @@
 
 package de.sciss.swingosc;
 
-import com.teamdev.jxbrowser.Browser;
-import com.teamdev.jxbrowser.BrowserFactory;
-import com.teamdev.jxbrowser.BrowserType;
-import com.teamdev.jxbrowser.events.NavigationEvent;
-import com.teamdev.jxbrowser.events.NavigationFinishedEvent;
-import com.teamdev.jxbrowser.events.NavigationListener;
-import com.teamdev.jxbrowser.events.NavigationType;
+import com.teamdev.jxbrowser.*;
+import com.teamdev.jxbrowser.events.*;
 
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
@@ -53,6 +48,7 @@ public class WebView extends JPanel {
     public static final boolean VERBOSE         = false;
 
     public static final String ACTION_LOADED    = "loaded";
+    public static final String ACTION_FAILED    = "failed";
 
     private static boolean initialized = false;
 
@@ -63,7 +59,40 @@ public class WebView extends JPanel {
     private final String dummyURLString = escape( "file:" + new File( "" ).getAbsolutePath() );
     private final URL dummyURL;
 
-    private URL nonManualURL = null;
+    volatile private URL nonManualURL = null;
+//    private String nonManualURLString = null;
+
+    volatile private boolean vetoEnabled = false;
+
+    private String nextURL;
+    private String lastURL;
+    private String result = "";
+
+    private final WebPolicyDelegate veto = new DefaultWebPolicyDelegate() {
+        @Override
+        public boolean allowNavigation( NavigationEvent e ) {
+            if( !vetoEnabled ) return true;
+
+            if( VERBOSE ) System.out.println( "allowNavigation: " + e.getUrl() + " ; type = " + e.getNavigationType() );
+            if( e.getNavigationType() == NavigationType.REDIRECT ) return true;
+            try {
+                final URL url = new URL( e.getUrl() );
+                if( url.equals( dummyURL )) return true;
+                // the comparison never works in all cases :-(
+                final boolean sameURL = nonManualURL != null; // url.equals( nonManualURL );
+                if( VERBOSE ) System.out.println( "allowNavigation: is " + url.toString() + " same as " + (nonManualURL == null ? null : nonManualURL.toString()) + " ? " + sameURL );
+                if( !sameURL ) {
+                    defer( new Runnable() { public void run() { dispatchLinkActivated( url );}});
+                } else {
+                    nonManualURL = null;
+                }
+                return sameURL;
+            } catch( MalformedURLException e2 ) {
+                e2.printStackTrace();
+                return true;
+            }
+        }
+    };
 
     private void defer( Runnable r ) {
         EventQueue.invokeLater( r );
@@ -71,32 +100,37 @@ public class WebView extends JPanel {
 
     private final NavigationListener navListener = new NavigationListener() {
         public void navigationStarted( NavigationEvent _e ) {
+            if( VERBOSE ) System.out.println( "navigationStarted " + _e.getUrl() );
             final NavigationEvent e = _e;
-            defer( new Runnable() {
-                public void run() {
-                    try {
-                        final URL url = new URL( e.getUrl() );
-                        if( url.equals( dummyURL )) return;
-                        final boolean sameURL = url.equals( nonManualURL );
-                        if( VERBOSE ) System.out.println( "Navigation started " + url.toString() + " / same? " + sameURL );
-                        if( (e.getNavigationType() == NavigationType.NAVIGATE) && !sameURL ) {
-                            nonManualURL = null;
-                            dispatchLinkActivated( url );
-                        }
-                    } catch( MalformedURLException e2 ) {
-                        e2.printStackTrace();
-        //            } catch( URISyntaxException e2 ) {
-        //                e2.printStackTrace();
-                    }
-                }
-            });
+//            defer( new Runnable() {
+//                public void run() {
+//                    try {
+//                        final URL url = new URL( e.getUrl() );
+//                        if( url.equals( dummyURL )) return;
+//                        final boolean sameURL = url.equals( nonManualURL );
+//                        if( VERBOSE ) System.out.println( "Navigation started " + url.toString() + " / same? " + sameURL );
+//                        if( (e.getNavigationType() == NavigationType.NAVIGATE) && !sameURL ) {
+//                            nonManualURL = null;
+//                            dispatchLinkActivated( url );
+//                        }
+//                    } catch( MalformedURLException e2 ) {
+//                        e2.printStackTrace();
+//        //            } catch( URISyntaxException e2 ) {
+//        //                e2.printStackTrace();
+//                    }
+//                }
+//            });
         }
 
         public void navigationFinished( NavigationFinishedEvent e ) {
+            if( VERBOSE ) System.out.println( "navigationFinished " + e.getUrl() + " ; status = " + e.getStatusCode() );
+//            final boolean ok = e.getStatusCode().equals(NavigationStatusCode.OK );
+            final boolean ok = e.getStatusCode().getValue() == 0L;
+            final String url = e.getUrl();
             defer( new Runnable() {
                 public void run() {
-                    if( VERBOSE ) System.out.println( "Navigation finished" );
-                    dispatchAction( ACTION_LOADED );
+                    lastURL = url;
+                    dispatchAction( ok ? ACTION_LOADED : ACTION_FAILED );
                 }
             });
         }
@@ -135,6 +169,7 @@ public class WebView extends JPanel {
 
     private void dispatchAction( String command ) {
         final ActionListener l = actionListener;
+        result = command;
         if( l != null ) {
             try {
                 l.actionPerformed( new ActionEvent( this, ActionEvent.ACTION_PERFORMED, command ));
@@ -162,8 +197,14 @@ public class WebView extends JPanel {
         return new WebView();
     }
 
+    public boolean getVetoEnabled() { return vetoEnabled; }
+
+    public void setVetoEnabled( boolean b ) {
+        vetoEnabled = b;
+    }
+
     public String getURL() {
-        final String u = browser.getCurrentLocation();
+        final String u = lastURL; //  browser.getCurrentLocation();
 //        final NavigationEntry ne = getCurrentNavigationEntry();
 //        final URL u = ne == null ? null : ne.getUrl();
         return u == null ? "" : u; // .toString();
@@ -176,9 +217,14 @@ public class WebView extends JPanel {
         return t == null ? "" : t;
     }
 
+    public String getResult() {
+        return result;
+    }
+
     public void setHtml( String html ) throws IOException {
 //        browser.setContent( html );
         nonManualURL = dummyURL;
+//        nonManualURLString = dummyURLString;
         browser.setContent( html, dummyURLString );
 //        final File f    = File.createTempFile( "tmp", ".html" );
 //        f.deleteOnExit();
@@ -219,7 +265,7 @@ public class WebView extends JPanel {
         } else {
             url1 = url;
         }
-        return URLUtil.encodePathQuery( url1, "UTF-8" );
+        return URLUtil.encodeFuckApache( url1, "UTF-8" );
 //        return url.replace( " ", "%20" );
 //        final int i = url.indexOf( ':' );
 //        if( i >= 0 ) {
@@ -237,8 +283,15 @@ public class WebView extends JPanel {
         final String urlString = url.toString();
         if( VERBOSE ) System.out.println( "navigate: " + urlString );
         nonManualURL = url;
+//        nonManualURLString = urlString;
         browser.stop();
+//        vetoEnabled = false;
+//        try {
             browser.navigate( urlString );
+//        browser.navigate( urlString + "?programmatic=true" );
+//        } finally {
+//            vetoEnabled = true;
+//        }
 //        } finally {
 //            browser.addNavigationListener( navListener );
 //        }
@@ -264,6 +317,8 @@ public class WebView extends JPanel {
 //        browser.
 //
         browser.addNavigationListener( navListener );
+
+        browser.getServices().setWebPolicyDelegate( veto );
 
 //        addContentListener( new ContentListener() {
 //            public void contentSet( ContentEvent e ) {

@@ -131,6 +131,7 @@ JSCWebView : JSCView {
 	onLinkActivated_ { arg func;
 		if( func.notNil && hyResp.isNil, { this.prCreateLinkResponder });
 		onLinkActivated = func;
+		server.sendMsg( \set, this.id, "vetoEnabled", func.notNil );
 	}
 
 	linkActivated { arg linkString; onLinkActivated.value( this, linkString )}
@@ -222,15 +223,29 @@ JSCWebView : JSCView {
 //			};
 //		}).add;
 		acResp = OSCpathResponder( server.addr, [ '/action', this.id ], { arg time, resp, msg;
-			// don't call valueAction coz we'd create a loop
-			title = msg[4].asString;
-			this.didLoad;
+			var state;
+			state = msg[4];
+			case { state === \loaded }
+			{
+				{
+					url   = msg[6].asString;
+					title = msg[8].asString;
+					this.didLoad;
+				}.defer;
+			}
+			{ state === \failed }
+			{
+				{ 
+					url   = msg[6].asString;
+					this.didFail;
+				}.defer;
+			};
 		}).add;
 		
 		^this.prSCViewNew([
 			[ '/local', this.id, '[', '/method', "de.sciss.swingosc.WebView", "create", ']',
 				"ac" ++ this.id,
-				'[', '/new', "de.sciss.swingosc.ActionResponder", this.id, \title, ']',
+				'[', '/new', "de.sciss.swingosc.ActionResponder", this.id, '[', '/array', \result, \URL, \title, ']', ']',
 //				"tx" ++ this.id,
 //				'[', '/new', "de.sciss.swingosc.DocumentResponder", this.id, ']'
 			]

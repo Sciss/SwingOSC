@@ -946,7 +946,7 @@ public class URLUtil {
     public static String encode( String unescaped, BitSet allowed, String charset ) throws MalformedURLException {
         try {
             final byte[] bytes = unescaped.getBytes( charset );
-            final byte[] rawdata = encodeURL( allowed_abs_path, bytes );
+            final byte[] rawdata = encodeURL( allowed, bytes );
             return new String( rawdata, 0, rawdata.length, "US-ASCII" );
         }
         catch( UnsupportedEncodingException e ) {
@@ -974,6 +974,18 @@ public class URLUtil {
         }
         // else
         return  encode(unescaped.substring(0, at), allowed_abs_path, charset)
+            + '?' + encode(unescaped.substring(at + 1), allowed_query, charset);
+    }
+
+    // I don't know who designed this crap. But we really need URI_reference to allow for fragments
+    // starting with a hash # char.
+    public static String encodeFuckApache(String unescaped, String charset) throws MalformedURLException {
+        int at = unescaped.indexOf('?');
+        if (at < 0) {
+            return encode(unescaped, URI_reference, charset);
+        }
+        // else
+        return  encode(unescaped.substring(0, at), URI_reference, charset)
             + '?' + encode(unescaped.substring(at + 1), allowed_query, charset);
     }
 

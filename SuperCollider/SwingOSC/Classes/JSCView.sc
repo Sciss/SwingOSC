@@ -458,7 +458,7 @@ JSCView {  // abstract class
 			if( state !== \typed, {
 				keyCode		= msg[3];
 				unicode		= msg[4];
-				char			= msg[5];
+				char			= msg[5].asString;
 				modifiers		= msg[6];
 				propagate		= unicode != 0xFFFF;
 				// java->cocoa ; this translates shift (1), ctrl (2), cmd (4), alt (8)

@@ -116,7 +116,7 @@ JSCListView : JSCView {
 	//		if( unicode == 16rF701, { this.valueAction = this.value + 1; ^this });
 			if( unicode == 16rF702, { this.valueAction = this.value - 1; ^this });
 		});
-		if (char.isAlpha, {
+		if( char.isKindOf( Char ) and: { char.isAlpha }, {
 			char = char.toUpper;
 			index = items.detectIndex({ arg item; item.asString.at(0).toUpper >= char });
 			if( index.notNil, { this.valueAction = index });

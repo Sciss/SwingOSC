@@ -67,7 +67,7 @@ JSCNumberBox : JSCTextEditBase {
 		if( unicode == 0xF701, { this.decrement( this.getScale( modifiers )); ^this });
 		if( unicode == 0xF702, { ^this });
 		if( (char == $\r) || (char == $\n), { ^this }); // enter key
-		if( char.isDecDigit or: { "+-.eE".includes( char )}, { ^this });
+		if( "0123456789+-.eE".includes( char ), { ^this });
 		^nil;	// bubble if it's an invalid key
 	}
 

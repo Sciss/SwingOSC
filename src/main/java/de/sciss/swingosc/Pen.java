@@ -1004,10 +1004,15 @@ test:		if( (gc.at.getShearX() == 0.0) && (gc.at.getShearY() == 0.0) &&
 		protected int constr( Object[] cmd, int off )
 		{
 			final int	dashNum = ((Number) cmd[ off++ ]).intValue();
-			final float dash[]	= new float[ dashNum ];
-			for( int i = 0; i < dashNum; i++ ) {
-				dash[ i ] = ((Number) cmd[ off++ ]).floatValue();
-			}
+			final float dash[];
+            if( dashNum > 0 ) {
+                dash = new float[ dashNum ];
+    			for( int i = 0; i < dashNum; i++ ) {
+    				dash[ i ] = ((Number) cmd[ off++ ]).floatValue();
+    			}
+            } else {
+                dash = null;
+            }
 			gc.strk	 = new BasicStroke( gc.strk.getLineWidth(),
 						BasicStroke.CAP_BUTT, gc.strk.getLineJoin(),
 						gc.strk.getMiterLimit(), dash,

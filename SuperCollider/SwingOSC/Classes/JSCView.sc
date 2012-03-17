@@ -38,7 +38,7 @@ JSCView {  // abstract class
 	var <mouseEnterAction, <mouseLeaveAction, <mouseWheelAction;
 		var <>keyDownAction, <>keyUpAction, <>keyTyped, <>keyModifiersChangedAction;
 		var <beginDragAction,<>canReceiveDragHandler,<receiveDragHandler;
-	var <>onClose;
+	var <>onClose, <>onMove, <>onResize;
 	var <>focusGainedAction, <>focusLostAction;
 
 	var <server, <id;	// the SwingOSC server used for this view
@@ -625,6 +625,7 @@ JSCView {  // abstract class
 				});
 //[ "--> jBounds", jBounds, "scBounds", scBounds ].postln;
 				this.prBoundsUpdated;
+				if( onResize.notNil, {{ onResize.value( this )}.defer });
 			},
 			\moved, {
 				x			= msg[3];
@@ -641,16 +642,17 @@ JSCView {  // abstract class
 				this.prInvalidateBounds;
 				scBounds		= temp;
 				this.prBoundsUpdated;
+				if( onMove.notNil, {{ onMove.value( this )}.defer });
 			},
 			\gainedFocus, {
 				hasFocus = true;
 				this.prFocusChange;
-				if( focusGainedAction.notNil, {{ focusGainedAction.value( this )}.defer });
+				if( focusGainedAction.notNil, {{ this.focusGained }.defer });
 			},
 			\lostFocus, {
 				hasFocus = false;
 				this.prFocusChange;
-				if( focusLostAction.notNil, {{ focusLostAction.value( this )}.defer });
+				if( focusLostAction.notNil, {{ this.focusLost }.defer });
 			});
 		});
 		cmpResp.add;
@@ -762,16 +764,19 @@ JSCView {  // abstract class
 	}
 
 	mouseEnter {
-		^mouseEnterAction.value( this );
+		mouseEnterAction.value( this );
 	}
 
 	mouseLeave {
-		^mouseLeaveAction.value( this );
+		mouseLeaveAction.value( this );
 	}
 
 	mouseWheel { arg x, y, modifiers, xDelta, yDelta;
 		mouseWheelAction.value( this, x, y, modifiers, xDelta, yDelta );
 	}
+
+	focusGained { focusGainedAction.value( this )}
+	focusLost   { focusLostAction.value( this )}
 
 //	prRemove { }
 

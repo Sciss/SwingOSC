@@ -66,6 +66,9 @@ JSCButton : JSCView {
 		this.setProperty( \states, states );
 	}
 	
+	string { ^states[ this.value ][ 0 ]}
+	string_ { arg val; this.states = [[ val ]]}
+	
 	defaultKeyDownAction { arg char, modifiers, unicode;
 // JJJ handled automatically by javax.swing.AbstractButton
 //		if (char == $ , { this.valueAction = this.value + 1; ^this });

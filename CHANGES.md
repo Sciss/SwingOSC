@@ -8,13 +8,13 @@
 
 ### v0.65 (jul 2010 - SVN rev. 252)
 
- - SC classes: JSCTextField and JSCNumberBox (added borderless_, setNormalBorder, setLineBorder), JSCMultiSlider (added steady_, precision_ - thanks to Tim Blechmann), JSCPeakMeter (added orientation_), JSCImage (added *color, setPixels, SwingGUI.image), JFont (available faces are now stored in archive, so can be accessed synchronously), Server (doWhenBooted forks functions now, fixed a problem with Model/ dependants)
+ - SC classes: JSCTextField and JSCNumberBox (added `borderless`, `setNormalBorder`, `setLineBorder`), JSCMultiSlider (added `steady`, `precision` - thanks to Tim Blechmann), JSCPeakMeter (added `orientation`), JSCImage (added *color, setPixels, SwingGUI.image), JFont (available faces are now stored in archive, so can be accessed synchronously), Server (doWhenBooted forks functions now, fixed a problem with Model/ dependants)
  - Added missing images in Den Haag tutorial
  - Added Debian packaging info by Dan Stowell
 
 ### v0.64 (feb 2010 - SVN rev. 235)
 
- - SC classes: JSCTextView (typo in caret_, support for RTF, various fixes, htmlString_, better tab size, undo/redo, selectedString_ fix, paragraph attributes), JSCSlider (adaptive knob size on OS X look-and-feel), JSCListView (fix for big bundles), JSCPopUpMenu (fix for big bundles), JSCNumberBox (helpfile)
+ - SC classes: JSCTextView (typo in `caret`, support for RTF, various fixes, `htmlString`, better tab size, undo/redo, `selectedString` fix, paragraph attributes), JSCSlider (adaptive knob size on OS X look-and-feel), JSCListView (fix for big bundles), JSCPopUpMenu (fix for big bundles), JSCNumberBox (helpfile)
  - Ensuring bundles are only made up of Arrays not Lists, fixing a problem with Linux and Windows
 
 ### v0.63 (oct 2009 - SVN rev. 218)
@@ -25,34 +25,34 @@
 
 ### v0.62 (jul 2009 - SVN rev. 207)
 
- - SC classes: JSCView (mouse coordinates now relative to view's left-top, added scheme), JSCUserView (added clearDrawing, refresh is &quot;lazy&quot;, mousePosition initially reports 0@0), JSCImage (renamed from JImage), JPen (added fillAxialGradient, fillStroke uses draw( 3 )), JKnob (added resize(_)), JSCPeakMeter finally works
+ - SC classes: JSCView (mouse coordinates now relative to view's left-top, added scheme), JSCUserView (added clearDrawing, refresh is &quot;lazy&quot;, mousePosition initially reports 0@0), JSCImage (renamed from JImage), JPen (added fillAxialGradient, fillStroke uses draw( 3 )), JKnob (added `resize`), JSCPeakMeter finally works
  - Bug fixes: 2809848, 2809958, 2001007, 2820992, 1901530
  - Help files: referring to ViewRedirect classes
 
 ### v0.61 (may 2009 - SVN rev. 181)
 
  - Server: performance improvement, improved booting from SC
- - SC classes: moved OSX specific stuff to separate folder, adding (still experimental) JSCMenuNode, JPen (joinStyle_, lineDash_, alpha_), adding JavaObjectD, SwingGUI (stringBounds), JSCTextView (open, linkAction), JSCContainerView (relativeOrigin), JSCWindow (initAction, toFrontAction, endFrontAction), JSCView (absoluteBounds, focusGainedAction, focusLostAction), JSCUserView (relativeOrigin true), JSCPeakMeter added, JSCEnvelopeView (all curve shapes should work now), keyboard value scrolling (for JSCSlider etc.)
+ - SC classes: moved OSX specific stuff to separate folder, adding (still experimental) JSCMenuNode, JPen (`joinStyle`, `lineDash`, `alpha`), adding JavaObjectD, SwingGUI (stringBounds), JSCTextView (open, linkAction), JSCContainerView (relativeOrigin), JSCWindow (initAction, toFrontAction, endFrontAction), JSCView (absoluteBounds, focusGainedAction, focusLostAction), JSCUserView (relativeOrigin true), JSCPeakMeter added, JSCEnvelopeView (all curve shapes should work now), keyboard value scrolling (for JSCSlider etc.)
  - Refactoring: using ScissLib (application framework with window handler customization), now JCollider (for peakmeter, in future version for scope etc.)
  - Bug fixes: 2037842, 2482337
  - New features: 1849186
 
 ### v0.60 (may 2008 - SVN rev. 77)
 
- - sc classes: fixes for control rate scoping, JSCView (handleKeyUp/DownBubbling, focusColor_ dummy,), JPen (addArc, addWedge, addAnnularWedge, setSmoothing), JSCListView (bounds), JSCTextView (bounds, open), adding coarse String-bounds estimator
+ - sc classes: fixes for control rate scoping, JSCView (handleKeyUp/DownBubbling, `focusColor` dummy,), JPen (addArc, addWedge, addAnnularWedge, setSmoothing), JSCListView (bounds), JSCTextView (bounds, open), adding coarse String-bounds estimator
  - synced with new NetUtil and common classes version
  - fixed loopback for -h rendezvous option (addresses problems on Linux and Windows Vista)
  - Mac OS X tablet library now universal binary
 
 ### v0.59 (feb 2008 - SVN rev. 56)
 
- - sc classes: JavaObject (added double underscore syntax, calling prRemove from JSCPlug(Container)View), SwingOSC (separate java field, faster booting, bootSync fix), SwingOptions (javaOptions field), SwingGUI (updated), JSCMultiSlider (valueAction_ fix), JSCPopUpMenu (value_ fix), JSCListView (value_ fix), JKnob (was broken), removed JEZSlider, JEZNumber.
+ - sc classes: JavaObject (added double underscore syntax, calling prRemove from JSCPlug(Container)View), SwingOSC (separate java field, faster booting, bootSync fix), SwingOptions (javaOptions field), SwingGUI (updated), JSCMultiSlider (`valueAction` fix), JSCPopUpMenu (`value` fix), JSCListView (`value` fix), JKnob (was broken), removed JEZSlider, JEZNumber.
  - java classes: DummyTransferHandler sends file-lists
 
 ### v0.58 (jan 2008 - SVN rev. 47)
 
  - sc classes: SwingOSC (aliveThread has longer timeout, improved isLocal detection), JavaObject (added print, isNull, notNull methods), extSwingOSC (fixed asSwingArg implementations, removed jinspect, jplot, jmakeWindow, jscope, jbrowse)
- - sc gui classes: JSCWindow (added resizable_, redefined drawHook refresh policy, cocoa-bounds translation look-and-feel independant, added scroll argument to contructor), JSCNumberBox (drag'n'drop fixed), JSCTextField (drag'n'drop fixed), JSCUserView (added mousePosition, clearOnRefresh_ methods), JSCPlug(Container)View (improved doesNotUnderstand), JSCView (proper layout manager validation with bounds_ and visible_, added addAction and removeAction methods), SwingGUI (added tabletView, scrollView), extCocoaCompat (removed methods that have been added to the standard library), JSCTextView (fixed property changes when document is empty), removed JSCScrollPane, JStartRow, added JSCScrollView, JSCScrollTopView, JSCTabletView
+ - sc gui classes: JSCWindow (added `resizable`, redefined `drawHook` refresh policy, cocoa-bounds translation look-and-feel independant, added `scroll` argument to contructor), JSCNumberBox (drag'n'drop fixed), JSCTextField (drag'n'drop fixed), JSCUserView (added `mousePosition`, `clearOnRefresh` methods), JSCPlug(Container)View (improved doesNotUnderstand), JSCView (proper layout manager validation with `bounds` and `visible`, added `addAction` and `removeAction` methods), SwingGUI (added tabletView, scrollView), extCocoaCompat (removed methods that have been added to the standard library), JSCTextView (fixed property changes when document is empty), removed JSCScrollPane, JStartRow, added JSCScrollView, JSCScrollTopView, JSCTabletView
  - sc helper classes improvements: Collapse (function call error protection), Insets (added leftTop method), added UpdateListener
  - sc help files: completed, partly reformatted
  - java classes: SwingOSC (fixed checkMethodArgs type priorities)
@@ -88,7 +88,7 @@
 
 ### v0.513 (apr 2007)
 
- - fixes a number of known issues (JSCView.bounds_, JSCEnvelopeView.value_, JSCPopUpMenu.item_, JSCListView.item_)
+ - fixes a number of known issues (`JSCView.bounds`, `JSCEnvelopeView.value`, `JSCPopUpMenu.item`, `JSCListView.item`)
 
 ### v0.51 (mar 2007)
  - includes NetUtil 0.32 (= fixes umlaut problems)

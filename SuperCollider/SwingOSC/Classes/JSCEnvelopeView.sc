@@ -32,6 +32,8 @@ JSCEnvelopeView : JSCAbstractMultiSliderView {
 	var acResp;
 	var vlResp;
 	var clpse;
+	
+	var <horizontalEditMode = \free;
 
 // rather useless behaviour in SCEnvelopeView (using shift+click you can ignore it),
 // so keep it out for now
@@ -254,7 +256,22 @@ JSCEnvelopeView : JSCAbstractMultiSliderView {
 	
 	lockBounds_ { arg val; this.setProperty( \lockBounds, val )}
 	
-	horizontalEditMode_ { arg val; this.setProperty( \horizontalEditMode, val )}
+	horizontalEditMode_ { arg val; 
+		horizontalEditMode = val;
+		this.setProperty( \horizontalEditMode, val );
+	}
+	
+	keepHorizontalOrder { ^horizontalEditMode === \clamp }
+	keepHorizontalOrder_ { arg bool;
+		this.horizontalEditMode = if( bool, \clamp, \free );
+	}
+	
+	elasticSelection { ^true }
+	elasticSelection_ { arg bool;
+		if( bool.not, {
+			"JSCEnvelopeView:elasticSelection_(false) -- not yet implemented".warn;
+		});
+	}
 	
 	connect { arg from, aconnections;
 		var bndl, target, targetCons, fromCons;

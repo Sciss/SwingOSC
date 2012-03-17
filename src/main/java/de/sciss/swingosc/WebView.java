@@ -64,7 +64,7 @@ public class WebView extends JPanel {
 
     volatile private boolean vetoEnabled = false;
 
-    private String nextURL;
+//    private String nextURL;
     private String lastURL;
     private String result = "";
 
@@ -151,6 +151,8 @@ public class WebView extends JPanel {
     public synchronized void removeActionListener( ActionListener l ) {
         actionListener = AWTEventMulticaster.remove(actionListener, l);
     }
+
+//    public float getZoom() { return browser.getServices(). ... }
 
     private void dispatchLinkActivated( URL url ) {
         if( !EventQueue.isDispatchThread() ) System.out.println( "--Ooops. not event thread" );

@@ -315,9 +315,11 @@ JSCView {  // abstract class
 		properties	= IdentityDictionary.new;
 		if( argBounds.isString, {
 			cmpLayout	= argBounds;
+		}, { if( argBounds.isKindOf( Rect ), {
+			scBounds	= argBounds.copy;
 		}, {
 			scBounds	= argBounds.asRect;
-		});
+		})});
 		properties.put( \enabled, true );
 		properties.put( \canFocus, true );
 		properties.put( \resize, 1 );

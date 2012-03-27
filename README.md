@@ -6,7 +6,7 @@
 
 SwingOSC is (C)opyright by 2005-2012 Hanns Holger. All rights reserved. It is released under the [GNU General Public License](http://github.com/Sciss/SwingOSC/blob/master/licenses/SwingOSC-License.txt).
 
-This is an __experimental__ v0.70-SNAPSHOT 'revamp' branch. See the old `readme.html` for more information about SwingOSC.
+The 'readme' is currently under re-writing. For the time being, also see the old `readme.html` for more information about SwingOSC.
 
 In progress:
 

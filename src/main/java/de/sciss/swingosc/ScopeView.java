@@ -140,18 +140,7 @@ implements OSCListener, ActionListener
 			if( wasListening ) {
 				stopListening();
 			}
-//			if( hostName.equals( "127.0.0.1" ) || hostName.equals( "localhost" )) {
-//				try {
-//					addr	= new InetSocketAddress( InetAddress.getLocalHost(), port );
-////					addr	= new InetSocketAddress( "192.168.2.106", port );
-//				}
-//				catch( UnknownHostException e1 ) {
-//					addr	= new InetSocketAddress( hostName, port );
-//				}
-//			} else {
-				addr		= new InetSocketAddress( hostName, port );
-//			}
-//System.err.println( "host = " + hostName + " => " + addr.getHostName() );
+            addr = new InetSocketAddress( hostName, port );
 			this.protocol	= protocol;
 			if( wasListening ) {
 				startListening();
@@ -168,7 +157,8 @@ implements OSCListener, ActionListener
 				}
 //				final Map map = new HashMap( 1 );
 				try {
-					client	= OSCClient.newUsing( protocol );
+                    final boolean loopBack = addr.getAddress().isLoopbackAddress();
+					client	= OSCClient.newUsing( protocol, 0, loopBack );
 					client.setBufferSize( OSC_BUF_SIZE );  // current scsynth versions!
 //					client	= OSCClient.newUsing( protocol, 0, true );
 //System.err.println( "size = " + size );

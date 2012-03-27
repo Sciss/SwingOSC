@@ -140,17 +140,17 @@ implements OSCListener, ActionListener
 			if( wasListening ) {
 				stopListening();
 			}
-			if( hostName.equals( "127.0.0.1" ) || hostName.equals( "localhost" )) {
-				try {
-					addr	= new InetSocketAddress( InetAddress.getLocalHost(), port );
-//					addr	= new InetSocketAddress( "192.168.2.106", port );
-				}
-				catch( UnknownHostException e1 ) {
-					addr	= new InetSocketAddress( hostName, port );
-				}
-			} else {
+//			if( hostName.equals( "127.0.0.1" ) || hostName.equals( "localhost" )) {
+//				try {
+//					addr	= new InetSocketAddress( InetAddress.getLocalHost(), port );
+////					addr	= new InetSocketAddress( "192.168.2.106", port );
+//				}
+//				catch( UnknownHostException e1 ) {
+//					addr	= new InetSocketAddress( hostName, port );
+//				}
+//			} else {
 				addr		= new InetSocketAddress( hostName, port );
-			}
+//			}
 //System.err.println( "host = " + hostName + " => " + addr.getHostName() );
 			this.protocol	= protocol;
 			if( wasListening ) {

@@ -97,21 +97,13 @@ object SwingOSCBuild extends Build {
                                 name: String, version: String, streams: TaskStreams ) {
       import streams.log
 
-      def flatten( platCfg: Configuration, f: File, res: IndexedSeq[ (File, String) ] = IndexedSeq.empty ) : IndexedSeq[ (File, String) ] = {
+      def flatten( f: File, res: IndexedSeq[ (File, String) ] = IndexedSeq.empty ) : IndexedSeq[ (File, String) ] = {
          require( f.exists(), "Expected file not found: " + f )
          if( f.isDirectory ) {
-            f.listFiles().foldLeft( res )( (fs, f) => flatten( platCfg, f, fs ))
-         } else {
-            val fn = f.getName
-            if( fn != ".DS_Store" ) {
-               val platName   = "-" + platCfg.name.capitalize;
-               val pi         = fn.indexOf( platName )
-               val f1 = if( pi < 0 ) f else {   // remove -platName
-                  new File( f.getParent, fn.substring( 0, pi ) + fn.substring( pi + platName.length ))
-               }
-               res :+ (f, IO.relativize( baseDir, f1 ).getOrElse( sys.error( "Can't relativize path " + f )))
-            } else res
-         }
+            f.listFiles().foldLeft( res )( (fs, f) => flatten( f, fs ))
+         } else if( f.getName != ".DS_Store" ) {
+            res :+ (f, IO.relativize( baseDir, f ).getOrElse( sys.error( "Can't relativize path " + f )))
+         } else res
       }
 
       val common = Seq(
@@ -120,16 +112,15 @@ object SwingOSCBuild extends Build {
          baseDir / "licenses",
          baseDir / "OSC-Command-Reference.html",
          baseDir / "PureData",
-         baseDir / "readme.html",
          baseDir / "README.md",
+         baseDir / "CHANGES.md",
          baseDir / "SuperCollider"
       )
 
       val macOnly = Seq(
          baseDir / "application.icns",
          baseDir / "SwingOSC_TCP.command",
-         baseDir / "SwingOSC_UDP.command",
-         macJarFile
+         baseDir / "SwingOSC_UDP.command"
       )
 
       val linuxOnly = Seq(
@@ -138,22 +129,20 @@ object SwingOSCBuild extends Build {
          baseDir / "install_linux_local.sh",
          baseDir / "install_linux_system.sh",
          baseDir / "SwingOSC_TCP.sh",
-         baseDir / "SwingOSC_UDP.sh",
-         linuxJarFile
+         baseDir / "SwingOSC_UDP.sh"
       )
 
       val winOnly = Seq(
          baseDir / "SwingOSC_TCP.bat",
-         baseDir / "SwingOSC_UDP.bat",
-         windowsJarFile
+         baseDir / "SwingOSC_UDP.bat"
       )
 
       val distDir = baseDir / "dist"
       distDir.mkdirs()
 
-      def compress( entries: Seq[ File ], platCfg: Configuration, format: String = "zip" ) {
+      def compress( entries: Seq[ File ], jarFile: File, platCfg: Configuration, format: String = "zip" ) {
          val platName = platCfg.name.capitalize
-         val entriesWithNames = entries.flatMap( flatten( platCfg, _ ))
+         val entriesWithNames = entries.flatMap( flatten( _ )) :+ (jarFile, "SwingOSC.jar")
          val targetFile = distDir / (name + "-" + version + "-" + platName + "." + format)
          log.info( "Packaging " + targetFile )
          format match {
@@ -163,8 +152,8 @@ object SwingOSCBuild extends Build {
          }
       }
 
-      compress( common ++ macOnly,   Mac )
-      compress( common ++ linuxOnly, Linux )
-      compress( common ++ winOnly,   Windows )
+      compress( common ++ macOnly, macJarFile, Mac )
+      compress( common ++ linuxOnly, linuxJarFile, Linux )
+      compress( common ++ winOnly, windowsJarFile, Windows )
    }
 }

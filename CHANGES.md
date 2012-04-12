@@ -1,5 +1,12 @@
 ## SwingOSC Version History
 
+### v0.70 (apr 2012)
+
+ - new components: JSCWebView, based on JxBrowser.
+ - uses Nimbus look-and-feel for default components, and Nimbus resembling style for custom components.
+ - adds various methods required for smooth operation with SC 3.5
+ - regression: the native tablet view is currently disabled
+
 ### v0.66 (oct 2011 - SVN rev. ???)
 
  - SC classes: added JSCWebView, updated JFont (added new methods)

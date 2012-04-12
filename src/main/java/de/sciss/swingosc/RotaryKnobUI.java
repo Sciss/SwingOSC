@@ -291,18 +291,17 @@ public class RotaryKnobUI extends BasicSliderUI {
 //
 //        } else
         if( knob.getPaintTrack() ) {
-//            final float w1      = w * 0.75f;
-//            final float h1      = h * 0.875f;
-//            final int margin    = w * 0.75f < h * 0.875f ? w / 8 : h / 8;
-            final int margin    = (int) (Math.min( w, h / 0.875 ) * 0.125);
-            final int diam      = margin << 3;
-            ext                 = margin * 6;
+            final float margin0 = Math.min( w, h / 0.875f ) * 0.125f;
+            ext                 = (int) (margin0 * 6);
+            final float margin  = (float) ext / 6;
+            final float diam    = margin * 8;
             final int inLeft    = (w - ext) >> 1;
-            final int inTop     = (h - margin * 5) >> 1;
+            final float inTop   = (h - margin * 5) * 0.5f;
+            final int inTopI    = (int) (inTop + 0.5f);
             trackBufIn.left     = inLeft;
             trackBufIn.right    = w - ext - inLeft;
-            trackBufIn.top      = inTop;
-            trackBufIn.bottom   = h - ext - inTop;
+            trackBufIn.top      = inTopI;
+            trackBufIn.bottom   = h - ext - inTopI;
 
 //System.out.println( "w = " + w + "; h = " + h + "; margin = " + margin + "; ext = " + ext + "; track.left = " + trackBufIn.left + "; track.right = " + trackBufIn.right + "; track.top = " + trackBufIn.top + "; track.bottom = " + trackBufIn.bottom );
 

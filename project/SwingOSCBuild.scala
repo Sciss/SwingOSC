@@ -11,7 +11,7 @@ object SwingOSCBuild extends Build {
    val Devel   = config( "devel" )   extend( Compile )
 
    lazy val crossAssemblySettings: Seq[Project.Setting[_]] = baseAssemblySettings ++ Seq(
-      target in assembly <<= baseDirectory,
+//      target in assembly <<= baseDirectory,
 //      jarName in assembly <<= name( _ + ".jar" ),
       mainClass in assembly := Some( "de.sciss.swingosc.SwingOSC" ),
       excludedFiles in assembly := {
@@ -28,14 +28,40 @@ object SwingOSCBuild extends Build {
       assembleArtifact in packageSrc   := false  // no sources
    )
 
+   private lazy val crossExcluded      = Set( "jxbrowser_development_license_for_swingosc.jar" )
+   private lazy val notSafariExcluded  = Set( "jxbrowser_engine-webkit.jar" )
+   private lazy val notMozillaExcluded = Set( "jxbrowser_engine-gecko.jar", "jxbrowser_MozillaInterfaces.jar",
+                                              "jxbrowser_xulrunner-linux.jar", "jxbrowser_xulrunner-linux64.jar",
+                                              "jxbrowser_xulrunner-mac.jar", "jxbrowser_xulrunner-windows.jar" )
+   private lazy val notIEExcluded      = Set( "jxbrowser_engine-ie.jar" )
+   private lazy val notMacExcluded     = Set( "jxbrowser_xulrunner-mac.jar" ) ++ notSafariExcluded
+   private lazy val notLinuxExcluded   = notMozillaExcluded
+   private lazy val notWindowsExcluded = Set( "jxbrowser_winpack-3.8.2.jar", "jxbrowser_xulrunner-windows.jar" ) ++ notIEExcluded
+   private lazy val macExcluded        = notLinuxExcluded ++ notWindowsExcluded
+   private lazy val linuxExcluded      = notMacExcluded ++ notWindowsExcluded
+   private lazy val windowsExcluded    = notMacExcluded ++ notLinuxExcluded
+
+   private def platformAssembly( config: Configuration, excl: Set[ String ] = Set.empty ) : Seq[sbt.Project.Setting[_]] = {
+      val excl1 = excl ++ crossExcluded
+      inConfig( config )( crossAssemblySettings ++ inTask( assembly ) {
+         val s0 = Seq[Project.Setting[_]](
+            jarName <<= name( _ + (if( config == Devel ) "" else "-" + config.name.capitalize) + ".jar" ),
+            excludedJars <<= (fullClasspath in assembly) map { _.filter( e => excl1.contains( e.data.getName ))}
+         )
+         if( config == Devel ) {
+            (target <<= baseDirectory) +: s0
+         } else s0
+      })
+   }
+
    lazy val customAssemblySettings: Seq[Project.Setting[_]] =
-       inConfig( Mac )(    inTask( assembly )( jarName <<= name( _ + "-Mac.jar"   ))) ++
-       inConfig( Linux )(  inTask( assembly )( jarName <<= name( _ + "-Linux.jar" )))
-       inConfig( Windows )(inTask( assembly )( jarName <<= name( _ + "-Windows.jar" )))
-       inConfig( Devel )  (inTask( assembly )( jarName <<= name( _ + ".jar" )))
+      platformAssembly( Mac, macExcluded ) ++
+      platformAssembly( Linux, linuxExcluded ) ++
+      platformAssembly( Windows, windowsExcluded ) ++
+      platformAssembly( Devel )
 
    lazy val root = Project( id = "root", base = file( "." ),
-      settings = Defaults.defaultSettings ++ assemblySettings ++ crossAssemblySettings ++ customAssemblySettings ++ Seq(
+      settings = Defaults.defaultSettings ++ assemblySettings ++ /* crossAssemblySettings ++ */ customAssemblySettings ++ Seq(
          name           := "SwingOSC",
          organization   := "de.sciss",
          version        := "0.70-SNAPSHOT",
@@ -47,9 +73,9 @@ object SwingOSCBuild extends Build {
 
          // ---- assembly ----
 
-         excludedJars in assembly <<= (fullClasspath in assembly) map {
-            _.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
-         },
+//         excludedJars in assembly <<= (fullClasspath in assembly) map {
+//            _.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
+//         },
 
          // ---- distribution ----
          assemblyMac     <<= assembly in Mac,
@@ -71,13 +97,21 @@ object SwingOSCBuild extends Build {
                                 name: String, version: String, streams: TaskStreams ) {
       import streams.log
 
-      def flatten( f: File, res: IndexedSeq[ (File, String) ] = IndexedSeq.empty ) : IndexedSeq[ (File, String) ] = {
+      def flatten( platCfg: Configuration, f: File, res: IndexedSeq[ (File, String) ] = IndexedSeq.empty ) : IndexedSeq[ (File, String) ] = {
          require( f.exists(), "Expected file not found: " + f )
          if( f.isDirectory ) {
-            f.listFiles().foldLeft( res )( (fs, f) => flatten( f, fs ))
-         } else if( f.getName != ".DS_Store" ) {
-            res :+ (f, IO.relativize( baseDir, f ).getOrElse( sys.error( "Can't relativize path " + f )))
-         } else res
+            f.listFiles().foldLeft( res )( (fs, f) => flatten( platCfg, f, fs ))
+         } else {
+            val fn = f.getName
+            if( fn != ".DS_Store" ) {
+               val platName   = "-" + platCfg.name.capitalize;
+               val pi         = fn.indexOf( platName )
+               val f1 = if( pi < 0 ) f else {   // remove -platName
+                  new File( f.getParent, fn.substring( 0, pi ) + fn.substring( pi + platName.length ))
+               }
+               res :+ (f, IO.relativize( baseDir, f1 ).getOrElse( sys.error( "Can't relativize path " + f )))
+            } else res
+         }
       }
 
       val common = Seq(
@@ -117,9 +151,10 @@ object SwingOSCBuild extends Build {
       val distDir = baseDir / "dist"
       distDir.mkdirs()
 
-      def compress( entries: Seq[ File ], platform: String, format: String = "zip" ) {
-         val entriesWithNames = entries.flatMap( flatten( _ ))
-         val targetFile = distDir / (name + "-" + version + "-" + platform + "." + format)
+      def compress( entries: Seq[ File ], platCfg: Configuration, format: String = "zip" ) {
+         val platName = platCfg.name.capitalize
+         val entriesWithNames = entries.flatMap( flatten( platCfg, _ ))
+         val targetFile = distDir / (name + "-" + version + "-" + platName + "." + format)
          log.info( "Packaging " + targetFile )
          format match {
             case "zip" => IO.zip( entriesWithNames, targetFile )
@@ -128,8 +163,8 @@ object SwingOSCBuild extends Build {
          }
       }
 
-      compress( common ++ macOnly,   "Mac" )
-      compress( common ++ linuxOnly, "Linux" /*, "gz" */)
-      compress( common ++ winOnly,   "Windows" )
+      compress( common ++ macOnly,   Mac )
+      compress( common ++ linuxOnly, Linux )
+      compress( common ++ winOnly,   Windows )
    }
 }

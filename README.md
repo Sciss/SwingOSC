@@ -8,6 +8,8 @@ SwingOSC is (C)opyright by 2005-2012 Hanns Holger. All rights reserved. It is re
 
 The 'readme' is currently under re-writing. For the time being, also see the old `readme.html` for more information about SwingOSC.
 
+This is a snapshot of version 0.70 which aims to be compatible with SuperCollider 3.5.
+
 In progress:
 
  - the tablet view classes are currently disabled

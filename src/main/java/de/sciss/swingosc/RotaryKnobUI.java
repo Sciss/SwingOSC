@@ -58,6 +58,8 @@ public class RotaryKnobUI extends BasicSliderUI {
 //    private static final Stroke strkHand        = new BasicStroke( 0.5f );
     private static final Stroke strkOut         = new BasicStroke( 6f );
 
+    private final float[] dashTrackHigh = new float[] { 2f, 1f };
+
     private boolean mOver       = false;
     private boolean mPressed    = false;
 //    protected Color	colrKnob	= null;
@@ -253,41 +255,74 @@ public class RotaryKnobUI extends BasicSliderUI {
 
     @Override
     protected void calculateThumbSize() {
+        final int x     = contentRect.x;
+        final int y     = contentRect.y;
         final int w     = contentRect.width; // - ((1 - contentRect.width) & 1);
         final int h     = contentRect.height;
         final int ext;
+//        if( false ) {
+//            final int w1        = (int) (w * 0.75f);
+//            final int h1        = (int) ((h - 1) * 0.875f); // nasty
+//            ext                 = Math.min( w1, h1 );
+//            final int tt  = (h - ext + 1) >> 1; // nasty
+//            trackBufIn.left     = (w - ext) >> 1;
+//            trackBufIn.top      = (int) (tt + 0.5f); // (h - ext) >> 1;
+//            trackBufIn.right    = (w - ext + 1) >> 1;
+//            trackBufIn.bottom   = 0;
+//            final int exto     = (int) (ext / 0.75f - 0.5f);  // nasty
+//            final float exti   = ext / 0.875f;
+//            final float extm   = (exti + exto) * 0.5f;
+//            final float ring   = (exto - exti) * 0.5f;
+//            final float ringo  = ring * 0.25f;
+//            final float ringh  = ring * 0.5f;
+//            final float exto2  = exto - (ringo + ringo);
+//            final float xo     = x + (w - exto) * 0.5f;
+//            final float yo     = y + (h + tt - exto) * 0.5f;
+//            arc.setFrame( xo + ringo, yo + ringo, exto2, exto2 );
+//            shpTrack = new Area( arc );
+//            final float exti2  = exti - (ringo + ringo);
+//            arc.setFrame( xo + ringo + ring, yo + ringo + ring, exti2, exti2 );
+//            shpTrack.subtract( new Area( arc ));
+////            final float dash    = 2f; // Math.max( 2f, ring );
+////            final float[] dashTrackHigh = new float[] { dash, dash * 0.5f };
+//            strkTrackHigh       = new BasicStroke( ring, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.5f, dashTrackHigh, 0f );
+//            arcTrackHigh.setFrame( xo + ringh, yo + ringh, extm, extm );
+////System.out.println( "calculateThumbSize(). w = " + w + ", h = " + h + ", w1 = " + w1 + ", h1 = " + h1 + ", ext = " + ext + ", xo = " + xo + ", yo " + yo + ", ringo = " + ringo );
+//
+//        } else
         if( knob.getPaintTrack() ) {
-            final int w1        = (int) (w * 0.75f);
-            final int h1        = (int) ((h - 1) * 0.875f); // nasty
-            ext                 = Math.min( w1, h1 );
-//            final float tt  = (h - ext) * 0.5f;
-            final int tt  = (h - ext + 1) >> 1; // nasty
-            trackBufIn.left     = (w - ext) >> 1;
-            trackBufIn.top      = (int) (tt + 0.5f); // (h - ext) >> 1;
-            trackBufIn.right    = (w - ext + 1) >> 1;
-            trackBufIn.bottom   = 0;
-//            final float exto   = ext / 0.75f;
-            final int exto     = (int) (ext / 0.75f - 0.5f);  // nasty
-            final float exti   = ext / 0.875f;
-            final float extm   = (exti + exto) * 0.5f;
-            final float ring   = (exto - exti) * 0.5f;
-            final float ringo  = ring * 0.25f;
-            final float ringh  = ring * 0.5f;
-            final float exto2  = exto - (ringo + ringo);
-//            final float xo     = contentRect.x + (w - exto) * 0.5f;
-            final float xo     = contentRect.x + (w - exto) * 0.5f;
-//            final int yo     = (int) (contentRect.y + (h + tt - exto) * 0.5f + 0.5f);
-            final float yo     = contentRect.y + (h + tt - exto) * 0.5f;
-            arc.setFrame( xo + ringo, yo + ringo, exto2, exto2 );
+//            final float w1      = w * 0.75f;
+//            final float h1      = h * 0.875f;
+//            final int margin    = w * 0.75f < h * 0.875f ? w / 8 : h / 8;
+            final int margin    = (int) (Math.min( w, h / 0.875 ) * 0.125);
+            final int diam      = margin << 3;
+            ext                 = margin * 6;
+            final int inLeft    = (w - ext) >> 1;
+            final int inTop     = (h - margin * 5) >> 1;
+            trackBufIn.left     = inLeft;
+            trackBufIn.right    = w - ext - inLeft;
+            trackBufIn.top      = inTop;
+            trackBufIn.bottom   = h - ext - inTop;
+
+//System.out.println( "w = " + w + "; h = " + h + "; margin = " + margin + "; ext = " + ext + "; track.left = " + trackBufIn.left + "; track.right = " + trackBufIn.right + "; track.top = " + trackBufIn.top + "; track.bottom = " + trackBufIn.bottom );
+
+            final float xo      = x + inLeft - margin;
+            final float yo      = y + inTop  - margin;
+            final float ring    = margin * 0.625f; // 0.5f;
+            final float ringh   = ring * 0.5f;
+            final float offLow1 = ring * 0.333f; // 0.25f;
+            final float offLow2 = offLow1 + ring;
+            final float extHigh = diam - ring;
+            final float extLow1 = diam - offLow1 - offLow1;
+            final float extLow2 = extLow1 - ring - ring;
+
+            arc.setFrame( xo + offLow1, yo + offLow1, extLow1, extLow1 );
             shpTrack = new Area( arc );
-            final float exti2  = exti - (ringo + ringo);
-            arc.setFrame( xo + ringo + ring, yo + ringo + ring, exti2, exti2 );
+            arc.setFrame( xo + offLow2, yo + offLow2, extLow2, extLow2 );
             shpTrack.subtract( new Area( arc ));
-            final float dash    = 2f; // Math.max( 2f, ring );
-            final float[] dashTrackHigh = new float[] { dash, dash * 0.5f };
+
             strkTrackHigh       = new BasicStroke( ring, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.5f, dashTrackHigh, 0f );
-            arcTrackHigh.setFrame( xo + ringh, yo + ringh, extm, extm );
-//System.out.println( "calculateThumbSize(). w = " + w + ", h = " + h + ", w1 = " + w1 + ", h1 = " + h1 + ", ext = " + ext + ", xo = " + xo + ", yo " + yo + ", ringo = " + ringo );
+            arcTrackHigh.setFrame( xo + ringh, yo + ringh, extHigh, extHigh );
 
         } else {
             trackBufIn.left     = 0;
@@ -295,15 +330,7 @@ public class RotaryKnobUI extends BasicSliderUI {
             trackBufIn.right    = 0;
             trackBufIn.bottom   = 0;
             ext = Math.min( w, h );
-//            trackBufIn.left     = (w - ext) >> 1;
-//            trackBufIn.top      = (h - ext) >> 1;
-//            trackBufIn.right    = (w - ext + 1) >> 1;
-//            trackBufIn.bottom   = (h - ext + 1) >> 1;
         }
-//        final int w1    = w - (trackBufIn.left + trackBufIn.right);
-//        final int h1    = h - (trackBufIn.top + trackBufIn.bottom);
-
-//        return new Dimension( ext, ext );
         thumbRect.setSize( ext, ext );
     }
 

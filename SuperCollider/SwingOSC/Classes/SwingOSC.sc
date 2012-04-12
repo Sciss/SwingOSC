@@ -41,8 +41,10 @@ SwingOptions
 	*initClass {
 		var jo = "-Xmx512m";
 		if( thisProcess.platform.name == \osx, {
-			// weird bug with escaping quotes here
-			jo = jo + "-Dapple.laf.useScreenMenuBar=true " ++ $" ++ "-Xdock:icon=${DIR}/application.icns" ++ $" ++ " -Xdock:name=SwingOSC";
+			// On OS X, enforce 32-bit JVM, because we prefer to use Mozilla as web engine
+			// across platforms, and JxBrowser does not support Mozilla on OS X 64 bit Java.
+			                                                         // weird bug with escaping quotes here
+			jo = jo + /* "-d32" + */ "-Dapple.laf.useScreenMenuBar=true" + ($" ++ "-Xdock:icon=${DIR}/application.icns" ++ $") + "-Xdock:name=SwingOSC";
 		});
 		default = this.new.javaOptions_( jo );
 	}

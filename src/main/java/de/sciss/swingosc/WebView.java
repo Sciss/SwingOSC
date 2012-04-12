@@ -45,6 +45,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class WebView extends JPanel {
+    public static final boolean MOZILLA         = false;
+
     public static final boolean VERBOSE         = false;
 
     public static final String ACTION_LOADED    = "loaded";
@@ -52,7 +54,7 @@ public class WebView extends JPanel {
 
     private static boolean initialized = false;
 
-    private final Browser browser = BrowserFactory.createBrowser(); // ( BrowserType.Mozilla );
+    private final Browser browser = MOZILLA ? BrowserFactory.createBrowser( BrowserType.Mozilla ) : BrowserFactory.createBrowser();
     private final List hyperlinkListeners   = new ArrayList();
     private ActionListener actionListener = null;
 
@@ -183,6 +185,10 @@ public class WebView extends JPanel {
 
     private static synchronized void init() throws Exception {
         if( !initialized ) {
+            // disable Mozilla profile creation in ~/.JxBrowser:
+            // http://www.teamdev.com/downloads/jxbrowser/docs/JxBrowser-PGuide.html#properties
+            // --- unfortunately that still extracts the XUL runner
+            System.setProperty( "jxbrowser.xulrunner.use.profile", "false" );
 //            final PlatformInit pi = PlatformInit.getInstance();
 ////            pi.initOtherProperties();
 ////            pi.initSecurity();

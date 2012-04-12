@@ -64,7 +64,7 @@ object SwingOSCBuild extends Build {
       settings = Defaults.defaultSettings ++ assemblySettings ++ /* crossAssemblySettings ++ */ customAssemblySettings ++ Seq(
          name           := "SwingOSC",
          organization   := "de.sciss",
-         version        := "0.70-SNAPSHOT",
+         version        := "0.70",
          homepage       := Some( url( "https://github.com/Sciss/SwingOSC" )),
          description    := "An OpenSoundControl (OSC) server to dynamically instantiate and control Java objects. " +
                            "Its main application is a GUI library for SuperCollider.",

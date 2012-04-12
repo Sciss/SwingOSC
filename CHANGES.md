@@ -2,16 +2,18 @@
 
 ### v0.70 (apr 2012)
 
- - new components: JSCWebView, based on JxBrowser.
- - uses Nimbus look-and-feel for default components, and Nimbus resembling style for custom components.
- - adds various methods required for smooth operation with SC 3.5
+ - new components: JSCWebView, based on JxBrowser; JSCLevelIndicator (still very plain); native JSCKnob
+ - fixes: JSCButton modifiers; s.meter returns window; JSCWindow full screen and alpha; initial JSCNumberBox space; sub-pixel coordinates in user view, envelope view and multislider view; unicodes in JSCTextField despite sclang's broken Char/String interaction; JSCView bounds argument is copied (fixes mutability)
+ - updates: speech works with newer freetts, PDF example uses newer iTextPDF
+ - adds various methods required for smooth operation with SC 3.5: JSCFont; shutdown hooks (thanks to james harkins); SwingDialog.openPanel; JSCWindow.drawHook deprecated; JPen.lineDash accepts empty array; JSCView has mouseWheel, mouseEnter, mouseLeave, onMove and onResize methods
+ - uses Nimbus look-and-feel for default components, and Nimbus resembling style for custom components. Add --nimbus switch to command line.
+ - more consistent component naming: JFont becomes JSCFont, JSpeech becomes JSCSpeech, JStethoscope becomes JSCStethoscope, JTexturePaint becomes JSCTexturePaint, JFreqScope becomes JSCFreqScopeWindow, JSC2DSlider becomes JSCSlider2D
+ - slight changes: JSCWindow appears centred on screen by default
  - regression: the native tablet view is currently disabled
-
-### v0.66 (oct 2011 - SVN rev. ???)
-
- - SC classes: added JSCWebView, updated JFont (added new methods)
- - Switched from Eclipse to IntelliJ IDEA
- - Now includes JMF and Lobo Browser
+ - switched from SourceForge/svn to GitHub/git
+ - switched from Eclipse/ant to IntelliJ IDEA/sbt for development
+ - now includes JMF (for JSCMovieView)
+ - SwingOSC.jar now in base directory
 
 ### v0.65 (jul 2010 - SVN rev. 252)
 

@@ -16,13 +16,15 @@ SwingOSC uses UDP and TCP network protocols. It allows to create and execute alm
 
 It is strongly advised to launch SwingOSC with the __-L option__ which limits communication to the local computer. Alternatively, make sure your firewall settings are appropriate.
 
-### installation
+### requirements
 
 SwingOSC is written in Java and requires a Java runtime environment (JRE) version 1.6 or better. On Mac OS X you already have this runtime. On other platforms you may need to download and install a recent runtime. SwingOSC should work with [Oracle Java](http://java.com) or [OpenJDK](http://openjdk.java.net/). You can verify your current Java version by opening a terminal and executing the command `java -version`.
 
 __Linux note:__ There are other free implementations for the Java standard platform, like Apache Harmony and GNU Classpath. However, most of them are not suitable for GUI applications since their AWT/Swing is incomplete or buggy. Note that you can have more than one java runtime installed (see [nescivi's posting](www.nabble.com/swingOSC-installation-on-Linux-Ubuntu-7.04-t4638827.html) for details).
 
-__Installing SuperCollider classes:__ please refer to the separate file `SuperCollider/README.md`.
+### installation
+
+__Installing SuperCollider classes:__ please refer to the separate file `SuperCollider/README.md`. Also see file `INSTALL_LINUX` on Linux.
 
 ### launching the server
 
@@ -30,13 +32,13 @@ __Note__: Typically you will launch SwingOSC from sclang, using `SwingOSC.defaul
 
 Open a terminal and `cd` into the SwingOSC folder. Either run the default script by typing `sh SwingOSC_TCP.ext` (where `ext` is `.command` on OS X, `.sh` on Linux, and `.bat` on Windows), or launch with custom options:
 
-    > java [java-VM-options] -jar SwingOSC.jar [swing-osc-options]
+    java [java-VM-options] -jar SwingOSC.jar [swing-osc-options]
 
 where the VM options are:
 
  - `-Dswing.defaultlaf=<LookAndFeelClassName>` (not recommended): specifies a custom look-and-feel class. e.g. `com.birosoft.liquid.LiquidLookAndFeel`. Note that the widgets are now optimised for Nimbus, so it is recommended to just use the `-nimbus` switch instead.
  - `-Xdock:icon=application.icns` : (Mac OS only) uses a prettier icon for display in the dock and programme switching screen.
- - -`Xdock:name=SwingOSC` : (Mac OS only) uses an alternative name in the screen bar and dock
+ - `-Xdock:name=SwingOSC` : (Mac OS only) uses an alternative name in the screen bar and dock
 
 and the SwingOSC options are:
 
@@ -45,7 +47,7 @@ and the SwingOSC options are:
  - `-L` (recommended) : uses loopback address ("127.0.0.1") for communication. if absent, the local host's IP address is used. when your computer is connected to a network and SwingOSC needs only be accessed from the local computer, make sure you use this option to minimize the security issue mentioned above.
  - `-i` : runs Swing initialization upon startup. On Mac OS, a terminal app becomes a GUI app with screen menu bar and icon in the Dock, as soon as an AWT or Swing component is created. This initialization can be enforced by using this option.
  - `-h <host:port>` (recommended) : sends a `[ /swing, "hello", <swingHost>, <swingPort>, <swingProtocol> ]` message to the given UDP socket. this kind of manual "bonjour" is used by the SuperCollider classes to detect the startup of the SwingOSC server.
- - `-nimbus` (recommended) : enforces the use of the Nimbus look and feel. Requires Apple Java 6, Oracle Java 6, or OpenJDK 7.
+ - `--nimbus` (recommended) : enforces the use of the Nimbus look and feel. Requires Apple Java 6, Oracle Java 6, or OpenJDK 7.
 
 If you wish to include custom java classes or libraries, you can either
 
@@ -53,7 +55,7 @@ If you wish to include custom java classes or libraries, you can either
  - include them in the `SwingOSC.jar` file
  - add them to the java class path, as shown in the following example which adds the freetts speech libraries (assuming they have been copied to the `lib` folder):
 
-    > java -cp SwingOSC.jar:lib/freetts.jar:lib/jsapi.jar de.sciss.swingosc.SwingOSC [swing-osc-options]
+    java -cp SwingOSC.jar:lib/freetts.jar:lib/jsapi.jar de.sciss.swingosc.SwingOSC [swing-osc-options]
 
 ### compilation from source
 

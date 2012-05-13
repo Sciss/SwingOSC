@@ -36,7 +36,7 @@ JSCTextField : JSCTextEditBase {   // not a child class of JSCNumberBox
 
 	defaultKeyDownAction { arg key, modifiers, unicode; ^this } // swallow all
 
-	string_ { arg s; super.string = s.as( String )}
+	string_ { arg s; super.string = s.asString }
 
 // doesn't work yet
 	defaultGetDrag { ^this.string }

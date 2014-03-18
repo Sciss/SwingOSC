@@ -1,32 +1,32 @@
 ![logo](http://sciss.de/swingOSC/application.png)
 
-## SwingOSC
+# SwingOSC
 
-### statement
+## statement
 
 SwingOSC is an OpenSoundControl (OSC) server intended for scripting Java(tm), such as to create graphical user interfaces with AWT or Swing classes. It uses the reflection and beans mechanism to dynamically create instances of java classes and control them. A separate set of SuperCollider language classes is included to allow the building of GUIs from within sclang.
 
-SwingOSC is (C)opyright by 2005-2012 Hanns Holger. All rights reserved. It is released under the [GNU General Public License](http://github.com/Sciss/SwingOSC/blob/master/licenses/SwingOSC-License.txt).
+SwingOSC is (C)opyright by 2005-2014 Hanns Holger. All rights reserved. It is released under the [GNU General Public License](http://github.com/Sciss/SwingOSC/blob/master/licenses/SwingOSC-License.txt).
 
-SwingOSC version 0.70 is intended to be used with SuperCollider 3.5.1 or higher.
+SwingOSC versions 0.70 and higher are intended to be used with SuperCollider v3.5.1 or higher.
 
-### security note
+## security note
 
 SwingOSC uses UDP and TCP network protocols. It allows to create and execute almost any kind of java code on your machine. Therefore, running SwingOSC in a network that can be accessed from outside is a __severe security problem__, allowing hijacking, information retrieval and massive damage on your machine. You have been warned!
 
 It is strongly advised to launch SwingOSC with the __-L option__ which limits communication to the local computer. Alternatively, make sure your firewall settings are appropriate.
 
-### requirements
+## requirements
 
 SwingOSC is written in Java and requires a Java runtime environment (JRE) version 1.6 or better. On Mac OS X you already have this runtime. On other platforms you may need to download and install a recent runtime. SwingOSC should work with [Oracle Java](http://java.com) or [OpenJDK](http://openjdk.java.net/). You can verify your current Java version by opening a terminal and executing the command `java -version`.
 
 __Linux note:__ There are other free implementations for the Java standard platform, like Apache Harmony and GNU Classpath. However, most of them are not suitable for GUI applications since their AWT/Swing is incomplete or buggy. Note that you can have more than one java runtime installed (see [nescivi's posting](www.nabble.com/swingOSC-installation-on-Linux-Ubuntu-7.04-t4638827.html) for details).
 
-### installation
+## installation
 
 __Installing SuperCollider classes:__ please refer to the separate file `SuperCollider/README.md`. Also see file `INSTALL_LINUX` on Linux.
 
-### launching the server
+## launching the server
 
 __Note__: Typically you will launch SwingOSC from sclang, using `SwingOSC.default.boot`. The following section describes how to launch SwingOSC from a terminal and the types of switches accepted.
 
@@ -57,11 +57,9 @@ If you wish to include custom java classes or libraries, you can either
 
     java -cp SwingOSC.jar:lib/freetts.jar:lib/jsapi.jar de.sciss.swingosc.SwingOSC [swing-osc-options]
 
-### compilation from source
+## compilation from source
 
-SwingOSC now builds with the [Simple Build Tool](https://github.com/harrah/xsbt/wiki). Includes is a little helper bash script `sbt` which will download the Simple Build Tool (sbt) launcher to the SwingOSC directory if not yet present, and then invoke it.
-
-You can also install sbt as explained on the sbt website, that is download the bootstrap jar version 0.11.2 and create a shell script `sbt` in your preferred `PATH`, e.g. as `~/bin/sbt`. You will need to perform this step on Windows.
+SwingOSC builds with [sbt](http://www.scala-sbt.org/). Includes is a helper bash script `sbt` written by [paulp](https://github.com/paulp/sbt-extras) and made available under a BSD-style license. This script will automatically download and install sbt if not yet present on the system.
 
 To compile and assemble SwingOSC, run `./sbt assembly-devel`. The final fully self-contained jar file will be `SwingOSC.jar` in the base directory. Make sure you adjust your `SwingOSC.program` settings in SuperCollider accordingly.
 
@@ -69,20 +67,7 @@ To package distribution zip files in the `dist` directory, run `./sbt package-di
 
 The project now includes all the JXBrowser library components. In `lib` you find two license keys `jxbrowser_development_license_for_swingosc.jar` and `jxbrowser_runtime_license_for_swingosc.jar`. If creating a binary artifact of SwingOSC, only the runtime key may be distributed, and the development key must not be included.
 
-### creating an IntelliJ IDEA project
-
-To develop the Java sources of SwingOSC, you can create an IntelliJ IDEA project file. If you haven't globally installed the sbt-idea plugin yet, create the following contents in `~/.sbt/plugins/build.sbt`:
-
-    resolvers += "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
-    
-    addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.0.0")
-
-Then to create the IDEA project, run the following two commands from the xsbt shell:
-
-    > set ideaProjectName := "SwingOSC"
-    > gen-idea
-
-### download
+## download
 
  - The binaries can be downloaded from [sourceforge.net/projects/swingosc](http://sourceforge.net/projects/swingosc/).
  - The source code and issue tracker can be found at [github.com/Sciss/SwingOSC](http://github.com/Sciss/SwingOSC).

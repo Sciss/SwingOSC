@@ -1,51 +1,40 @@
-import annotation.tailrec
 import sbt._
 import Keys._
 import sbtassembly.Plugin._
 import AssemblyKeys._
 
 object SwingOSCBuild extends Build {
-   val Mac     = config( "mac" )     extend( Compile )
-   val Linux   = config( "linux" )   extend( Compile )
-   val Windows = config( "windows" ) extend( Compile )
-   val Devel   = config( "devel" )   extend( Compile )
+  val Mac     = config("mac"    ) extend Compile
+  val Linux   = config("linux"  ) extend Compile
+  val Windows = config("windows") extend Compile
+  val Devel   = config("devel"  ) extend Compile
 
-   lazy val crossAssemblySettings: Seq[Project.Setting[_]] = baseAssemblySettings ++ Seq(
-//      target in assembly <<= baseDirectory,
-//      jarName in assembly <<= name( _ + ".jar" ),
-      mainClass in assembly := Some( "de.sciss.swingosc.SwingOSC" ),
-      excludedFiles in assembly := {
-         (bases: Seq[File]) =>
-            bases.flatMap {
-               base =>
-                  (base / "META-INF" * "*").get collect {
-                     case f if f.getName.toLowerCase.endsWith(".sf") => f
-                     case f if f.getName.toLowerCase == "manifest.mf" => f
-                  }
-            }
-      },
-      assembleArtifact in packageScala := false, // no scala-library.jar
-      assembleArtifact in packageSrc   := false  // no sources
-   )
+  lazy val crossAssemblySettings: Seq[Def.Setting[_]] = baseAssemblySettings ++ Seq(
+    //      target in assembly <<= baseDirectory,
+    //      jarName in assembly <<= name( _ + ".jar" ),
+    mainClass in assembly := Some("de.sciss.swingosc.SwingOSC"),
+    assembleArtifact in packageScala := false, // no scala-library.jar
+    assembleArtifact in packageSrc   := false  // no sources
+  )
 
-   private lazy val crossExcluded      = Set( "jxbrowser_development_license_for_swingosc.jar" )
-   private lazy val notSafariExcluded  = Set( "jxbrowser_engine-webkit.jar" )
-   private lazy val notMozillaExcluded = Set( "jxbrowser_engine-gecko.jar", "jxbrowser_MozillaInterfaces.jar",
-                                              "jxbrowser_xulrunner-linux.jar", "jxbrowser_xulrunner-linux64.jar",
-                                              "jxbrowser_xulrunner-mac.jar", "jxbrowser_xulrunner-windows.jar" )
-   private lazy val notIEExcluded      = Set( "jxbrowser_engine-ie.jar" )
-   private lazy val notMacExcluded     = Set( "jxbrowser_xulrunner-mac.jar" ) ++ notSafariExcluded
-   private lazy val notLinuxExcluded   = notMozillaExcluded
-   private lazy val notWindowsExcluded = Set( "jxbrowser_winpack-3.8.2.jar", "jxbrowser_xulrunner-windows.jar" ) ++ notIEExcluded
-   private lazy val macExcluded        = notLinuxExcluded ++ notWindowsExcluded
-   private lazy val linuxExcluded      = notMacExcluded ++ notWindowsExcluded
-   private lazy val windowsExcluded    = notMacExcluded ++ notLinuxExcluded
+  private lazy val crossExcluded      = Set( "jxbrowser_development_license_for_swingosc.jar" )
+  private lazy val notSafariExcluded  = Set( "jxbrowser_engine-webkit.jar" )
+  private lazy val notMozillaExcluded = Set( "jxbrowser_engine-gecko.jar", "jxbrowser_MozillaInterfaces.jar",
+                                            "jxbrowser_xulrunner-linux.jar", "jxbrowser_xulrunner-linux64.jar",
+                                            "jxbrowser_xulrunner-mac.jar", "jxbrowser_xulrunner-windows.jar" )
+  private lazy val notIEExcluded      = Set( "jxbrowser_engine-ie.jar" )
+  private lazy val notMacExcluded     = Set( "jxbrowser_xulrunner-mac.jar" ) ++ notSafariExcluded
+  private lazy val notLinuxExcluded   = notMozillaExcluded
+  private lazy val notWindowsExcluded = Set( "jxbrowser_winpack-3.8.2.jar", "jxbrowser_xulrunner-windows.jar" ) ++ notIEExcluded
+  private lazy val macExcluded        = notLinuxExcluded ++ notWindowsExcluded
+  private lazy val linuxExcluded      = notMacExcluded ++ notWindowsExcluded
+  private lazy val windowsExcluded    = notMacExcluded ++ notLinuxExcluded
 
-   private def platformAssembly( config: Configuration, excl: Set[ String ] = Set.empty ) : Seq[sbt.Project.Setting[_]] = {
-      val excl1 = excl ++ crossExcluded
+  private def platformAssembly(config: Configuration, excl: Set[String] = Set.empty): Seq[Def.Setting[_]] = {
+    val excl1 = excl ++ crossExcluded
       inConfig( config )( crossAssemblySettings ++ inTask( assembly ) {
-         val s0 = Seq[Project.Setting[_]](
-            jarName <<= name( _ + (if( config == Devel ) "" else "-" + config.name.capitalize) + ".jar" ),
+         val s0 = Seq[Def.Setting[_]](
+            jarName := name.value + (if( config == Devel ) "" else "-" + config.name.capitalize) + ".jar",
             excludedJars <<= (fullClasspath in assembly) map { _.filter( e => excl1.contains( e.data.getName ))}
          )
          if( config == Devel ) {
@@ -54,44 +43,50 @@ object SwingOSCBuild extends Build {
       })
    }
 
-   lazy val customAssemblySettings: Seq[Project.Setting[_]] =
-      platformAssembly( Mac, macExcluded ) ++
-      platformAssembly( Linux, linuxExcluded ) ++
-      platformAssembly( Windows, windowsExcluded ) ++
-      platformAssembly( Devel )
+  lazy val customAssemblySettings: Seq[Def.Setting[_]] =
+    platformAssembly(Mac    , macExcluded    ) ++
+    platformAssembly(Linux  , linuxExcluded  ) ++
+    platformAssembly(Windows, windowsExcluded) ++
+    platformAssembly(Devel)
 
-   lazy val root = Project( id = "root", base = file( "." ),
-      settings = Defaults.defaultSettings ++ assemblySettings ++ /* crossAssemblySettings ++ */ customAssemblySettings ++ Seq(
-         name           := "SwingOSC",
-         organization   := "de.sciss",
-         version        := "0.70",
-         homepage       := Some( url( "https://github.com/Sciss/SwingOSC" )),
-         description    := "An OpenSoundControl (OSC) server to dynamically instantiate and control Java objects. " +
-                           "Its main application is a GUI library for SuperCollider.",
-         scalaVersion   := "2.9.1",
-         crossPaths     := false,
+  lazy val root = Project(id = "root", base = file("."),
+    settings = Defaults.defaultSettings ++ assemblySettings ++ /* crossAssemblySettings ++ */ customAssemblySettings ++ Seq(
+      name           := "SwingOSC",
+      organization   := "de.sciss",
+      version        := "0.71.0-SNAPSHOT",
+      homepage       := Some( url( "https://github.com/Sciss/SwingOSC" )),
+      description    := "An OpenSoundControl (OSC) server to dynamically instantiate and control Java objects. " +
+                       "Its main application is a GUI library for SuperCollider.",
+      scalaVersion   := "2.10.3",
+      crossPaths     := false,
 
-         // ---- assembly ----
+      // ---- assembly ----
 
-//         excludedJars in assembly <<= (fullClasspath in assembly) map {
-//            _.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
-//         },
+      excludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
+        cp.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
+      },
+      mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
+        {
+          case "META-INF/THAWTECO.RSA" => MergeStrategy.last
+          case x => old(x)
+        }
+      },
 
-         // ---- distribution ----
-         assemblyMac     <<= assembly in Mac,
-         assemblyLinux   <<= assembly in Linux,
-         assemblyWindows <<= assembly in Windows,
-         assemblyDevel   <<= assembly in Devel,
-         packageDist     <<= (assemblyMac, assemblyLinux, assemblyWindows, baseDirectory, name, version, streams) map
-            packageDistTask
-      )
-   )
+      // ---- distribution ----
+      assemblyMac     <<= assembly in Mac,
+      assemblyLinux   <<= assembly in Linux,
+      assemblyWindows <<= assembly in Windows,
+      assemblyDevel   <<= assembly in Devel,
+      packageDist     <<= (assemblyMac, assemblyLinux, assemblyWindows, baseDirectory, name, version, streams) map
+        packageDistTask
+    )
+  )
 
-   lazy val packageDist       = TaskKey[Unit]("package-dist")
-   lazy val assemblyMac       = TaskKey[File]("assembly-mac")
-   lazy val assemblyLinux     = TaskKey[File]("assembly-linux")
-   lazy val assemblyWindows   = TaskKey[File]("assembly-windows")
-   lazy val assemblyDevel     = TaskKey[File]("assembly-devel")
+  lazy val packageDist       = TaskKey[Unit]("package-dist")
+  lazy val assemblyMac       = TaskKey[File]("assembly-mac")
+  lazy val assemblyLinux     = TaskKey[File]("assembly-linux")
+  lazy val assemblyWindows   = TaskKey[File]("assembly-windows")
+  lazy val assemblyDevel     = TaskKey[File]("assembly-devel")
 
    private def packageDistTask( macJarFile: File, linuxJarFile: File, windowsJarFile: File, baseDir: File,
                                 name: String, version: String, streams: TaskStreams ) {

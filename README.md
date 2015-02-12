@@ -2,6 +2,8 @@
 
 # SwingOSC
 
+[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=sciss&url=https%3A%2F%2Fgithub.com%2FSciss%2FSwingOSC&title=SwingOSC%20Server&language=Java&tags=github&category=software)
+
 ## statement
 
 SwingOSC is an OpenSoundControl (OSC) server intended for scripting Java(tm), such as to create graphical user interfaces with AWT or Swing classes. It uses the reflection and beans mechanism to dynamically create instances of java classes and control them. A separate set of SuperCollider language classes is included to allow the building of GUIs from within sclang.

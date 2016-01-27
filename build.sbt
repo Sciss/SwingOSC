@@ -1,7 +1,7 @@
 val Mac     = config("mac"    ) extend Compile
 val Linux   = config("linux"  ) extend Compile
 val Windows = config("windows") extend Compile
-val Devel   = config("devel"  ) extend Compile
+val Devel   = config("devel"  ) // extend Compile
 
 lazy val crossAssemblySettings = Seq(
   mainClass         in assembly   := Some("de.sciss.swingosc.SwingOSC"),
@@ -17,15 +17,13 @@ lazy val notIEExcluded      = Set("jxbrowser_engine-ie.jar")
 lazy val notMacExcluded     = Set("jxbrowser_xulrunner-mac.jar") ++ notSafariExcluded
 lazy val notLinuxExcluded   = notMozillaExcluded
 lazy val notWindowsExcluded = Set("jxbrowser_winpack-3.8.2.jar", "jxbrowser_xulrunner-windows.jar") ++ notIEExcluded
-lazy val macExcluded        = notLinuxExcluded ++ notWindowsExcluded
-lazy val linuxExcluded      = notMacExcluded   ++ notWindowsExcluded
-lazy val windowsExcluded    = notMacExcluded   ++ notLinuxExcluded
+lazy val macExcluded        = notLinuxExcluded ++ notWindowsExcluded ++ crossExcluded
+lazy val linuxExcluded      = notMacExcluded   ++ notWindowsExcluded ++ crossExcluded
+lazy val windowsExcluded    = notMacExcluded   ++ notLinuxExcluded   ++ crossExcluded
 lazy val develExcluded      = Set("jxbrowser_runtime_license_for_swingosc.jar")
 
-// XXX TODO -- this doesn't work yet, somehow is ignored
-def platformAssembly(config: Configuration, excl: Set[String] = Set.empty): Seq[sbt.Project.Setting[_]] = {
-  val excl1 = if (config == Devel) excl else excl ++ crossExcluded
-  inConfig(config)(crossAssemblySettings ++ inTask(assembly) {
+def platformAssembly(config: Configuration, excl: Set[String]) =
+  inConfig(config)(baseAssemblySettings ++ crossAssemblySettings ++ inTask(assembly) {
     val s0 = Seq(
       assemblyJarName := {
         val n = name.value
@@ -36,15 +34,14 @@ def platformAssembly(config: Configuration, excl: Set[String] = Set.empty): Seq[
         val cp = (fullClasspath in assembly).value
         cp.filter { e =>
           val n   = e.data.getName
-          val res = excl1.contains(n)
-          println(s"contains '$n'? $res") // WTF sbt -- this is never called
+          val res = excl.contains(n)
+          // println(s"contains '$n'? $res") // WTF sbt -- this is never called
           res
         }
       }
     )
     if (config != Devel) s0 else (target := baseDirectory.value) +: s0
   })
-}
 
 lazy val customAssemblySettings =
   platformAssembly(Mac    , macExcluded    ) ++
@@ -67,10 +64,10 @@ lazy val root = Project(id = "root", base = file("."))
 
     // ---- assembly ----
 
-    // WORK AROUND FOR SBT FAILING TO PICK UP CONFIG SPECIFIC SETTINGS
-    assemblyExcludedJars in assembly <<= (fullClasspath in assembly) map {
-      _.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
-    },
+//    // WORK AROUND FOR SBT FAILING TO PICK UP CONFIG SPECIFIC SETTINGS
+//    assemblyExcludedJars in assembly <<= (fullClasspath in assembly) map {
+//      _.filter(_.data.getName == "jxbrowser_development_license_for_swingosc.jar")
+//    },
 
     // ---- distribution ----
     assemblyMac     <<= assembly in Mac,
